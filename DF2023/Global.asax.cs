@@ -1,14 +1,13 @@
-﻿using DF2023.Core;
-using DF2023.Core.Helpers;
+﻿using DF2023.Core.Configs;
 using System;
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Http;
 using Telerik.Microsoft.Practices.Unity;
 using Telerik.Sitefinity.Abstractions;
+using Telerik.Sitefinity.Configuration;
 using Telerik.Sitefinity.Data;
 using Telerik.Sitefinity.DynamicModules.Events;
-using Telerik.Sitefinity.DynamicModules.Model;
 using Telerik.Sitefinity.Security.Sanitizers;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web.Events;
@@ -25,6 +24,7 @@ namespace DF2023
 
         private void OnBootstrapped(object sender, EventArgs e)
         {
+            this.RegisterCustomConfigurations();
             GlobalConfiguration.Configure(RegisterGraphQLMutationsController);
             EventHub.Subscribe<IDynamicContentCreatedEvent>(evt => DynamicContentCreatedEventHandler(evt));
             EventHub.Subscribe<IDynamicContentUpdatedEvent>(evt => DynamicContentUpdatedEventHandler(evt));
@@ -33,9 +33,13 @@ namespace DF2023
             EventHub.Subscribe<ILogoutCompletedEvent>(evt => LogoutEvent(evt));
         }
 
+        private void RegisterCustomConfigurations()
+        {
+            Config.RegisterSection<EmailConfig>();
+        }
+
         private void DynamicContentCreatedEventHandler(IDynamicContentCreatedEvent eventInfo)
         {
-
             MOFAHandler.Content_Action(eventInfo, eventInfo.Item);
         }
 
@@ -138,8 +142,6 @@ namespace DF2023
             routeTemplate: ".well-known/apple-app-site-association",
             defaults: new { controller = "FidoLogin", action = "AppleAppSiteAssociation" }
         );
-
-
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
