@@ -18,7 +18,8 @@ namespace DF2023.Core.Helpers
                 var apiKey = config.SendGridApiKey;
                 var client = new SendGridClient(apiKey);
                 string emailSenderName = config.EmailSenderName;
-                var from = new EmailAddress("noreply@gm.gov.qa", emailSenderName);
+                string email = config.Email;
+                var from = new EmailAddress(email, emailSenderName);
 
                 List<EmailAddress> tos = new List<EmailAddress>();
                 foreach (string item in toEmailAddresses)

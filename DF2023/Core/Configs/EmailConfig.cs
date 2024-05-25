@@ -33,5 +33,17 @@ namespace DF2023.Core.Configs
             get => this["SendGridApiKey"] as string;
             set => this["SendGridApiKey"] = value;
         }
+
+        [ConfigurationProperty("Email",
+           DefaultValue = "noreply@gm.gov.qa")]
+        [ObjectInfo(
+           Title = "Email",
+           Description = "The sender email address guests and users will recieve email from")
+       ]
+        public string Email
+        {
+            get => this["Email"] as string;
+            set => this["Email"] = value;
+        }
     }
 }
