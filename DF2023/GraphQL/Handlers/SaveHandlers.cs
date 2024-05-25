@@ -18,6 +18,7 @@ using Telerik.Sitefinity.Model;
 using Telerik.Sitefinity.Modules.Libraries;
 using Telerik.Sitefinity.RelatedData;
 using Telerik.Sitefinity.Utilities.TypeConverters;
+using Telerik.Sitefinity.Versioning;
 using Telerik.Sitefinity.Workflow;
 
 namespace DF2023.GraphQL.Handlers
@@ -150,6 +151,10 @@ namespace DF2023.GraphQL.Handlers
                 ILifecycleDataItem publishedItem = dynamicManager.Lifecycle.Publish(item);
                 item.SetWorkflowStatus(dynamicManager.Provider.ApplicationName, "Published");
                 manager.SaveChanges();
+
+                var versionManager = VersionManager.GetManager();
+                var version = versionManager.CreateVersion(item, true);
+                versionManager.SaveChanges();
 
                 return item;
             }
