@@ -1,0 +1,38 @@
+[
+  {
+    "ControlType": "Telerik.Sitefinity.Frontend.DynamicContent.Mvc.Controllers.DynamicContentController",
+    "FriendlyControlName": "PassportTypes - PassportTypes - single (MVC)",
+    "IsDifferentFromEmbedded": true,
+    "ResourceClassId": null,
+    "AreaName": "PassportTypes - PassportType",
+    "Condition": "Telerik.Sitefinity.DynamicTypes.Model.PassportTypes.Passporttype AND MVC",
+    "NameForDevelopers": "Detail-PassportType",
+    "Id": "38ebfcee-f580-4f7a-b8ca-8d5c199dfa7d",
+    "Name": "Detail.PassportType",
+    "Theme": null,
+    "DataType": "ASP_NET_TEMPLATE",
+    "Data": "@model Telerik.Sitefinity.Frontend.Mvc.Models.ContentDetailsViewModel\r\n\r\n@using System.Collections;\r\n@using System.Linq;\r\n@using Telerik.Sitefinity.Frontend.DynamicContent.WidgetTemplates.Fields.Helpers;\r\n@using Telerik.Sitefinity;\r\n@using Telerik.Sitefinity.Data.ContentLinks;\r\n@using Telerik.Sitefinity.Frontend.Mvc.Helpers;\r\n@using Telerik.Sitefinity.Libraries.Model;\r\n@using Telerik.Sitefinity.Localization;\r\n@using Telerik.Sitefinity.Model;\r\n@using Telerik.Sitefinity.Model.ContentLinks;\r\n@using Telerik.Sitefinity.Modules.Pages;\r\n@using Telerik.Sitefinity.Pages.Model;\r\n\r\n<div class=\"@Model.CssClass\" @Html.InlineEditingAttributes(Model.ProviderName, Model.ContentType.FullName, (Guid)Model.Item.Fields.Id)>\r\n    <h3 @Html.InlineEditingFieldAttributes(\"Title\", \"ShortText\")>\r\n        @Model.Item.Fields.Title\r\n    </h3>\r\n    <div>\r\n        @Model.Item.GetDateTime(\"PublicationDate\", \"MMM d, yyyy, HH:mm tt\")\r\n        @Html.CommentsCount(\"\", @Model.Item.DataItem)\r\n    </div>\r\n    \r\n    \r\n@*Start Title field*@\r\n<div>\r\n    <strong> Title :</strong>\r\n\r\n    <span @Html.InlineEditingFieldAttributes(\"Title\", \"ShortText\")>@Model.Item.Fields.Title</span>    \r\n</div>\r\n@*End Title field*@\r\n\r\n@*Start TitleAr field*@\r\n<div>\r\n    <strong> Title ar :</strong>\r\n\r\n    <span @Html.InlineEditingFieldAttributes(\"TitleAr\", \"ShortText\")>@Model.Item.Fields.TitleAr</span>    \r\n</div>\r\n@*End TitleAr field*@\r\n    \r\n\r\n    @Html.CommentsList(@Model.Item.DataItem)\r\n</div>",
+    "DateCreated": "2024-05-18T18:52:28.637Z",
+    "ResourceAssemblyName": "Telerik.Sitefinity.Resources",
+    "EmbeddedTemplateName": null,
+    "Owner": "b973888a-1dac-4d56-be2c-e6df7642d0fe"
+  },
+  {
+    "ControlType": "Telerik.Sitefinity.Frontend.DynamicContent.Mvc.Controllers.DynamicContentController",
+    "FriendlyControlName": "PassportTypes - PassportTypes - list (MVC)",
+    "IsDifferentFromEmbedded": true,
+    "ResourceClassId": null,
+    "AreaName": "PassportTypes - PassportType",
+    "Condition": "Telerik.Sitefinity.DynamicTypes.Model.PassportTypes.Passporttype AND MVC",
+    "NameForDevelopers": "List-PassportType",
+    "Id": "a490ad5b-6c94-4155-b506-903a2db9a832",
+    "Name": "List.PassportType",
+    "Theme": null,
+    "DataType": "ASP_NET_TEMPLATE",
+    "Data": "@model Telerik.Sitefinity.Frontend.DynamicContent.Mvc.Models.DynamicContentListViewModel\r\n\r\n@using Telerik.Sitefinity.Frontend.DynamicContent.WidgetTemplates.Fields.Helpers;\r\n@using Telerik.Sitefinity;\r\n@using Telerik.Sitefinity.Data.ContentLinks;\r\n@using Telerik.Sitefinity.Frontend.Mvc.Helpers;\r\n@using Telerik.Sitefinity.Frontend.Mvc.Models;\r\n@using Telerik.Sitefinity.Web.DataResolving;\r\n@using Telerik.Sitefinity.Model.ContentLinks;\r\n@using Telerik.Sitefinity.Modules.Pages;\r\n\r\n<div class=\"@Model.CssClass\">\r\n    <ul>\r\n        @foreach (var item in Model.Items)\r\n        {\r\n            var navigateUrl = HyperLinkHelpers.GetDetailPageUrl(item, ViewBag.DetailsPageId, ViewBag.OpenInSamePage, Model.UrlKeyPrefix);\r\n            <li @Html.InlineEditingAttributes(Model.ProviderName, Model.ContentType.FullName, (Guid)item.Fields.Id)>\r\n                \r\n\r\n                <h3>\r\n                    <a @Html.InlineEditingFieldAttributes(\"Title\", \"ShortText\") href=\"@navigateUrl\">\r\n                        @item.Fields.Title\r\n                    </a>\r\n                </h3>\r\n                <div>\r\n                    @item.GetDateTime(\"PublicationDate\", \"MMM d, yyyy, HH:mm tt\")\r\n                    @Html.CommentsCount((string)navigateUrl, item.DataItem)\r\n                </div>\r\n            </li>\r\n        }\r\n    </ul>\r\n\r\n    @if (Model.ShowPager)\r\n    {\r\n        @Html.Action(\"Index\", \"ContentPager\", new { currentPage = Model.CurrentPage, \r\n                        totalPagesCount = Model.TotalPagesCount.Value, \r\n                        redirectUrlTemplate = ViewBag.RedirectPageUrlTemplate })\r\n    }\r\n\r\n</div>",
+    "DateCreated": "2024-05-18T18:52:28.637Z",
+    "ResourceAssemblyName": "Telerik.Sitefinity.Resources",
+    "EmbeddedTemplateName": null,
+    "Owner": "b973888a-1dac-4d56-be2c-e6df7642d0fe"
+  }
+]

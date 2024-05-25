@@ -1,0 +1,38 @@
+[
+  {
+    "ControlType": "Telerik.Sitefinity.Frontend.DynamicContent.Mvc.Controllers.DynamicContentController",
+    "FriendlyControlName": "Countries - Countries - list (MVC)",
+    "IsDifferentFromEmbedded": true,
+    "ResourceClassId": null,
+    "AreaName": "Countries - Country",
+    "Condition": "Telerik.Sitefinity.DynamicTypes.Model.Countries.Country AND MVC",
+    "NameForDevelopers": "List-Country",
+    "Id": "f8993cbc-2731-4925-b7c1-49bd0b81579b",
+    "Name": "List.Country",
+    "Theme": null,
+    "DataType": "ASP_NET_TEMPLATE",
+    "Data": "@model Telerik.Sitefinity.Frontend.DynamicContent.Mvc.Models.DynamicContentListViewModel\r\n\r\n@using Telerik.Sitefinity.Frontend.DynamicContent.WidgetTemplates.Fields.Helpers;\r\n@using Telerik.Sitefinity;\r\n@using Telerik.Sitefinity.Data.ContentLinks;\r\n@using Telerik.Sitefinity.Frontend.Mvc.Helpers;\r\n@using Telerik.Sitefinity.Frontend.Mvc.Models;\r\n@using Telerik.Sitefinity.Web.DataResolving;\r\n@using Telerik.Sitefinity.Model.ContentLinks;\r\n@using Telerik.Sitefinity.Modules.Pages;\r\n\r\n<div class=\"@Model.CssClass\">\r\n    <ul>\r\n        @foreach (var item in Model.Items)\r\n        {\r\n            var navigateUrl = HyperLinkHelpers.GetDetailPageUrl(item, ViewBag.DetailsPageId, ViewBag.OpenInSamePage, Model.UrlKeyPrefix);\r\n            <li @Html.InlineEditingAttributes(Model.ProviderName, Model.ContentType.FullName, (Guid)item.Fields.Id)>\r\n                \r\n\r\n                <h3>\r\n                    <a @Html.InlineEditingFieldAttributes(\"Title\", \"ShortText\") href=\"@navigateUrl\">\r\n                        @item.Fields.Title\r\n                    </a>\r\n                </h3>\r\n                <div>\r\n                    @item.GetDateTime(\"PublicationDate\", \"MMM d, yyyy, HH:mm tt\")\r\n                    @Html.CommentsCount((string)navigateUrl, item.DataItem)\r\n                </div>\r\n            </li>\r\n        }\r\n    </ul>\r\n\r\n    @if (Model.ShowPager)\r\n    {\r\n        @Html.Action(\"Index\", \"ContentPager\", new { currentPage = Model.CurrentPage, \r\n                        totalPagesCount = Model.TotalPagesCount.Value, \r\n                        redirectUrlTemplate = ViewBag.RedirectPageUrlTemplate })\r\n    }\r\n\r\n</div>",
+    "DateCreated": "2024-05-18T14:55:38.513Z",
+    "ResourceAssemblyName": "Telerik.Sitefinity.Resources",
+    "EmbeddedTemplateName": null,
+    "Owner": "b973888a-1dac-4d56-be2c-e6df7642d0fe"
+  },
+  {
+    "ControlType": "Telerik.Sitefinity.Frontend.DynamicContent.Mvc.Controllers.DynamicContentController",
+    "FriendlyControlName": "Countries - Countries - single (MVC)",
+    "IsDifferentFromEmbedded": true,
+    "ResourceClassId": null,
+    "AreaName": "Countries - Country",
+    "Condition": "Telerik.Sitefinity.DynamicTypes.Model.Countries.Country AND MVC",
+    "NameForDevelopers": "Detail-Country",
+    "Id": "47dacd30-7b75-461b-a748-f0af413d7a1b",
+    "Name": "Detail.Country",
+    "Theme": null,
+    "DataType": "ASP_NET_TEMPLATE",
+    "Data": "@model Telerik.Sitefinity.Frontend.Mvc.Models.ContentDetailsViewModel\r\n\r\n@using System.Collections;\r\n@using System.Linq;\r\n@using Telerik.Sitefinity.Frontend.DynamicContent.WidgetTemplates.Fields.Helpers;\r\n@using Telerik.Sitefinity;\r\n@using Telerik.Sitefinity.Data.ContentLinks;\r\n@using Telerik.Sitefinity.Frontend.Mvc.Helpers;\r\n@using Telerik.Sitefinity.Libraries.Model;\r\n@using Telerik.Sitefinity.Localization;\r\n@using Telerik.Sitefinity.Model;\r\n@using Telerik.Sitefinity.Model.ContentLinks;\r\n@using Telerik.Sitefinity.Modules.Pages;\r\n@using Telerik.Sitefinity.Pages.Model;\r\n\r\n<div class=\"@Model.CssClass\" @Html.InlineEditingAttributes(Model.ProviderName, Model.ContentType.FullName, (Guid)Model.Item.Fields.Id)>\r\n    <h3 @Html.InlineEditingFieldAttributes(\"Title\", \"ShortText\")>\r\n        @Model.Item.Fields.Title\r\n    </h3>\r\n    <div>\r\n        @Model.Item.GetDateTime(\"PublicationDate\", \"MMM d, yyyy, HH:mm tt\")\r\n        @Html.CommentsCount(\"\", @Model.Item.DataItem)\r\n    </div>\r\n    \r\n    \r\n@*Start Title field*@\r\n<div>\r\n    <strong> Title :</strong>\r\n\r\n    <span @Html.InlineEditingFieldAttributes(\"Title\", \"ShortText\")>@Model.Item.Fields.Title</span>    \r\n</div>\r\n@*End Title field*@\r\n\r\n@*Start TitleAr field*@\r\n<div>\r\n    <strong> Title ar :</strong>\r\n\r\n    <span @Html.InlineEditingFieldAttributes(\"TitleAr\", \"ShortText\")>@Model.Item.Fields.TitleAr</span>    \r\n</div>\r\n@*End TitleAr field*@\r\n\r\n@*Start Alpha2 field*@\r\n<div>\r\n    <strong> Alpha 2 :</strong>\r\n\r\n    <span @Html.InlineEditingFieldAttributes(\"Alpha2\", \"ShortText\")>@Model.Item.Fields.Alpha2</span>    \r\n</div>\r\n@*End Alpha2 field*@\r\n\r\n@*Start Alpha3 field*@\r\n<div>\r\n    <strong> Alpha 3 :</strong>\r\n\r\n    <span @Html.InlineEditingFieldAttributes(\"Alpha3\", \"ShortText\")>@Model.Item.Fields.Alpha3</span>    \r\n</div>\r\n@*End Alpha3 field*@\r\n\r\n@*Start Nationality field*@\r\n<div>\r\n    <strong> Nationality :</strong>\r\n\r\n    <span @Html.InlineEditingFieldAttributes(\"Nationality\", \"ShortText\")>@Model.Item.Fields.Nationality</span>    \r\n</div>\r\n@*End Nationality field*@\r\n\r\n@*Start NationalityAr field*@\r\n<div>\r\n    <strong> Nationality ar :</strong>\r\n\r\n    <span @Html.InlineEditingFieldAttributes(\"NationalityAr\", \"ShortText\")>@Model.Item.Fields.NationalityAr</span>    \r\n</div>\r\n@*End NationalityAr field*@\r\n\r\n@*Start IsArabic field*@\r\n<div>\r\n    <strong> Is Arabic Country? :</strong>\r\n\r\n    <span @Html.InlineEditingFieldAttributes(\"IsArabic\", \"YesNo\")>\r\n        @Model.Item.GetBool(\"IsArabic\")\r\n    </span> \r\n</div>\r\n@*End IsArabic field*@\r\n\r\n@*Start Flag field*@\r\n<ul>\r\n@foreach (var relatedItem in Model.Item.Fields.Flag)\r\n{\r\n    <li class=\"media\">\r\n        <a class=\"media-body\" href='@relatedItem.Fields.MediaUrl'>\r\n            <img src='@relatedItem.Fields.ThumbnailUrl' alt='@relatedItem.Fields.AlternativeText' title='@relatedItem.Fields.Title' />\r\n        </a>\r\n    </li>   \r\n}\r\n</ul>\r\n@*End Flag field*@\r\n    \r\n\r\n    @Html.CommentsList(@Model.Item.DataItem)\r\n</div>",
+    "DateCreated": "2024-05-18T14:55:38.513Z",
+    "ResourceAssemblyName": "Telerik.Sitefinity.Resources",
+    "EmbeddedTemplateName": null,
+    "Owner": "b973888a-1dac-4d56-be2c-e6df7642d0fe"
+  }
+]
