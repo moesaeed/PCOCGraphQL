@@ -1390,6 +1390,8 @@
     <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\TitleList\Structure\version.sf" />
     <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\TitleList\Structure\widgetTemplates.sf" />
     <Content Include="App_Data\Sitefinity\Configuration\WebSecurityConfig.config" />
+    <Content Include="App_Data\Sitefinity\Configuration\WebServicesConfig.config" />
+    <Content Include="App_Data\Sitefinity\Configuration\AuthenticationConfig.config" />
     <None Include="packages.config" />
     <Content Include="SampleTemplate.cshtml">
       <Generator>RazorGenerator</Generator>
