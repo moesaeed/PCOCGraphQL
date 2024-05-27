@@ -17,6 +17,8 @@ using Telerik.Sitefinity.Localization;
 using Telerik.Sitefinity.Model;
 using Telerik.Sitefinity.Modules.Libraries;
 using Telerik.Sitefinity.RelatedData;
+using Telerik.Sitefinity.Security.Claims;
+using Telerik.Sitefinity.Security;
 using Telerik.Sitefinity.Utilities.TypeConverters;
 using Telerik.Sitefinity.Versioning;
 using Telerik.Sitefinity.Workflow;
@@ -101,6 +103,8 @@ namespace DF2023.GraphQL.Handlers
         {
             using (CultureRegion cr = new CultureRegion(new CultureInfo("en")))
             {
+                var isNewItem = false;
+                var isValidMutation = true;
                 var id = contextValue.ContainsKey("id") ? Guid.Parse(contextValue["id"].ToString()) : Guid.Empty;
                 var title = contextValue.ContainsKey("title") ? contextValue["title"].ToString() : string.Empty;
                 var type = TypeResolutionService.ResolveType(contentType);
@@ -109,7 +113,10 @@ namespace DF2023.GraphQL.Handlers
 
                 DynamicContent item = null;
                 if (id == Guid.Empty)
+                {
+                    isNewItem = true;
                     item = dynamicManager.CreateDataItem(type);
+                }
                 else
                     item = dynamicManager.GetDataItems(type).FirstOrDefault(i => i.Id == id);
 
@@ -147,16 +154,62 @@ namespace DF2023.GraphQL.Handlers
                     item.SetString("UrlName", $"{StringHelper.SetValidUrlName(title)}-{Guid.NewGuid()}");
                 }
 
-                item.ApprovalWorkflowState = ApprovalStatusConstants.Published;
-                ILifecycleDataItem publishedItem = dynamicManager.Lifecycle.Publish(item);
-                item.SetWorkflowStatus(dynamicManager.Provider.ApplicationName, "Published");
-                manager.SaveChanges();
+                //check if connection.
+                if (contentType.ToLower().EndsWith(".connection"))
+                {
+                    //Get email of authenticated user
+                    var authenticatedEmail = ConnectionsHelper.GetAuthenticateUserEmail();
+                    if (isNewItem)
+                    {
+                        //Get the Id of the initiator and target from the mutation
+                        var initiatorId = contextValue.ContainsKey("initiatorID") ? contextValue["initiatorID"].ToString() : string.Empty;
+                        var targetId = contextValue.ContainsKey("targetID") ? contextValue["targetID"].ToString() : string.Empty;
+                        //check if the items exist in the module speaker and if authenticatedEmail == initiatorEmail
+                        var usersConnection = ConnectionsHelper.ValidateConnection(dynamicManager, authenticatedEmail, initiatorId, targetId);
+                        {
+                            if (usersConnection.source != null && usersConnection.target != null)
+                            {
+                                //Relate item if the above conditions are valid
+                                item.CreateRelation(usersConnection.source, "InitiatorSpeaker");
+                                item.CreateRelation(usersConnection.target, "TargetSpeaker");
 
-                var versionManager = VersionManager.GetManager();
-                var version = versionManager.CreateVersion(item, true);
-                versionManager.SaveChanges();
+                                //Set permissions
+                                Telerik.Sitefinity.Security.Model.ISecuredObject secureObject = item;
+                                manager.BreakPermiossionsInheritance(secureObject);
 
-                return item;
+                                //item.GetOwnPermissions().remove;
+                                ConnectionsHelper.SetPermission(item, ClaimsManager.GetCurrentUserId());
+                                var targetUser = UserManager.GetManager().GetUserByEmail(usersConnection.target.GetValue("Email")?.ToString());
+                                ConnectionsHelper.SetPermission(item, targetUser.Id);
+                                ConnectionsHelper.RemovePermission(item);
+                            }
+                            else
+                            {
+                                isValidMutation = false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //Get target and compare its email with authenticated email, if it match then update request
+                        var targetEmail = ConnectionsHelper.GetTargetEmail(dynamicManager, id);
+                        if (!string.IsNullOrWhiteSpace(targetEmail) && targetEmail.Equals(authenticatedEmail))
+                            isValidMutation = true;
+                        else
+                            isValidMutation = false;
+                    }
+                }
+
+                if (isValidMutation)
+                {
+                    item.ApprovalWorkflowState = ApprovalStatusConstants.Published;
+                    ILifecycleDataItem publishedItem = dynamicManager.Lifecycle.Publish(item);
+                    item.SetWorkflowStatus(dynamicManager.Provider.ApplicationName, "Published");
+                    manager.SaveChanges();
+
+                    return item;
+                }
+                return null;
             }
         }
 
