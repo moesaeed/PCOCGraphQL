@@ -19,7 +19,7 @@ namespace DF2023.Core.Helpers
         public static bool SendPushNotification(PushNotificationViewModel pushNotification)
         {
             var manager = DynamicModuleManager.GetManager();
-            var items = manager.GetDataItems(TypeResolutionService.ResolveType(Constants.FCMListType))
+            var items = manager.GetDataItems(TypeResolutionService.ResolveType(Constants.DynamicModulesNames.FCMListType))
                 .Where(x => x.Status == Telerik.Sitefinity.GenericContent.Model.ContentLifecycleStatus.Master)
                 .ToList();
             if (items != null && items.Count == 1)

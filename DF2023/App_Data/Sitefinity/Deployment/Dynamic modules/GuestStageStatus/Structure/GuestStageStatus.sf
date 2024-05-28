@@ -1,18 +1,18 @@
 {
-  "Name": "GuestPositions",
-  "Title": "GuestPositions",
+  "Name": "GuestStageStatus",
+  "Title": "GuestStageStatus",
   "Description": "",
   "Status": 1,
   "Types": [
     {
-      "DisplayName": "GuestPosition",
-      "ParentModuleId": "25bbb096-23c9-4955-bbc0-31f3e809e0b2",
-      "TypeNamespace": "Telerik.Sitefinity.DynamicTypes.Model.GuestPositions",
-      "TypeName": "Guestposition",
+      "DisplayName": "GuestStageStatus",
+      "ParentModuleId": "442c3040-4686-46d6-8030-62f2abb78f6c",
+      "TypeNamespace": "Telerik.Sitefinity.DynamicTypes.Model.GuestStageStatus",
+      "TypeName": "Gueststagestatus",
       "Fields": [
         {
-          "ParentTypeId": "c7971603-6ab3-4534-8640-9432a17c6988",
-          "FieldNamespace": "Telerik.Sitefinity.DynamicTypes.Model.GuestPositions.Guestposition",
+          "ParentTypeId": "628d84e8-b1f9-4fbf-b19a-57b10354918c",
+          "FieldNamespace": "Telerik.Sitefinity.DynamicTypes.Model.GuestStageStatus.Gueststagestatus",
           "Name": "Title",
           "Title": "Title",
           "FieldType": 1,
@@ -38,16 +38,16 @@
           "Choices": "",
           "ChoiceRenderType": "",
           "ShowInGrid": true,
-          "ParentSectionId": "211bf2b3-fd94-4a93-b76b-9bfb8ac6bb2e",
+          "ParentSectionId": "0781b1d7-b7a7-48c1-85e5-9e253805046e",
           "TypeUIName": "\n                                Short text\n                            ",
-          "Id": "dd1c1657-bf1c-43bd-80ec-dfeb8a6f68a0",
-          "LastModified": "2024-05-19T19:29:25.44Z"
+          "Id": "09a8574a-3dd9-4bfb-807a-6fdd77a11a75",
+          "LastModified": "2024-05-27T06:12:31.843Z"
         },
         {
-          "ParentTypeId": "c7971603-6ab3-4534-8640-9432a17c6988",
-          "FieldNamespace": "Telerik.Sitefinity.DynamicTypes.Model.GuestPositions.Guestposition",
+          "ParentTypeId": "628d84e8-b1f9-4fbf-b19a-57b10354918c",
+          "FieldNamespace": "Telerik.Sitefinity.DynamicTypes.Model.GuestStageStatus.Gueststagestatus",
           "Name": "TitleAr",
-          "Title": "Title Ar",
+          "Title": "Title ar",
           "FieldType": 1,
           "SpecialType": 0,
           "MediaType": "",
@@ -70,13 +70,13 @@
           "Choices": "",
           "ChoiceRenderType": "",
           "GridColumnOrdinal": 2,
-          "ParentSectionId": "211bf2b3-fd94-4a93-b76b-9bfb8ac6bb2e",
+          "ParentSectionId": "0781b1d7-b7a7-48c1-85e5-9e253805046e",
           "TypeUIName": "\n                                Short text\n                            ",
-          "Id": "071bdd1c-1d78-4888-8311-b824645aabe4",
-          "LastModified": "2024-05-19T19:29:25.44Z"
+          "Id": "55787f9a-a763-44c3-82f9-8ac2e1215409",
+          "LastModified": "2024-05-27T06:12:31.843Z"
         },
         {
-          "ParentTypeId": "c7971603-6ab3-4534-8640-9432a17c6988",
+          "ParentTypeId": "628d84e8-b1f9-4fbf-b19a-57b10354918c",
           "FieldNamespace": null,
           "Name": "IncludeInSitemap",
           "Title": "Include in sitemap",
@@ -86,12 +86,12 @@
           "FieldTypeDisplayName": "Unknown",
           "Ordinal": 1,
           "GridColumnOrdinal": 1,
-          "ParentSectionId": "980c7d7c-58b7-4d24-8875-3153e1d3fb78",
-          "Id": "2f1e7968-a0df-49a0-b459-c83661759662",
-          "LastModified": "2024-05-19T19:29:25.44Z"
+          "ParentSectionId": "66b40291-4f48-4a79-b14f-daf0d5152963",
+          "Id": "0a3eb11c-44b5-4a73-81da-f6a8a7db2de2",
+          "LastModified": "2024-05-27T06:12:31.843Z"
         },
         {
-          "ParentTypeId": "c7971603-6ab3-4534-8640-9432a17c6988",
+          "ParentTypeId": "628d84e8-b1f9-4fbf-b19a-57b10354918c",
           "FieldNamespace": null,
           "Name": "UrlName",
           "Title": "URL Name",
@@ -103,12 +103,12 @@
           "Ordinal": 2,
           "RegularExpression": "^[\\p{L}\\-_\\.!~*'()\\d]+$",
           "GridColumnOrdinal": 2,
-          "ParentSectionId": "980c7d7c-58b7-4d24-8875-3153e1d3fb78",
-          "Id": "3afe9231-86e9-4d21-a863-a70b138cb998",
-          "LastModified": "2024-05-19T19:29:25.44Z"
+          "ParentSectionId": "66b40291-4f48-4a79-b14f-daf0d5152963",
+          "Id": "21c0fd96-c51f-4acb-9a32-a4c4c438a8ab",
+          "LastModified": "2024-05-27T06:12:31.843Z"
         },
         {
-          "ParentTypeId": "c7971603-6ab3-4534-8640-9432a17c6988",
+          "ParentTypeId": "628d84e8-b1f9-4fbf-b19a-57b10354918c",
           "FieldNamespace": null,
           "Name": "Actions",
           "Title": "Actions",
@@ -119,12 +119,12 @@
           "Ordinal": 3,
           "ShowInGrid": true,
           "GridColumnOrdinal": 3,
-          "ParentSectionId": "980c7d7c-58b7-4d24-8875-3153e1d3fb78",
-          "Id": "0fa5a5d5-c65c-41d6-aabb-13c53fff76c2",
-          "LastModified": "2024-05-19T19:29:25.44Z"
+          "ParentSectionId": "66b40291-4f48-4a79-b14f-daf0d5152963",
+          "Id": "b925da27-65cf-4f3c-800f-ac369ae8da9c",
+          "LastModified": "2024-05-27T06:12:31.843Z"
         },
         {
-          "ParentTypeId": "c7971603-6ab3-4534-8640-9432a17c6988",
+          "ParentTypeId": "628d84e8-b1f9-4fbf-b19a-57b10354918c",
           "FieldNamespace": null,
           "Name": "Author",
           "Title": "Author",
@@ -135,12 +135,12 @@
           "Ordinal": 4,
           "ShowInGrid": true,
           "GridColumnOrdinal": 4,
-          "ParentSectionId": "980c7d7c-58b7-4d24-8875-3153e1d3fb78",
-          "Id": "783bcfc9-3caa-4560-8a32-682f13a7c165",
-          "LastModified": "2024-05-19T19:29:25.44Z"
+          "ParentSectionId": "66b40291-4f48-4a79-b14f-daf0d5152963",
+          "Id": "f7476a68-89c0-4f21-a292-4d90a25a7987",
+          "LastModified": "2024-05-27T06:12:31.843Z"
         },
         {
-          "ParentTypeId": "c7971603-6ab3-4534-8640-9432a17c6988",
+          "ParentTypeId": "628d84e8-b1f9-4fbf-b19a-57b10354918c",
           "FieldNamespace": null,
           "Name": "PublicationDate",
           "Title": "Publication date",
@@ -150,12 +150,12 @@
           "FieldTypeDisplayName": "Unknown",
           "Ordinal": 5,
           "GridColumnOrdinal": 5,
-          "ParentSectionId": "980c7d7c-58b7-4d24-8875-3153e1d3fb78",
-          "Id": "b218c22e-870e-46e0-a17f-5994fb431db6",
-          "LastModified": "2024-05-19T19:29:25.44Z"
+          "ParentSectionId": "66b40291-4f48-4a79-b14f-daf0d5152963",
+          "Id": "04d7e161-5101-40a1-95e5-ef01a0c103c5",
+          "LastModified": "2024-05-27T06:12:31.843Z"
         },
         {
-          "ParentTypeId": "c7971603-6ab3-4534-8640-9432a17c6988",
+          "ParentTypeId": "628d84e8-b1f9-4fbf-b19a-57b10354918c",
           "FieldNamespace": null,
           "Name": "LastModified",
           "Title": "Last modified",
@@ -166,12 +166,12 @@
           "Ordinal": 7,
           "ShowInGrid": true,
           "GridColumnOrdinal": 7,
-          "ParentSectionId": "980c7d7c-58b7-4d24-8875-3153e1d3fb78",
-          "Id": "23ed8ead-1e4c-4198-bca8-37d7586cdf4c",
-          "LastModified": "2024-05-19T19:29:25.44Z"
+          "ParentSectionId": "66b40291-4f48-4a79-b14f-daf0d5152963",
+          "Id": "eaf238a4-6a95-4f26-b4fe-8e70c011cf29",
+          "LastModified": "2024-05-27T06:12:31.843Z"
         },
         {
-          "ParentTypeId": "c7971603-6ab3-4534-8640-9432a17c6988",
+          "ParentTypeId": "628d84e8-b1f9-4fbf-b19a-57b10354918c",
           "FieldNamespace": null,
           "Name": "DateCreated",
           "Title": "Created on",
@@ -182,9 +182,9 @@
           "Ordinal": 8,
           "ShowInGrid": true,
           "GridColumnOrdinal": 8,
-          "ParentSectionId": "980c7d7c-58b7-4d24-8875-3153e1d3fb78",
-          "Id": "17cf30f9-2409-48df-99b0-287b7c510bda",
-          "LastModified": "2024-05-19T19:29:25.44Z"
+          "ParentSectionId": "66b40291-4f48-4a79-b14f-daf0d5152963",
+          "Id": "f847bea7-71a4-4172-ad24-2a608c13837a",
+          "LastModified": "2024-05-27T06:12:31.843Z"
         }
       ],
       "Sections": [
@@ -194,8 +194,8 @@
           "Title": "Main Section",
           "IsExpandable": false,
           "IsExpandedByDefault": false,
-          "ParentTypeId": "c7971603-6ab3-4534-8640-9432a17c6988",
-          "Id": "211bf2b3-fd94-4a93-b76b-9bfb8ac6bb2e"
+          "ParentTypeId": "628d84e8-b1f9-4fbf-b19a-57b10354918c",
+          "Id": "0781b1d7-b7a7-48c1-85e5-9e253805046e"
         },
         {
           "Name": "Classification",
@@ -203,8 +203,8 @@
           "Title": "Classification",
           "IsExpandable": true,
           "IsExpandedByDefault": true,
-          "ParentTypeId": "c7971603-6ab3-4534-8640-9432a17c6988",
-          "Id": "7c76a741-a875-49f9-adf9-6874356fa952"
+          "ParentTypeId": "628d84e8-b1f9-4fbf-b19a-57b10354918c",
+          "Id": "45f3b7c9-01d3-4a51-aa03-8b141c47c0be"
         },
         {
           "Name": "MoreOptions",
@@ -212,21 +212,21 @@
           "Title": "More Options",
           "IsExpandable": true,
           "IsExpandedByDefault": false,
-          "ParentTypeId": "c7971603-6ab3-4534-8640-9432a17c6988",
-          "Id": "980c7d7c-58b7-4d24-8875-3153e1d3fb78"
+          "ParentTypeId": "628d84e8-b1f9-4fbf-b19a-57b10354918c",
+          "Id": "66b40291-4f48-4a79-b14f-daf0d5152963"
         }
       ],
       "MainShortTextFieldName": "Title",
       "IsSelfReferencing": false,
       "CheckFieldPermissions": false,
-      "PageId": "43508e8e-63da-42af-8a6c-0d51f184cc41",
-      "Id": "c7971603-6ab3-4534-8640-9432a17c6988",
-      "LastModified": "2024-05-19T19:29:29.673Z"
+      "PageId": "5a079007-31fa-4020-91a0-a468b3f7d55c",
+      "Id": "628d84e8-b1f9-4fbf-b19a-57b10354918c",
+      "LastModified": "2024-05-27T06:12:36.327Z"
     }
   ],
   "DefaultBackendDefinitionName": null,
-  "PageId": "a01738e6-c906-4f2a-a5ab-91c768b8a6ea",
-  "UrlName": "guestpositions",
-  "Id": "25bbb096-23c9-4955-bbc0-31f3e809e0b2",
+  "PageId": "b666d65f-b4b6-4c50-93df-4126958b1cf1",
+  "UrlName": "gueststagestatus",
+  "Id": "442c3040-4686-46d6-8030-62f2abb78f6c",
   "Owner": "b973888a-1dac-4d56-be2c-e6df7642d0fe"
 }

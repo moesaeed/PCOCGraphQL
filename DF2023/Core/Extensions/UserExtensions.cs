@@ -10,7 +10,6 @@ using Telerik.Sitefinity.Modules.Libraries;
 using Telerik.Sitefinity.Security;
 using Telerik.Sitefinity.Security.Claims;
 using Telerik.Sitefinity.Security.Model;
-using static DF2023.Core.Constants;
 
 namespace DF2023.Core.Extensions
 {
@@ -30,6 +29,25 @@ namespace DF2023.Core.Extensions
         {
             var identity = ClaimsManager.GetCurrentIdentity();
             return identity.UserId;
+        }
+
+        public static bool IsCurrentUserInRole(string roleName)
+        {
+            bool isUserInRole = false;
+
+            Guid userId = GetCurentUserId();
+            RoleManager roleManager = RoleManager.GetManager();
+
+            if (userId != Guid.Empty)
+            {
+                bool roleExists = roleManager.RoleExists(roleName);
+                if (roleExists)
+                {
+                    isUserInRole = roleManager.IsUserInRole(userId, roleName);
+                }
+            }
+
+            return isUserInRole;
         }
 
         public static string GetCurrentUserAvatarURL()
@@ -199,7 +217,7 @@ namespace DF2023.Core.Extensions
             return keyValuePairs;
         }
 
-        public static List<Guid> GetUsersInProle(string roleName)
+        public static List<Guid> GetUsersInRole(string roleName)
         {
             List<Guid> guids = new List<Guid>();
             RoleManager roleManager = RoleManager.GetManager();
@@ -213,23 +231,9 @@ namespace DF2023.Core.Extensions
             return null;
         }
 
-        public static SitefinityProfile GetUserProfile(DynamicContent dcItem)
-        {
-            UserManager userManager = new UserManager();
-            UserProfileManager userProfileManager = new UserProfileManager();
-            var user = userManager.GetUser(dcItem.Owner);
-            if (user != null)
-            {
-                var profile = userProfileManager.GetUserProfile<SitefinityProfile>(user);
-                return profile;
-            }
-
-            return null;
-        }
-
         public static string GetUserAvatarURL(DynamicContent dcItem)
         {
-            var profile = UserExtensions.GetUserProfile(dcItem);
+            var profile = GetUserProfile(dcItem);
             if (profile != null)
             {
                 ContentLink avatarLink = profile.Avatar;
@@ -248,22 +252,31 @@ namespace DF2023.Core.Extensions
             return string.Empty;
         }
 
-        public static string GetCustomfieldValue(DynamicContent dcItem, string fieldName)
+        public static string GetUserCustomfieldValue(string fieldName)
         {
-            var profile = UserExtensions.GetUserProfile(dcItem);
-            if (profile == null || profile.DoesFieldExist(fieldName) == false)
+            Guid userId = GetCurentUserId();
+            UserManager userManager = UserManager.GetManager(ProviderName);
+            if (userId != Guid.Empty)
             {
-                return string.Empty;
+                User user = userManager.GetUser(userId);
+                UserProfileManager profileManager = UserProfileManager.GetManager();
+                var profile = profileManager.GetUserProfile<SitefinityProfile>(user);
+                if (profile == null || profile.DoesFieldExist(fieldName) == false)
+                {
+                    return string.Empty;
+                }
+                try
+                {
+                    string v = profile.GetValue<string>(fieldName);
+                    return v;
+                }
+                catch (Exception)
+                {
+                    return string.Empty;
+                }
             }
-            try
-            {
-                string v = profile.GetValue<string>(fieldName);
-                return v;
-            }
-            catch (Exception)
-            {
-                return string.Empty;
-            }
+
+            return string.Empty;
         }
 
         public static List<User> GetUsersInListOfRoles(List<string> roleNames)
@@ -283,6 +296,27 @@ namespace DF2023.Core.Extensions
             users = users.Distinct().ToList();
 
             return users;
+        }
+
+        public static User GetUser(Guid owner)
+        {
+            UserManager userManager = new UserManager();
+            var user = userManager.GetUser(owner);
+            return user;
+        }
+
+        public static SitefinityProfile GetUserProfile(DynamicContent dcItem)
+        {
+            UserManager userManager = new UserManager();
+            UserProfileManager userProfileManager = new UserProfileManager();
+            var user = GetUser(dcItem.Owner);
+            if (user != null)
+            {
+                var profile = userProfileManager.GetUserProfile<SitefinityProfile>(user);
+                return profile;
+            }
+
+            return null;
         }
     }
 }

@@ -1,18 +1,18 @@
 {
-  "Name": "Delegation Types",
-  "Title": "Delegation Types",
+  "Name": "SubAttendeeTypes",
+  "Title": "SubAttendeeTypes",
   "Description": "",
   "Status": 1,
   "Types": [
     {
-      "DisplayName": "DelegationType",
-      "ParentModuleId": "754b8ab3-313c-4bf8-a677-0889ea040367",
-      "TypeNamespace": "Telerik.Sitefinity.DynamicTypes.Model.DelegationTypes",
-      "TypeName": "DelegationType",
+      "DisplayName": "SubAttendeeType",
+      "ParentModuleId": "f5c40884-8b6e-401c-8abc-53af740745ae",
+      "TypeNamespace": "Telerik.Sitefinity.DynamicTypes.Model.SubAttendeeTypes",
+      "TypeName": "Subattendeetype",
       "Fields": [
         {
-          "ParentTypeId": "346eaf2b-1cab-4ddb-a9bc-deae41cca78a",
-          "FieldNamespace": "Telerik.Sitefinity.DynamicTypes.Model.DelegationTypes.DelegationType",
+          "ParentTypeId": "6dc27364-5804-40e2-aae9-3cf00ff0860c",
+          "FieldNamespace": "Telerik.Sitefinity.DynamicTypes.Model.SubAttendeeTypes.Subattendeetype",
           "Name": "Title",
           "Title": "Title",
           "FieldType": 1,
@@ -22,38 +22,6 @@
           "IsRequired": true,
           "LengthValidationMessage": "",
           "Ordinal": 1,
-          "CanCreateItemsWhileSelecting": true,
-          "WidgetTypeName": "Telerik.Sitefinity.Web.UI.Fields.TextField",
-          "DBType": "VARCHAR",
-          "ClassificationId": "e5cd6d69-1543-427b-ad62-688a99f5e7d4",
-          "DBLength": "",
-          "InstructionalChoice": "- Select -",
-          "NumberUnit": "",
-          "ColumnName": "",
-          "InstructionalText": "",
-          "ImageExtensions": "",
-          "VideoExtensions": "",
-          "FileExtensions": "",
-          "DefaultValue": "",
-          "Choices": "",
-          "ChoiceRenderType": "",
-          "ShowInGrid": true,
-          "ParentSectionId": "15182041-31e0-48f3-9e9b-6b4446ebc6e6",
-          "TypeUIName": "\n                                Short text\n                            ",
-          "Id": "dd0ae3b8-1145-4649-b746-d0d10c11ba34",
-          "LastModified": "2024-05-18T15:51:36.89Z"
-        },
-        {
-          "ParentTypeId": "346eaf2b-1cab-4ddb-a9bc-deae41cca78a",
-          "FieldNamespace": "Telerik.Sitefinity.DynamicTypes.Model.DelegationTypes.DelegationType",
-          "Name": "TitleAr",
-          "Title": "Title Ar",
-          "FieldType": 1,
-          "SpecialType": 0,
-          "MediaType": "",
-          "FieldTypeDisplayName": "ShortText",
-          "LengthValidationMessage": "",
-          "Ordinal": 3,
           "CanCreateItemsWhileSelecting": true,
           "WidgetTypeName": "Telerik.Sitefinity.Web.UI.Fields.TextField",
           "DBType": "VARCHAR",
@@ -69,14 +37,46 @@
           "DefaultValue": "",
           "Choices": "",
           "ChoiceRenderType": "",
-          "GridColumnOrdinal": 2,
-          "ParentSectionId": "15182041-31e0-48f3-9e9b-6b4446ebc6e6",
+          "ShowInGrid": true,
+          "ParentSectionId": "8f689626-8170-48cc-982b-51436b70800b",
           "TypeUIName": "\n                                Short text\n                            ",
-          "Id": "4f357a8f-6458-4eda-b6f1-942a5654dcd1",
-          "LastModified": "2024-05-18T15:51:36.89Z"
+          "Id": "b7c42d5f-fc84-4550-84d0-f81c4682f5c2",
+          "LastModified": "2024-05-27T06:04:43.443Z"
         },
         {
-          "ParentTypeId": "346eaf2b-1cab-4ddb-a9bc-deae41cca78a",
+          "ParentTypeId": "6dc27364-5804-40e2-aae9-3cf00ff0860c",
+          "FieldNamespace": "Telerik.Sitefinity.DynamicTypes.Model.SubAttendeeTypes.Subattendeetype",
+          "Name": "TitleAr",
+          "Title": "Title ar",
+          "FieldType": 1,
+          "SpecialType": 0,
+          "MediaType": "",
+          "FieldTypeDisplayName": "ShortText",
+          "LengthValidationMessage": "",
+          "Ordinal": 3,
+          "CanCreateItemsWhileSelecting": true,
+          "WidgetTypeName": "Telerik.Sitefinity.Web.UI.Fields.TextField",
+          "DBType": "VARCHAR",
+          "ClassificationId": "e5cd6d69-1543-427b-ad62-688a99f5e7d4",
+          "DBLength": "",
+          "InstructionalChoice": "- Select -",
+          "NumberUnit": "",
+          "ColumnName": "",
+          "InstructionalText": "",
+          "ImageExtensions": "",
+          "VideoExtensions": "",
+          "FileExtensions": "",
+          "DefaultValue": "",
+          "Choices": "",
+          "ChoiceRenderType": "",
+          "GridColumnOrdinal": 2,
+          "ParentSectionId": "8f689626-8170-48cc-982b-51436b70800b",
+          "TypeUIName": "\n                                Short text\n                            ",
+          "Id": "3bd4d332-7ed5-4ba0-8d0f-4980dab13fd6",
+          "LastModified": "2024-05-27T06:04:43.443Z"
+        },
+        {
+          "ParentTypeId": "6dc27364-5804-40e2-aae9-3cf00ff0860c",
           "FieldNamespace": null,
           "Name": "IncludeInSitemap",
           "Title": "Include in sitemap",
@@ -86,12 +86,12 @@
           "FieldTypeDisplayName": "Unknown",
           "Ordinal": 1,
           "GridColumnOrdinal": 1,
-          "ParentSectionId": "f4a99c3a-f3b9-42a4-bd52-88d0040b2214",
-          "Id": "994f4e3f-ebc9-44ca-95cf-4cba24f3cb68",
-          "LastModified": "2024-05-18T15:51:36.89Z"
+          "ParentSectionId": "1d3d3f87-2762-438c-94bb-9c8356609889",
+          "Id": "f32eb2ea-a066-4783-90bc-cfb3a950fb6a",
+          "LastModified": "2024-05-27T06:04:43.443Z"
         },
         {
-          "ParentTypeId": "346eaf2b-1cab-4ddb-a9bc-deae41cca78a",
+          "ParentTypeId": "6dc27364-5804-40e2-aae9-3cf00ff0860c",
           "FieldNamespace": null,
           "Name": "UrlName",
           "Title": "URL Name",
@@ -103,12 +103,12 @@
           "Ordinal": 2,
           "RegularExpression": "^[\\p{L}\\-_\\.!~*'()\\d]+$",
           "GridColumnOrdinal": 2,
-          "ParentSectionId": "f4a99c3a-f3b9-42a4-bd52-88d0040b2214",
-          "Id": "0607d34d-e8e6-4a0f-8c3f-c25cd2f70f20",
-          "LastModified": "2024-05-18T15:51:36.89Z"
+          "ParentSectionId": "1d3d3f87-2762-438c-94bb-9c8356609889",
+          "Id": "c9ff3c20-17fb-4c72-8e0d-895618873d95",
+          "LastModified": "2024-05-27T06:04:43.443Z"
         },
         {
-          "ParentTypeId": "346eaf2b-1cab-4ddb-a9bc-deae41cca78a",
+          "ParentTypeId": "6dc27364-5804-40e2-aae9-3cf00ff0860c",
           "FieldNamespace": null,
           "Name": "Actions",
           "Title": "Actions",
@@ -119,12 +119,12 @@
           "Ordinal": 3,
           "ShowInGrid": true,
           "GridColumnOrdinal": 3,
-          "ParentSectionId": "f4a99c3a-f3b9-42a4-bd52-88d0040b2214",
-          "Id": "e359783c-c2a6-4422-b942-602965b8d3fa",
-          "LastModified": "2024-05-18T15:51:36.89Z"
+          "ParentSectionId": "1d3d3f87-2762-438c-94bb-9c8356609889",
+          "Id": "a8fbff38-32c9-47ce-ab2b-622a2eb13a6a",
+          "LastModified": "2024-05-27T06:04:43.443Z"
         },
         {
-          "ParentTypeId": "346eaf2b-1cab-4ddb-a9bc-deae41cca78a",
+          "ParentTypeId": "6dc27364-5804-40e2-aae9-3cf00ff0860c",
           "FieldNamespace": null,
           "Name": "Author",
           "Title": "Author",
@@ -135,12 +135,12 @@
           "Ordinal": 4,
           "ShowInGrid": true,
           "GridColumnOrdinal": 4,
-          "ParentSectionId": "f4a99c3a-f3b9-42a4-bd52-88d0040b2214",
-          "Id": "e1a4039f-a3f2-4d42-9599-f3b234156f14",
-          "LastModified": "2024-05-18T15:51:36.89Z"
+          "ParentSectionId": "1d3d3f87-2762-438c-94bb-9c8356609889",
+          "Id": "c591ebca-c0ae-4767-bc4f-1220baba4475",
+          "LastModified": "2024-05-27T06:04:43.443Z"
         },
         {
-          "ParentTypeId": "346eaf2b-1cab-4ddb-a9bc-deae41cca78a",
+          "ParentTypeId": "6dc27364-5804-40e2-aae9-3cf00ff0860c",
           "FieldNamespace": null,
           "Name": "PublicationDate",
           "Title": "Publication date",
@@ -150,12 +150,12 @@
           "FieldTypeDisplayName": "Unknown",
           "Ordinal": 5,
           "GridColumnOrdinal": 5,
-          "ParentSectionId": "f4a99c3a-f3b9-42a4-bd52-88d0040b2214",
-          "Id": "b3675ce6-c80b-46e3-9d46-ed40897e9bc4",
-          "LastModified": "2024-05-18T15:51:36.89Z"
+          "ParentSectionId": "1d3d3f87-2762-438c-94bb-9c8356609889",
+          "Id": "e94cd8c4-f16e-429b-8e8b-01e7ee14c4aa",
+          "LastModified": "2024-05-27T06:04:43.443Z"
         },
         {
-          "ParentTypeId": "346eaf2b-1cab-4ddb-a9bc-deae41cca78a",
+          "ParentTypeId": "6dc27364-5804-40e2-aae9-3cf00ff0860c",
           "FieldNamespace": null,
           "Name": "LastModified",
           "Title": "Last modified",
@@ -166,12 +166,12 @@
           "Ordinal": 7,
           "ShowInGrid": true,
           "GridColumnOrdinal": 7,
-          "ParentSectionId": "f4a99c3a-f3b9-42a4-bd52-88d0040b2214",
-          "Id": "aaaeb1a1-ffb2-4516-8883-effa1443bc80",
-          "LastModified": "2024-05-18T15:51:36.89Z"
+          "ParentSectionId": "1d3d3f87-2762-438c-94bb-9c8356609889",
+          "Id": "67aaf9b0-867f-4752-8d4a-0272e735ab27",
+          "LastModified": "2024-05-27T06:04:43.443Z"
         },
         {
-          "ParentTypeId": "346eaf2b-1cab-4ddb-a9bc-deae41cca78a",
+          "ParentTypeId": "6dc27364-5804-40e2-aae9-3cf00ff0860c",
           "FieldNamespace": null,
           "Name": "DateCreated",
           "Title": "Created on",
@@ -182,9 +182,9 @@
           "Ordinal": 8,
           "ShowInGrid": true,
           "GridColumnOrdinal": 8,
-          "ParentSectionId": "f4a99c3a-f3b9-42a4-bd52-88d0040b2214",
-          "Id": "44a6db52-24c1-4195-9ca7-7abc94ce880a",
-          "LastModified": "2024-05-18T15:51:36.89Z"
+          "ParentSectionId": "1d3d3f87-2762-438c-94bb-9c8356609889",
+          "Id": "df59e869-39a9-459f-b950-c10cdde00c27",
+          "LastModified": "2024-05-27T06:04:43.443Z"
         }
       ],
       "Sections": [
@@ -194,8 +194,8 @@
           "Title": "Main Section",
           "IsExpandable": false,
           "IsExpandedByDefault": false,
-          "ParentTypeId": "346eaf2b-1cab-4ddb-a9bc-deae41cca78a",
-          "Id": "15182041-31e0-48f3-9e9b-6b4446ebc6e6"
+          "ParentTypeId": "6dc27364-5804-40e2-aae9-3cf00ff0860c",
+          "Id": "8f689626-8170-48cc-982b-51436b70800b"
         },
         {
           "Name": "Classification",
@@ -203,8 +203,8 @@
           "Title": "Classification",
           "IsExpandable": true,
           "IsExpandedByDefault": true,
-          "ParentTypeId": "346eaf2b-1cab-4ddb-a9bc-deae41cca78a",
-          "Id": "b54c0c5c-64fa-4af5-a571-92f801b9580e"
+          "ParentTypeId": "6dc27364-5804-40e2-aae9-3cf00ff0860c",
+          "Id": "82073057-d9be-45b6-a60b-0e0f23c26762"
         },
         {
           "Name": "MoreOptions",
@@ -212,21 +212,21 @@
           "Title": "More Options",
           "IsExpandable": true,
           "IsExpandedByDefault": false,
-          "ParentTypeId": "346eaf2b-1cab-4ddb-a9bc-deae41cca78a",
-          "Id": "f4a99c3a-f3b9-42a4-bd52-88d0040b2214"
+          "ParentTypeId": "6dc27364-5804-40e2-aae9-3cf00ff0860c",
+          "Id": "1d3d3f87-2762-438c-94bb-9c8356609889"
         }
       ],
       "MainShortTextFieldName": "Title",
       "IsSelfReferencing": false,
       "CheckFieldPermissions": false,
-      "PageId": "073070b5-9ff1-4f4d-af7b-451986d42c16",
-      "Id": "346eaf2b-1cab-4ddb-a9bc-deae41cca78a",
-      "LastModified": "2024-05-18T15:51:41.687Z"
+      "PageId": "32921aed-2508-4626-a564-1eea19d13d36",
+      "Id": "6dc27364-5804-40e2-aae9-3cf00ff0860c",
+      "LastModified": "2024-05-27T06:04:50.147Z"
     }
   ],
   "DefaultBackendDefinitionName": null,
-  "PageId": "91f56f7f-cc64-444e-93c2-6842f23bd2e3",
-  "UrlName": "delegation-types",
-  "Id": "754b8ab3-313c-4bf8-a677-0889ea040367",
+  "PageId": "8f195ff2-c570-4e4f-a4de-c05a558d7b8a",
+  "UrlName": "subattendeetypes",
+  "Id": "f5c40884-8b6e-401c-8abc-53af740745ae",
   "Owner": "b973888a-1dac-4d56-be2c-e6df7642d0fe"
 }

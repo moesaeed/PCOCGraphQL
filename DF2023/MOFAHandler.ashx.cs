@@ -363,7 +363,7 @@ namespace DF2023
                                     }
                                     else if (sfName == "Username")
                                     {
-                                        var profile = UserExtention.GetUserProfile(dynamicContent);
+                                        var profile = Core.Extensions.UserExtensions.GetUserProfile(dynamicContent);
                                         if (profile != null)
                                         {
                                             values.Add(gqField.Name.StringValue, profile.Nickname);
@@ -371,7 +371,7 @@ namespace DF2023
                                     }
                                     else if (sfName == "Avatar")
                                     {
-                                        var avatar = UserExtention.GetUserAvatarURL(dynamicContent);
+                                        var avatar =Core.Extensions.UserExtensions.GetUserAvatarURL(dynamicContent);
                                         values.Add(gqField.Name.StringValue, avatar);
                                     }
                                     else if (sfName == "UserId")

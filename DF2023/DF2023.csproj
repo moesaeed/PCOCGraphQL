@@ -1193,7 +1193,10 @@
     <Compile Include="App_Start\RazorGeneratorMvcStart.cs" />
     <Compile Include="AzureWebRole.cs" />
     <Compile Include="Core\Configs\EmailConfig.cs" />
-    <Compile Include="Core\Constants.cs" />
+    <Compile Include="Core\Constants\DynamicModulesNames.cs" />
+    <Compile Include="Core\Constants\UserRoles.cs" />
+    <Compile Include="Core\Custom\DelegationManager.cs" />
+    <Compile Include="Core\Custom\DynamicContentItem.cs" />
     <Compile Include="Core\Extensions\UserExtensions.cs" />
     <Compile Include="Core\FCMHelper.cs" />
     <Compile Include="Core\Helpers\DynamicContentExtension.cs" />
@@ -1203,7 +1206,7 @@
     <Compile Include="Core\Helpers\NotificationHelper.cs" />
     <Compile Include="Core\Helpers\Process.cs" />
     <Compile Include="Core\Helpers\StringHelper.cs" />
-    <Compile Include="Core\UserExtention.cs" />
+    <Compile Include="CutomAttributes\AuthorizeWithRolesAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

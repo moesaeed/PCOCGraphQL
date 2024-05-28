@@ -16,7 +16,7 @@ namespace DF2023.Core.Helpers
             try
             {
                 DynamicModuleManager dynamicModuleManager = DynamicModuleManager.GetManager();
-                Type notificationType = TypeResolutionService.ResolveType(Constants.NotificationType);
+                Type notificationType = TypeResolutionService.ResolveType(Constants.DynamicModulesNames.NotificationType);
                 DynamicContent notificationItem = dynamicModuleManager.GetDataItem(notificationType, item.Id);
                 if (notificationItem != null && notificationItem.GetValue<bool>("SendNotification") == true)
                 {

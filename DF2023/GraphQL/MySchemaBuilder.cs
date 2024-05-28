@@ -380,7 +380,7 @@ namespace DF2023.GraphQL
                         DynamicContent dcItem = context.Source as DynamicContent;
                         if (dcItem != null)
                         {
-                            var profile = UserExtention.GetUserProfile(dcItem);
+                            var profile = Core.Extensions.UserExtensions.GetUserProfile(dcItem);
                             if (profile != null && profile.Nickname != null)
                             {
                                 return profile.Nickname;
@@ -405,7 +405,7 @@ namespace DF2023.GraphQL
                         DynamicContent dcItem = context.Source as DynamicContent;
                         if (dcItem != null)
                         {
-                            return UserExtention.GetUserAvatarURL(dcItem);
+                            return Core.Extensions.UserExtensions.GetUserAvatarURL(dcItem);
                         }
 
                         return null;
