@@ -1235,6 +1235,10 @@
     <Content Include="App_Data\Sitefinity\Configuration\SecurityConfig.config" />
     <Content Include="App_Data\Sitefinity\Configuration\SystemConfig.config" />
     <Content Include="App_Data\Sitefinity\Sitefinity.lic" />
+    <Content Include="MOFAHandler.ashx" />
+    <Content Include="App_Data\Sitefinity\Configuration\WebSecurityConfig.config" />
+    <Content Include="App_Data\Sitefinity\Configuration\WebServicesConfig.config" />
+    <Content Include="App_Data\Sitefinity\Configuration\AuthenticationConfig.config" />
     <Content Include="AdminApp\vendor.958dded24f6fc5c4.js.map" />
     <Content Include="AdminApp\styles.bf479c9f0d9e2f46.css.map" />
     <Content Include="AdminApp\src_app_modules_insight_insight_module_ts.434e3bcef923e159.js.map" />
@@ -1343,65 +1347,12 @@
     <Content Include="App_Data\RadSpell\en-US.tdf" />
     <Content Include="App_Data\RadSpell\de-DE.tdf" />
     <Content Include="App_Data\GeoLocation\GeoLite2-City.mmdb" />
-    <Content Include="MOFAHandler.ashx" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Airports\Structure\Airports.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Airports\Structure\configs.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Airports\Structure\version.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Airports\Structure\widgetTemplates.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Badge Types\Structure\Badge Types.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Badge Types\Structure\configs.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Badge Types\Structure\version.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Badge Types\Structure\widgetTemplates.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Conferences\Structure\Conferences.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Conferences\Structure\configs.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Conferences\Structure\version.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Conferences\Structure\widgetTemplates.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Conventions\Structure\configs.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Conventions\Structure\Conventions.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Conventions\Structure\version.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Conventions\Structure\widgetTemplates.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Countries\Structure\configs.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Countries\Structure\Countries.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Countries\Structure\version.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Countries\Structure\widgetTemplates.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Delegation Types\Structure\configs.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Delegation Types\Structure\Delegation Types.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Delegation Types\Structure\version.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Delegation Types\Structure\widgetTemplates.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Entities\Structure\configs.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Entities\Structure\Entities.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Entities\Structure\version.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Entities\Structure\widgetTemplates.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Guest Status\Structure\configs.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Guest Status\Structure\Guest Status.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Guest Status\Structure\version.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Guest Status\Structure\widgetTemplates.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\GuestPositions\Structure\configs.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\GuestPositions\Structure\GuestPositions.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\GuestPositions\Structure\version.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\GuestPositions\Structure\widgetTemplates.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\PassportTypes\Structure\configs.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\PassportTypes\Structure\PassportTypes.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\PassportTypes\Structure\version.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\PassportTypes\Structure\widgetTemplates.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Service Levels\Structure\configs.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Service Levels\Structure\Service Levels.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Service Levels\Structure\version.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\Service Levels\Structure\widgetTemplates.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\TitleList\Structure\configs.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\TitleList\Structure\TitleList.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\TitleList\Structure\version.sf" />
-    <Content Include="App_Data\Sitefinity\Deployment\Dynamic modules\TitleList\Structure\widgetTemplates.sf" />
-    <Content Include="App_Data\Sitefinity\Configuration\WebSecurityConfig.config" />
-    <Content Include="App_Data\Sitefinity\Configuration\WebServicesConfig.config" />
-    <Content Include="App_Data\Sitefinity\Configuration\AuthenticationConfig.config" />
     <None Include="packages.config" />
+    <Content Include="Sitefinity\ExternalLibraries\LibWebP\libwebp_x86.sflib" />
+    <Content Include="Sitefinity\ExternalLibraries\LibWebP\libwebp_x64.sflib" />
     <Content Include="SampleTemplate.cshtml">
       <Generator>RazorGenerator</Generator>
     </Content>
-    <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
-    <Content Include="Sitefinity\ExternalLibraries\LibWebP\libwebp_x86.sflib" />
-    <Content Include="Sitefinity\ExternalLibraries\LibWebP\libwebp_x64.sflib" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1410,12 +1361,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\Sitefinity\Deployment\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
     <Analyzer Include="..\packages\AWSSDK.DynamoDBv2.3.7.3.47\analyzers\dotnet\cs\AWSSDK.DynamoDBv2.CodeAnalysis.dll" />
     <Analyzer Include="..\packages\AWSSDK.S3.3.7.9.15\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
     <Analyzer Include="..\packages\AWSSDK.SQS.3.7.2.68\analyzers\dotnet\cs\AWSSDK.SQS.CodeAnalysis.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Mvc\Views\User\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
