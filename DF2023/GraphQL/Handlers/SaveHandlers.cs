@@ -1,4 +1,5 @@
-﻿using DF2023.Core.Helpers;
+﻿using DF2023.Core.Custom;
+using DF2023.Core.Helpers;
 using DF2023.GraphQL.Classes;
 using GraphQL;
 using ServiceStack;
@@ -104,6 +105,19 @@ namespace DF2023.GraphQL.Handlers
                 var id = contextValue.ContainsKey("id") ? Guid.Parse(contextValue["id"].ToString()) : Guid.Empty;
                 var title = contextValue.ContainsKey("title") ? contextValue["title"].ToString() : string.Empty;
                 var type = TypeResolutionService.ResolveType(contentType);
+
+                ContentHandler handler = ContentHandlerFactory.GetHandler(contentType);
+
+                // Validation before any processing
+                if (!handler.IsDataValid(contextValue))
+                {
+                    throw new InvalidOperationException("The item cannot be saved due to validation failure.");
+                }
+
+                // Pre-process data before setting value
+                handler.PreProcessData(contextValue);
+
+
                 var metaType = FieldHandlers.SitefinityMetaTypes.FirstOrDefault(t => t.Namespace == type.Namespace && t.ClassName == type.Name);
                 var dynamicManager = DynamicModuleManager.GetManager();
 
@@ -155,6 +169,9 @@ namespace DF2023.GraphQL.Handlers
                 var versionManager = VersionManager.GetManager();
                 var version = versionManager.CreateVersion(item, true);
                 versionManager.SaveChanges();
+
+                // Post-process data after saving
+                handler.PostProcessData(item);
 
                 return item;
             }

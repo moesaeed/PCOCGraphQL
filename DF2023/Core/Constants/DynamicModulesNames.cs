@@ -1,5 +1,16 @@
 ﻿namespace DF2023.Core.Constants
 {
+    public static class Others
+    {
+        public const string UserCustomField = "About";
+    }
+
+        public static class UserRoles
+    {
+        public const string GuestAdmin = "GuestAdmin";
+        public const string PCOC = "PCOC";
+    }
+
     public static class DynamicModulesNames
     {
         public const string NotificationType = "Telerik.Sitefinity.DynamicTypes.Model.Conferences.Notification";
