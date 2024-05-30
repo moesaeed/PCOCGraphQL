@@ -1197,6 +1197,7 @@
     <Compile Include="Core\Extensions\UserExtensions.cs" />
     <Compile Include="Core\FCMHelper.cs" />
     <Compile Include="Core\Helpers\ConnectionsHelper.cs" />
+    <Compile Include="Core\Helpers\ConventionHelper.cs" />
     <Compile Include="Core\Helpers\DynamicContentExtension.cs" />
     <Compile Include="Core\Helpers\EmailHelper.cs" />
     <Compile Include="Core\Helpers\FCMHTTPV1.cs" />

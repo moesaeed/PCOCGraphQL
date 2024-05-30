@@ -199,6 +199,16 @@ namespace DF2023.GraphQL.Handlers
                             isValidMutation = false;
                     }
                 }
+                else if (contentType.ToLower().EndsWith(".Delegation"))
+                {
+                    if (isNewItem)
+                    {
+                        var parentId = contextValue.ContainsKey("parentID") ? contextValue["parentID"].ToString() : string.Empty;
+                        var email = contextValue.ContainsKey("email") ? contextValue["email"].ToString() : string.Empty;
+                        if (ConventionHelper.isExistEmail(dynamicManager, new Guid(parentId), email))
+                            isValidMutation = false;
+                    }
+                }
 
                 if (isValidMutation)
                 {
