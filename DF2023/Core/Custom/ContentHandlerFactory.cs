@@ -1,4 +1,4 @@
-﻿using System;
+﻿using DF2023.Core.Constants;
 
 namespace DF2023.Core.Custom
 {
@@ -6,13 +6,13 @@ namespace DF2023.Core.Custom
     {
         public static ContentHandler GetHandler(string contentType)
         {
-            switch (contentType.ToLower())
+            switch (contentType)
             {
-                case "article":
+                case Delegation.DelegationDynamicTypeName:
                     return new DelegationManager();
 
                 default:
-                    throw new NotSupportedException($"Content type '{contentType}' is not supported.");
+                    return new DefaultContentHandler();
             }
         }
     }

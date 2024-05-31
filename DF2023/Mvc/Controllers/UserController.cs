@@ -5,9 +5,6 @@ using DF2023.CutomAttributes;
 using DF2023.Mvc.Models;
 using System;
 using System.Globalization;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Web.Http;
 using Telerik.Sitefinity.Services;
 
@@ -35,26 +32,21 @@ namespace DF2023.Mvc.Controllers
 
         [AuthorizeWithRoles(UserRoles.GuestAdmin)]
         [HttpGet]
-        public HttpResponseMessage GetGuestConventionDetails()
+        public IHttpActionResult GetGuestConventionDetails()
         {
             ApiResult apiResult = null;
             try
             {
-                string data = UserExtensions.GetUserCustomfieldValue(Others.UserCustomField);
+                string data = UserExtensions.GetUserCustomfieldValue(Others.UserCustomField, UserExtensions.GetCurentUserId());
 
-                var contentString = new StringContent(data);
-
-                var response = new HttpResponseMessage(HttpStatusCode.OK);
-                response.Content = contentString;
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-                return response;
+                apiResult = new ApiResult("Guest Convention Details", true, data);
             }
             catch (Exception ex)
             {
+                apiResult = new ApiResult(ex.Message, false, null);
             }
 
-            return null;
+            return this.Ok(apiResult);
         }
     }
 }

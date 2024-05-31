@@ -12,4 +12,22 @@ namespace DF2023.Core.Custom
 
         public abstract void PostProcessData(DynamicContent item);
     }
+
+    public class DefaultContentHandler : ContentHandler
+    {
+        public override bool IsDataValid(Dictionary<string, object> contextValue)
+        {
+            return true;
+        }
+
+        public override void PreProcessData(Dictionary<string, object> contextValue)
+        {
+            // No pre-processing for unsupported types
+        }
+
+        public override void PostProcessData(DynamicContent item)
+        {
+            // No post-processing for unsupported types
+        }
+    }
 }

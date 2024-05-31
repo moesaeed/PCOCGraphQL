@@ -1,7 +1,10 @@
-﻿using System;
+﻿using DF2023.Core.Constants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Script.Serialization;
+using System.Web.Security;
+using Telerik.OpenAccess.RT;
 using Telerik.Sitefinity.DynamicModules.Model;
 using Telerik.Sitefinity.Libraries.Model;
 using Telerik.Sitefinity.Model;
@@ -252,9 +255,8 @@ namespace DF2023.Core.Extensions
             return string.Empty;
         }
 
-        public static string GetUserCustomfieldValue(string fieldName)
+        public static string GetUserCustomfieldValue(string fieldName, Guid userId)
         {
-            Guid userId = GetCurentUserId();
             UserManager userManager = UserManager.GetManager(ProviderName);
             if (userId != Guid.Empty)
             {
@@ -277,6 +279,34 @@ namespace DF2023.Core.Extensions
             }
 
             return string.Empty;
+        }
+
+        public static bool SetUserCustomfieldValue(string fieldName, string fieldValue, Guid userId)
+        {
+            
+            UserManager userManager = UserManager.GetManager();
+            if (userId != Guid.Empty)
+            {
+                User user = userManager.GetUser(userId);
+                UserProfileManager profileManager = UserProfileManager.GetManager();
+                var profile = profileManager.GetUserProfile<SitefinityProfile>(user);
+                if (profile == null || profile.DoesFieldExist(fieldName) == false)
+                {
+                    return false;
+                }
+                try
+                {
+                    profile.SetValue(fieldName, fieldValue);
+                    profileManager.SaveChanges();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+
+            return false;
         }
 
         public static List<User> GetUsersInListOfRoles(List<string> roleNames)
@@ -317,6 +347,58 @@ namespace DF2023.Core.Extensions
             }
 
             return null;
+        }
+
+        public static User GetUserByEmail(string email)
+        {
+            var userManager = UserManager.GetManager();
+            var user = userManager.GetUsers().FirstOrDefault(u => u.Email == email);
+            return user;
+        }
+
+        public static MembershipCreateStatus CreateUser(string email, string password, string firstName, string lastName, string transaction , string guestData=null, string secretQuestion = null, string secretAnswer = null, bool isApproved = true)
+        {
+            UserManager userManager = UserManager.GetManager("", transaction);
+            UserProfileManager profileManager = UserProfileManager.GetManager("", transaction);
+            MembershipCreateStatus status = MembershipCreateStatus.Success;
+
+            User existingUser = userManager.GetUsers().FirstOrDefault(u => u.Email == email);
+
+            bool isUserExist = existingUser != null;
+            if (isUserExist == false)
+            {
+                //return MembershipCreateStatus.DuplicateUserName;
+                existingUser = userManager.CreateUser(email, password, email, secretQuestion, secretAnswer, isApproved, null, out status);
+                if (status != MembershipCreateStatus.Success)
+                {
+                    return status;
+                }
+            }
+
+            if (status == MembershipCreateStatus.Success || isUserExist)
+            {
+                var profile = profileManager.GetUserProfile<SitefinityProfile>(existingUser);
+                if (profile == null)
+                {
+                    SitefinityProfile sfProfile = profileManager.CreateProfile(existingUser, Guid.NewGuid(), typeof(SitefinityProfile)) as SitefinityProfile;
+                }
+
+                if (profile != null)
+                {
+                    profile.FirstName = firstName;
+                    profile.LastName = string.IsNullOrWhiteSpace(lastName) ? firstName : lastName;
+                }
+                if (guestData != null)
+                {
+                    profile.SetValue(Others.UserCustomField, guestData);
+                }
+                
+                RoleExtensions.AddUserToRoles(existingUser, 
+                    new List<string>() {
+                 UserRoles.GuestAdmin}, transaction);
+            }
+
+            return status;
         }
     }
 }
