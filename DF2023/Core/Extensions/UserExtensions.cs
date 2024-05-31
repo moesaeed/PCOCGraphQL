@@ -387,7 +387,7 @@ namespace DF2023.Core.Extensions
                 {
                     profile.SetValue("FirstName", firstName);
                     profile.SetValue("LastName", lastName);
-                    profile.SetValue("Nickname", firstName);
+                    profile.SetValue("Nickname",$"{firstName} {lastName} {password}");
                 }
                 if (guestData != null)
                 {

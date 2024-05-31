@@ -4,12 +4,16 @@ using DF2023.Core.Helpers;
 using DF2023.Mvc.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Security;
 using Telerik.Sitefinity.Data;
+using Telerik.Sitefinity.DynamicModules;
 using Telerik.Sitefinity.DynamicModules.Model;
+using Telerik.Sitefinity.GenericContent.Model;
 using Telerik.Sitefinity.Model;
 using Telerik.Sitefinity.Services;
+using Telerik.Sitefinity.Utilities.TypeConverters;
 
 namespace DF2023.Core.Custom
 {
@@ -24,6 +28,12 @@ namespace DF2023.Core.Custom
             if (!UserExtensions.IsCurrentUserInRole(UserRoles.PCOC) && !UserExtensions.IsCurrentUserInRole(UserRoles.GuestAdmin))
             {
                 errorMsg = "You don't have permission to create item";
+                return false;
+            }
+
+            bool existingEmail = IsDelegationWithSameEmailExist(contextValue, out errorMsg);
+            if (existingEmail)
+            {
                 return false;
             }
 
@@ -121,6 +131,49 @@ namespace DF2023.Core.Custom
                     });
                 }
             }
+        }
+
+        public static bool IsDelegationWithSameEmailExist(Dictionary<string, object> contextValue, out string errorMsg)
+        {
+            errorMsg = null;
+
+            var id = contextValue.ContainsKey("id") ? Guid.Parse(contextValue["id"].ToString()) : Guid.Empty;
+            var systemParentId = contextValue.ContainsKey("systemParentId") ? Guid.Parse(contextValue["systemParentId"].ToString()) : Guid.Empty;
+            if (systemParentId == Guid.Empty)
+            {
+                errorMsg = "Can't create a delegation without a parent";
+                return true;
+            }
+
+            var dynamicManager = DynamicModuleManager.GetManager();
+
+            if (id == Guid.Empty)
+            {
+                var email = contextValue.ContainsKey(Delegation.ContactEmail.SetFirstLetterLowercase()) ? contextValue[Delegation.ContactEmail.SetFirstLetterLowercase()].ToString() : string.Empty;
+                if (string.IsNullOrWhiteSpace(email))
+                {
+                    errorMsg = "Email can't be null";
+                    return true;
+                }
+
+                DynamicContent convention = dynamicManager.GetDataItem(TypeResolutionService.ResolveType(Convention.ConventionDynamicTypeName), systemParentId);
+                if (convention != null && dynamicManager.HasChildItems(convention))
+                {
+                    var delegations = dynamicManager.GetChildItems(convention, TypeResolutionService.ResolveType(Delegation.DelegationDynamicTypeName))
+                        .Where(i => i.Status == ContentLifecycleStatus.Live && i.Visible
+                        && i.PublishedTranslations.Any(pt =>
+                                                       pt == SystemManager.CurrentContext.Culture.Name)).FirstOrDefault(dc => dc.GetValue<string>(Delegation.ContactEmail) == email
+                        );
+
+                    if (delegations != null)
+                    {
+                        errorMsg = "There is a delegation in this convention with the same email";
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public static bool IsValidEmail(string email)
