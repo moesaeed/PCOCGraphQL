@@ -1208,6 +1208,7 @@
     <Compile Include="Core\Helpers\PasswordGenerator.cs" />
     <Compile Include="Core\Helpers\Process.cs" />
     <Compile Include="Core\Helpers\StringHelper.cs" />
+    <Compile Include="CustomMembershipProvider.cs" />
     <Compile Include="CutomAttributes\AuthorizeWithRolesAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
