@@ -359,7 +359,7 @@ namespace DF2023.Core.Extensions
         public static MembershipCreateStatus CreateUser(string email, string password, string firstName, string lastName, string transaction , string guestData=null, string secretQuestion = null, string secretAnswer = null, bool isApproved = true)
         {
             UserManager userManager = UserManager.GetManager("", transaction);
-            UserProfileManager profileManager = UserProfileManager.GetManager("", transaction);
+            UserProfileManager profileManager = UserProfileManager.GetManager(UserProfileManager.GetDefaultProviderName(), transaction);
             MembershipCreateStatus status = MembershipCreateStatus.Success;
 
             User existingUser = userManager.GetUsers().FirstOrDefault(u => u.Email == email);
@@ -380,13 +380,14 @@ namespace DF2023.Core.Extensions
                 var profile = profileManager.GetUserProfile<SitefinityProfile>(existingUser);
                 if (profile == null)
                 {
-                    SitefinityProfile sfProfile = profileManager.CreateProfile(existingUser, Guid.NewGuid(), typeof(SitefinityProfile)) as SitefinityProfile;
+                    profile = profileManager.CreateProfile(existingUser, Guid.NewGuid(), typeof(SitefinityProfile)) as SitefinityProfile;
                 }
 
                 if (profile != null)
                 {
-                    profile.FirstName = firstName;
-                    profile.LastName = string.IsNullOrWhiteSpace(lastName) ? firstName : lastName;
+                    profile.SetValue("FirstName", firstName);
+                    profile.SetValue("LastName", lastName);
+                    profile.SetValue("Nickname", firstName);
                 }
                 if (guestData != null)
                 {

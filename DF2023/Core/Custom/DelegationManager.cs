@@ -19,20 +19,15 @@ namespace DF2023.Core.Custom
         public override bool IsDataValid(Dictionary<string, object> contextValue, out string errorMsg)
         {
             errorMsg = null;
-            bool isValid = UserExtensions.IsCurrentUserInRole(UserRoles.PCOC);
-            if (isValid == false)
+
+            if (!UserExtensions.IsCurrentUserInRole(UserRoles.PCOC) && !UserExtensions.IsCurrentUserInRole(UserRoles.GuestAdmin))
             {
-                isValid = UserExtensions.IsCurrentUserInRole(UserRoles.GuestAdmin);
-                if (isValid == false)
-                {
-                    errorMsg = "You don't have permission to create item";
-                }
+                errorMsg = "You don't have permission to create item";
+                return false;
             }
 
             var id = contextValue.ContainsKey("id") ? Guid.Parse(contextValue["id"].ToString()) : Guid.Empty;
-            IsNewDelegation = false;
-            // id == Guid.Empty => New delegation and we need to create a user
-            if (id == Guid.Empty && isValid)
+            if (id == Guid.Empty)
             {
                 IsNewDelegation = true;
 
@@ -41,11 +36,11 @@ namespace DF2023.Core.Custom
                 if (string.IsNullOrWhiteSpace(contactName) || string.IsNullOrWhiteSpace(email))
                 {
                     errorMsg = "Contact name and email can't be null";
-                    isValid = false;
+                    return false;
                 }
             }
 
-            return isValid;
+            return true;
         }
 
         public override void PreProcessData(Dictionary<string, object> contextValue)
@@ -60,7 +55,6 @@ namespace DF2023.Core.Custom
                     var email = contextValue.ContainsKey(Delegation.ContactEmail.SetFirstLetterLowercase()) ? contextValue[Delegation.ContactEmail.SetFirstLetterLowercase()].ToString() : string.Empty;
                     if (IsValidEmail(email))
                     {
-                        string transactio = Guid.NewGuid().ToString();
                         string password = PasswordGenerator.GenerateStrongPassword(8);
                         MembershipCreateStatus membershipCreateStatus =
                             UserExtensions.CreateUser(email, password, contactName, contactName, transaction);
@@ -70,6 +64,10 @@ namespace DF2023.Core.Custom
                         }
 
                         TransactionManager.CommitTransaction(transaction);
+                    }
+                    else
+                    {
+                        throw new NoStackTraceException("Not valid email");
                     }
                 }
             });
