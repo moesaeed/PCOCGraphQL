@@ -9,6 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Telerik.Sitefinity;
+using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Data;
 using Telerik.Sitefinity.DynamicModules;
 using Telerik.Sitefinity.DynamicModules.Model;
@@ -109,9 +110,10 @@ namespace DF2023.GraphQL.Handlers
                 ContentHandler handler = ContentHandlerFactory.GetHandler(contentType);
 
                 // Validation before any processing
-                if (!handler.IsDataValid(contextValue))
+                string errorMsg;
+                if (!handler.IsDataValid(contextValue,out errorMsg))
                 {
-                    throw new InvalidOperationException("The item cannot be saved due to validation failure.");
+                    throw new NoStackTraceException(errorMsg);
                 }
 
                 // Pre-process data before setting value

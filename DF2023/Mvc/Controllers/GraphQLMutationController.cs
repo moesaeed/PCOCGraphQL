@@ -1,4 +1,5 @@
-﻿using DF2023.GraphQL;
+﻿using DF2023.Core.Custom;
+using DF2023.GraphQL;
 using GraphQL;
 using GraphQL.DataLoader;
 using GraphQL.Execution;
@@ -81,8 +82,15 @@ namespace DF2023.Mvc.Controllers
                     if (originalException != null)
                     {
                         JObject originalExecutionResult = JsonConvert.DeserializeObject<JObject>(content);
-                        originalExecutionResult.Add("OriginalException", $"{originalException.Message} Stack Trace: {originalException.StackTrace}");
-                        content = JsonConvert.SerializeObject(originalExecutionResult);
+                        if (originalException is NoStackTraceException)
+                        {
+                            content = JsonConvert.SerializeObject(originalException.Message);
+                        }
+                        else
+                        {
+                            originalExecutionResult.Add("OriginalException", $"{originalException.Message} Stack Trace: {originalException.StackTrace}");
+                            content = JsonConvert.SerializeObject(originalExecutionResult);
+                        }
                     }
                     HttpResponseMessage httpResponseMessage = request.CreateResponse(httpResult);
                     httpResponseMessage.Content = new StringContent(content, Encoding.UTF8, "application/graphql+json");

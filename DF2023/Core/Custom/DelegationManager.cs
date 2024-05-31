@@ -16,12 +16,17 @@ namespace DF2023.Core.Custom
     {
         public bool IsNewDelegation { get; set; }
 
-        public override bool IsDataValid(Dictionary<string, object> contextValue)
+        public override bool IsDataValid(Dictionary<string, object> contextValue, out string errorMsg)
         {
+            errorMsg = null;
             bool isValid = UserExtensions.IsCurrentUserInRole(UserRoles.PCOC);
             if (isValid == false)
             {
                 isValid = UserExtensions.IsCurrentUserInRole(UserRoles.GuestAdmin);
+                if (isValid == false)
+                {
+                    errorMsg = "You don't have permission to create item";
+                }
             }
 
             var id = contextValue.ContainsKey("id") ? Guid.Parse(contextValue["id"].ToString()) : Guid.Empty;
@@ -35,6 +40,7 @@ namespace DF2023.Core.Custom
                 var email = contextValue.ContainsKey(Delegation.ContactEmail.SetFirstLetterLowercase()) ? contextValue[Delegation.ContactEmail.SetFirstLetterLowercase()].ToString() : string.Empty;
                 if (string.IsNullOrWhiteSpace(contactName) || string.IsNullOrWhiteSpace(email))
                 {
+                    errorMsg = "Contact name and email can't be null";
                     isValid = false;
                 }
             }
