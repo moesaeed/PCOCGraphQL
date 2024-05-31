@@ -1,5 +1,5 @@
-﻿using DF2023.Core.Custom;
-using DF2023.GraphQL;
+﻿using DF2023.GraphQL;
+using DF2023.Mvc.Models;
 using GraphQL;
 using GraphQL.DataLoader;
 using GraphQL.Execution;

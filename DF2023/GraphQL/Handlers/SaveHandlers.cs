@@ -1,6 +1,7 @@
 ﻿using DF2023.Core.Custom;
 using DF2023.Core.Helpers;
 using DF2023.GraphQL.Classes;
+using DF2023.Mvc.Models;
 using GraphQL;
 using ServiceStack;
 using System;
@@ -9,7 +10,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Telerik.Sitefinity;
-using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Data;
 using Telerik.Sitefinity.DynamicModules;
 using Telerik.Sitefinity.DynamicModules.Model;
@@ -111,14 +111,13 @@ namespace DF2023.GraphQL.Handlers
 
                 // Validation before any processing
                 string errorMsg;
-                if (!handler.IsDataValid(contextValue,out errorMsg))
+                if (!handler.IsDataValid(contextValue, out errorMsg))
                 {
                     throw new NoStackTraceException(errorMsg);
                 }
 
                 // Pre-process data before setting value
                 handler.PreProcessData(contextValue);
-
 
                 var metaType = FieldHandlers.SitefinityMetaTypes.FirstOrDefault(t => t.Namespace == type.Namespace && t.ClassName == type.Name);
                 var dynamicManager = DynamicModuleManager.GetManager();

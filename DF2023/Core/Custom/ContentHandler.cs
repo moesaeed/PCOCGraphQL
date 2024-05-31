@@ -31,16 +31,4 @@ namespace DF2023.Core.Custom
             return true;
         }
     }
-
-    public class NoStackTraceException : Exception
-    {
-        public NoStackTraceException(string message) : base(message)
-        {
-        }
-
-        public override string StackTrace
-        {
-            get { return string.Empty; }
-        }
-    }
 }

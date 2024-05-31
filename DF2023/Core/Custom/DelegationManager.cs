@@ -1,6 +1,7 @@
 ﻿using DF2023.Core.Constants;
 using DF2023.Core.Extensions;
 using DF2023.Core.Helpers;
+using DF2023.Mvc.Models;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -51,8 +52,12 @@ namespace DF2023.Core.Custom
                 if (id == Guid.Empty)
                 {
                     string transaction = Guid.NewGuid().ToString();
-                    var contactName = contextValue.ContainsKey(Delegation.ContactName.SetFirstLetterLowercase()) ? contextValue[Delegation.ContactName.SetFirstLetterLowercase()].ToString() : string.Empty;
-                    var email = contextValue.ContainsKey(Delegation.ContactEmail.SetFirstLetterLowercase()) ? contextValue[Delegation.ContactEmail.SetFirstLetterLowercase()].ToString() : string.Empty;
+                    var contactName = contextValue.ContainsKey(Delegation.ContactName.SetFirstLetterLowercase()) ?
+                    contextValue[Delegation.ContactName.SetFirstLetterLowercase()].ToString() : string.Empty;
+
+                    var email = contextValue.ContainsKey(Delegation.ContactEmail.SetFirstLetterLowercase()) ?
+                    contextValue[Delegation.ContactEmail.SetFirstLetterLowercase()].ToString() : string.Empty;
+
                     if (IsValidEmail(email))
                     {
                         string password = PasswordGenerator.GenerateStrongPassword(8);

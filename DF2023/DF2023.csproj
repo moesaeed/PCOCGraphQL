@@ -1230,6 +1230,7 @@
     <Compile Include="Mvc\Controllers\RolesController.cs" />
     <Compile Include="Mvc\Controllers\UserController.cs" />
     <Compile Include="Mvc\Models\ApiResult.cs" />
+    <Compile Include="Mvc\Models\NoStackTraceException.cs" />
     <Compile Include="Mvc\Models\PushNotificationViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
