@@ -1196,12 +1196,13 @@
     <Compile Include="Core\Constants\DynamicModulesNames.cs" />
     <Compile Include="Core\Custom\ContentHandler.cs" />
     <Compile Include="Core\Custom\ContentHandlerFactory.cs" />
+    <Compile Include="Core\Custom\DelegationEmailManager.cs" />
     <Compile Include="Core\Custom\DelegationManager.cs" />
     <Compile Include="Core\Extensions\RoleExtensions.cs" />
     <Compile Include="Core\Extensions\UserExtensions.cs" />
     <Compile Include="Core\FCMHelper.cs" />
     <Compile Include="Core\Helpers\DynamicContentExtension.cs" />
-    <Compile Include="Core\Helpers\EmailHelper.cs" />
+    <Compile Include="Core\Helpers\EmailSender.cs" />
     <Compile Include="Core\Helpers\FCMHTTPV1.cs" />
     <Compile Include="Core\Helpers\MediaHelper.cs" />
     <Compile Include="Core\Helpers\NotificationHelper.cs" />
@@ -1228,6 +1229,7 @@
     </Compile>
     <Compile Include="Mvc\Controllers\GraphQLMutationController.cs" />
     <Compile Include="Mvc\Controllers\RolesController.cs" />
+    <Compile Include="Mvc\Controllers\DelegationController.cs" />
     <Compile Include="Mvc\Controllers\UserController.cs" />
     <Compile Include="Mvc\Models\ApiResult.cs" />
     <Compile Include="Mvc\Models\NoStackTraceException.cs" />

@@ -8,9 +8,9 @@ using Telerik.Sitefinity.Configuration;
 
 namespace DF2023.Core.Helpers
 {
-    public class EmailHelper
+    public class EmailSender
     {
-        public static bool Execute(List<string> toEmailAddresses, string subject, string emailBody)
+        public static bool Send(List<string> recipients, string subject, string emailMessage)
         {
             try
             {
@@ -22,7 +22,7 @@ namespace DF2023.Core.Helpers
                 var from = new EmailAddress(email, emailSenderName);
 
                 List<EmailAddress> tos = new List<EmailAddress>();
-                foreach (string item in toEmailAddresses)
+                foreach (string item in recipients)
                 {
                     if (!string.IsNullOrEmpty(item))
                     {
@@ -30,7 +30,7 @@ namespace DF2023.Core.Helpers
                     }
                 }
 
-                var msg = MailHelper.CreateSingleEmailToMultipleRecipients(from, tos, subject, null, emailBody, false);
+                var msg = MailHelper.CreateSingleEmailToMultipleRecipients(from, tos, subject, null, emailMessage, false);
                 var res = client.SendEmailAsync(msg).Result;
 
                 if (res.StatusCode == System.Net.HttpStatusCode.Unauthorized)
