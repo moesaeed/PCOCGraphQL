@@ -119,6 +119,11 @@ namespace DF2023.GraphQL.Handlers
                 // Pre-process data before setting value
                 handler.PreProcessData(contextValue);
 
+                if (!string.IsNullOrWhiteSpace(handler.TitleValue))
+                {
+                    contextValue["title"]=handler.TitleValue;
+                }
+
                 var metaType = FieldHandlers.SitefinityMetaTypes.FirstOrDefault(t => t.Namespace == type.Namespace && t.ClassName == type.Name);
                 var dynamicManager = DynamicModuleManager.GetManager();
 

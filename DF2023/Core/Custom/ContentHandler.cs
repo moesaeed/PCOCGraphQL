@@ -6,6 +6,8 @@ namespace DF2023.Core.Custom
 {
     public abstract class ContentHandler
     {
+        public string TitleValue { get; set; }
+
         public abstract bool IsDataValid(Dictionary<string, Object> contextValue, out string errorMsg);
 
         public abstract void PreProcessData(Dictionary<string, Object> contextValue);

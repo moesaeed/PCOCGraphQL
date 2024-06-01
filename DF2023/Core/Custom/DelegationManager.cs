@@ -49,6 +49,12 @@ namespace DF2023.Core.Custom
                     errorMsg = "Contact name and email can't be null";
                     return false;
                 }
+
+                var title = contextValue.ContainsKey("title") ? contextValue["title"].ToString() : string.Empty;
+                if (string.IsNullOrWhiteSpace(title))
+                {
+                    TitleValue = $"{contactName} - {email}";
+                }
             }
 
             return true;
