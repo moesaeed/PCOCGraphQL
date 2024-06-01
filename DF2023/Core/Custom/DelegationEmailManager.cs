@@ -43,7 +43,7 @@ namespace DF2023.Core.Custom
                         var service = delegation.GetRelatedItems(Delegation.ServicesLevel)?.FirstOrDefault();
                         if(service != null)
                         {
-                            var contentLink = DynamicContentExtension.GetRelationsByChild(service.Id, "ss", "ss")?.FirstOrDefault();
+                            var contentLink = DynamicContentExtension.GetRelationsByChild(service.Id, ServicesLevel.ServicesLevelDynamicTypeName, CustomTextConfig.CustomTextConfigDynamicTypeName)?.FirstOrDefault();
                             if (contentLink != null)
                             {
                                 var customTextConfig = dynamicManager.GetDataItem(TypeResolutionService.ResolveType(CustomTextConfig.CustomTextConfigDynamicTypeName), contentLink.ChildItemId);
