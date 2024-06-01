@@ -46,9 +46,9 @@ namespace DF2023.Core.Custom
                             var contentLink = DynamicContentExtension.GetRelationsByChild(service.Id, ServicesLevel.ServicesLevelDynamicTypeName, CustomTextConfig.CustomTextConfigDynamicTypeName)?.FirstOrDefault();
                             if (contentLink != null)
                             {
-                                var customTextConfig = dynamicManager.GetDataItem(TypeResolutionService.ResolveType(CustomTextConfig.CustomTextConfigDynamicTypeName), contentLink.ChildItemId);
-                                subject = convention.GetValue<string>(CustomTextConfig.InvitationEmailSubject);
-                                emailMessage = convention.GetValue<string>(CustomTextConfig.InvitationEmail);
+                                var customTextConfig = dynamicManager.GetDataItem(TypeResolutionService.ResolveType(CustomTextConfig.CustomTextConfigDynamicTypeName), contentLink.ParentItemId);
+                                subject = customTextConfig.GetValue<string>(CustomTextConfig.InvitationEmailSubject);
+                                emailMessage = customTextConfig.GetValue<string>(CustomTextConfig.InvitationEmail);
                             }
                             
                         }
