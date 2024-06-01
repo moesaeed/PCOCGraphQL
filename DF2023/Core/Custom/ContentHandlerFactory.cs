@@ -11,6 +11,9 @@ namespace DF2023.Core.Custom
                 case Delegation.DelegationDynamicTypeName:
                     return new DelegationManager();
 
+                case Guest.GuestDynamicTypeName:
+                    return new GuestManager();
+
                 default:
                     return new DefaultContentHandler();
             }

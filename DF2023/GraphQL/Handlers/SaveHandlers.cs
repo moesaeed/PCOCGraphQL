@@ -121,7 +121,7 @@ namespace DF2023.GraphQL.Handlers
 
                 if (!string.IsNullOrWhiteSpace(handler.TitleValue))
                 {
-                    contextValue["title"]=handler.TitleValue;
+                    contextValue["title"] = handler.TitleValue;
                 }
 
                 var metaType = FieldHandlers.SitefinityMetaTypes.FirstOrDefault(t => t.Namespace == type.Namespace && t.ClassName == type.Name);

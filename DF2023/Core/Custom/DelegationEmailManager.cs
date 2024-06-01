@@ -31,8 +31,9 @@ namespace DF2023.Core.Custom
 
                     if (customInvitation)
                     {
+                        // TODO: Rawad could you please
                         // 1. Retrieve delegation's service level.
-                        // 2. Based on the service level, fetch custom text configurations for the convention.
+                        // 2. Based on the service level, fetch custom text configurations form the convention.
                         // 3. Extract the invitation email subject and Invitation email content from the retrieved configurations.
                     }
                     else

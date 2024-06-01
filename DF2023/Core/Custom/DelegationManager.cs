@@ -144,32 +144,32 @@ namespace DF2023.Core.Custom
             errorMsg = null;
 
             var id = contextValue.ContainsKey("id") ? Guid.Parse(contextValue["id"].ToString()) : Guid.Empty;
-            var systemParentId = contextValue.ContainsKey("systemParentId") ? Guid.Parse(contextValue["systemParentId"].ToString()) : Guid.Empty;
-            if (systemParentId == Guid.Empty)
-            {
-                errorMsg = "Can't create a delegation without a parent";
-                return true;
-            }
-
-            var email = contextValue.ContainsKey(Delegation.ContactEmail.SetFirstLetterLowercase()) ? contextValue[Delegation.ContactEmail.SetFirstLetterLowercase()].ToString() : string.Empty;
-            if (string.IsNullOrWhiteSpace(email))
-            {
-                errorMsg = "Email can't be null";
-                return true;
-            }
-
             var dynamicManager = DynamicModuleManager.GetManager();
             var type = TypeResolutionService.ResolveType(Delegation.DelegationDynamicTypeName);
+            var email = contextValue.ContainsKey(Delegation.ContactEmail.SetFirstLetterLowercase()) ? contextValue[Delegation.ContactEmail.SetFirstLetterLowercase()].ToString().ToLower() : string.Empty;
 
             if (id == Guid.Empty)
             {
+                var systemParentId = contextValue.ContainsKey("systemParentId") ? Guid.Parse(contextValue["systemParentId"].ToString()) : Guid.Empty;
+                if (systemParentId == Guid.Empty)
+                {
+                    errorMsg = "Can't create a delegation without a parent";
+                    return true;
+                }
+
+                if (string.IsNullOrWhiteSpace(email))
+                {
+                    errorMsg = "Email can't be null";
+                    return true;
+                }
+
                 DynamicContent convention = dynamicManager.GetDataItem(TypeResolutionService.ResolveType(Convention.ConventionDynamicTypeName), systemParentId);
                 if (convention != null && dynamicManager.HasChildItems(convention))
                 {
                     var delegations = dynamicManager.GetChildItems(convention, type)
                         .Where(i => i.Status == ContentLifecycleStatus.Live && i.Visible
-                        && i.PublishedTranslations.Any(pt =>
-                                                       pt == SystemManager.CurrentContext.Culture.Name)).FirstOrDefault(dc => dc.GetValue<string>(Delegation.ContactEmail) == email
+                                    && i.PublishedTranslations.Any(pt => pt == SystemManager.CurrentContext.Culture.Name))
+                        .FirstOrDefault(dc => dc.GetValue<string>(Delegation.ContactEmail).ToLower() == email
                         );
 
                     if (delegations != null)
@@ -182,8 +182,8 @@ namespace DF2023.Core.Custom
             else
             {
                 var item = dynamicManager.GetDataItems(type).FirstOrDefault(i => i.Id == id);
-                string currentEmail = item.GetValue<string>(Delegation.ContactEmail);
-                if (!string.IsNullOrWhiteSpace(currentEmail) && email.ToLower() != currentEmail.ToLower())
+                string currentEmail = item.GetValue<string>(Delegation.ContactEmail).ToLower();
+                if (!string.IsNullOrWhiteSpace(email) && !string.IsNullOrWhiteSpace(currentEmail) && email != currentEmail)
                 {
                     errorMsg = "You can't change email address";
                     return true;
