@@ -145,21 +145,22 @@ namespace DF2023.Core.Custom
                 return true;
             }
 
+            var email = contextValue.ContainsKey(Delegation.ContactEmail.SetFirstLetterLowercase()) ? contextValue[Delegation.ContactEmail.SetFirstLetterLowercase()].ToString() : string.Empty;
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                errorMsg = "Email can't be null";
+                return true;
+            }
+
             var dynamicManager = DynamicModuleManager.GetManager();
+            var type = TypeResolutionService.ResolveType(Delegation.DelegationDynamicTypeName);
 
             if (id == Guid.Empty)
             {
-                var email = contextValue.ContainsKey(Delegation.ContactEmail.SetFirstLetterLowercase()) ? contextValue[Delegation.ContactEmail.SetFirstLetterLowercase()].ToString() : string.Empty;
-                if (string.IsNullOrWhiteSpace(email))
-                {
-                    errorMsg = "Email can't be null";
-                    return true;
-                }
-
                 DynamicContent convention = dynamicManager.GetDataItem(TypeResolutionService.ResolveType(Convention.ConventionDynamicTypeName), systemParentId);
                 if (convention != null && dynamicManager.HasChildItems(convention))
                 {
-                    var delegations = dynamicManager.GetChildItems(convention, TypeResolutionService.ResolveType(Delegation.DelegationDynamicTypeName))
+                    var delegations = dynamicManager.GetChildItems(convention, type)
                         .Where(i => i.Status == ContentLifecycleStatus.Live && i.Visible
                         && i.PublishedTranslations.Any(pt =>
                                                        pt == SystemManager.CurrentContext.Culture.Name)).FirstOrDefault(dc => dc.GetValue<string>(Delegation.ContactEmail) == email
@@ -170,6 +171,16 @@ namespace DF2023.Core.Custom
                         errorMsg = "There is a delegation in this convention with the same email";
                         return true;
                     }
+                }
+            }
+            else
+            {
+                var item = dynamicManager.GetDataItems(type).FirstOrDefault(i => i.Id == id);
+                string currentEmail = item.GetValue<string>(Delegation.ContactEmail);
+                if (!string.IsNullOrWhiteSpace(currentEmail) && email.ToLower() != currentEmail.ToLower())
+                {
+                    errorMsg = "You can't change email address";
+                    return true;
                 }
             }
 
