@@ -1198,6 +1198,7 @@
     <Compile Include="Core\Custom\ContentHandlerFactory.cs" />
     <Compile Include="Core\Custom\DelegationEmailManager.cs" />
     <Compile Include="Core\Custom\DelegationManager.cs" />
+    <Compile Include="Core\Custom\GuestManager.cs" />
     <Compile Include="Core\Extensions\RoleExtensions.cs" />
     <Compile Include="Core\Extensions\UserExtensions.cs" />
     <Compile Include="Core\FCMHelper.cs" />
