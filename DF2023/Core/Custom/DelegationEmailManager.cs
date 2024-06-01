@@ -68,7 +68,7 @@ namespace DF2023.Core.Custom
                         var InvitationDate = delegation.GetValue<DateTime?>(Delegation.InvitationDate);
                         if (InvitationDate == null || (InvitationDate.HasValue && InvitationDate.Value == DateTime.MinValue))
                         {
-                            delegation.SetValue(Delegation.InvitationDate, DateTime.Now);
+                            delegation.SetValue(Delegation.InvitationDate, DateTime.UtcNow);
                             dynamicManager.SaveChanges();
                         }
 

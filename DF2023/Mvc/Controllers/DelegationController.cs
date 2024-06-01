@@ -12,8 +12,8 @@ namespace DF2023.Mvc.Controllers
     [Authorize]
     public class DelegationController : ApiController
     {
-        [AuthorizeWithRoles(UserRoles.PCOC)]
         [HttpPost]
+        [AuthorizeWithRoles(UserRoles.PCOC)]
         public IHttpActionResult SendInvitationEmail(Guid delegationID, Guid conventionID, string cultureName = "en")
         {
             ApiResult apiResult = null;
