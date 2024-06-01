@@ -12,7 +12,7 @@ namespace DF2023.Core.Helpers
 {
     public static class DynamicContentExtension
     {
-        private static IQueryable<ContentLink> GetRelationsByParent(Guid parentItemId, string parentItemType, string childItemType, string fieldName, string itemProviderName = "OpenAccessProvider")
+        public static IQueryable<ContentLink> GetRelationsByParent(Guid parentItemId, string parentItemType, string childItemType, string fieldName, string itemProviderName = "OpenAccessProvider")
         {
             ContentLinksManager contentLinksManager = ContentLinksManager.GetManager();
 
@@ -26,7 +26,7 @@ namespace DF2023.Core.Helpers
             return linksToRelatedItems;
         }
 
-        private static IQueryable<ContentLink> GetRelationsByChild(Guid childItemId, string childItemType, string parentItemType, string fieldName ="", string itemProviderName = "OpenAccessProvider")
+        public static IQueryable<ContentLink> GetRelationsByChild(Guid childItemId, string childItemType, string parentItemType, string fieldName ="", string itemProviderName = "OpenAccessProvider")
         {
             ContentLinksManager contentLinksManager = ContentLinksManager.GetManager();
             if(!string.IsNullOrWhiteSpace(fieldName))

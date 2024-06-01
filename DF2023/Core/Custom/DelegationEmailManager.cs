@@ -1,12 +1,16 @@
 ﻿using DF2023.Core.Constants;
 using DF2023.Core.Helpers;
+using DocumentFormat.OpenXml.ExtendedProperties;
+using OpenAccessRuntime.Relational.metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.DynamicModules;
 using Telerik.Sitefinity.DynamicModules.Model;
+using Telerik.Sitefinity.Lifecycle;
 using Telerik.Sitefinity.Model;
+using Telerik.Sitefinity.RelatedData;
 using Telerik.Sitefinity.Utilities.TypeConverters;
 
 namespace DF2023.Core.Custom
@@ -35,6 +39,19 @@ namespace DF2023.Core.Custom
                         // 1. Retrieve delegation's service level.
                         // 2. Based on the service level, fetch custom text configurations form the convention.
                         // 3. Extract the invitation email subject and Invitation email content from the retrieved configurations.
+                        
+                        var service = delegation.GetRelatedItems(Delegation.ServicesLevel)?.FirstOrDefault();
+                        if(service != null)
+                        {
+                            var contentLink = DynamicContentExtension.GetRelationsByChild(service.Id, "ss", "ss")?.FirstOrDefault();
+                            if (contentLink != null)
+                            {
+                                var customTextConfig = dynamicManager.GetDataItem(TypeResolutionService.ResolveType(CustomTextConfig.CustomTextConfigDynamicTypeName), contentLink.ChildItemId);
+                                subject = convention.GetValue<string>(CustomTextConfig.InvitationEmailSubject);
+                                emailMessage = convention.GetValue<string>(CustomTextConfig.InvitationEmail);
+                            }
+                            
+                        }
                     }
                     else
                     {
