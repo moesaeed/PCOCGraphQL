@@ -35,11 +35,6 @@ namespace DF2023.Core.Custom
 
                     if (customInvitation)
                     {
-                        // TODO: Rawad could you please
-                        // 1. Retrieve delegation's service level.
-                        // 2. Based on the service level, fetch custom text configurations form the convention.
-                        // 3. Extract the invitation email subject and Invitation email content from the retrieved configurations.
-                        
                         var service = delegation.GetRelatedItems(Delegation.ServicesLevel)?.FirstOrDefault();
                         if(service != null)
                         {
@@ -49,8 +44,7 @@ namespace DF2023.Core.Custom
                                 var customTextConfig = dynamicManager.GetDataItem(TypeResolutionService.ResolveType(CustomTextConfig.CustomTextConfigDynamicTypeName), contentLink.ParentItemId);
                                 subject = customTextConfig.GetValue<string>(CustomTextConfig.InvitationEmailSubject);
                                 emailMessage = customTextConfig.GetValue<string>(CustomTextConfig.InvitationEmail);
-                            }
-                            
+                            }                           
                         }
                     }
                     else
