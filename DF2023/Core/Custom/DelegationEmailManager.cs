@@ -1,14 +1,11 @@
 ﻿using DF2023.Core.Constants;
 using DF2023.Core.Helpers;
-using DocumentFormat.OpenXml.ExtendedProperties;
-using OpenAccessRuntime.Relational.metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.DynamicModules;
 using Telerik.Sitefinity.DynamicModules.Model;
-using Telerik.Sitefinity.Lifecycle;
 using Telerik.Sitefinity.Model;
 using Telerik.Sitefinity.RelatedData;
 using Telerik.Sitefinity.Utilities.TypeConverters;
@@ -36,15 +33,18 @@ namespace DF2023.Core.Custom
                     if (customInvitation)
                     {
                         var service = delegation.GetRelatedItems(Delegation.ServicesLevel)?.FirstOrDefault();
-                        if(service != null)
+
+                        if (service != null)
                         {
-                            var contentLink = DynamicContentExtension.GetRelationsByChild(service.Id, ServicesLevel.ServicesLevelDynamicTypeName, CustomTextConfig.CustomTextConfigDynamicTypeName)?.FirstOrDefault();
-                            if (contentLink != null)
+                            var customTextConfig = service.GetRelatedParentItems(CustomTextConfig.CustomTextConfigDynamicTypeName, fieldName: CustomTextConfig.ServiceLevel)
+                                .OfType<DynamicContent>()
+                                .Where(x => x.SystemParentId == conventionID)
+                                ?.FirstOrDefault();
+                            if (customTextConfig != null)
                             {
-                                var customTextConfig = dynamicManager.GetDataItem(TypeResolutionService.ResolveType(CustomTextConfig.CustomTextConfigDynamicTypeName), contentLink.ParentItemId);
                                 subject = customTextConfig.GetValue<string>(CustomTextConfig.InvitationEmailSubject);
                                 emailMessage = customTextConfig.GetValue<string>(CustomTextConfig.InvitationEmail);
-                            }                           
+                            }
                         }
                     }
                     else
