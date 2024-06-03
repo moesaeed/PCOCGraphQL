@@ -41,7 +41,41 @@
           "ParentSectionId": "42afe75a-e91d-4a22-855f-ae17e27232a4",
           "TypeUIName": "\n                                Short text\n                            ",
           "Id": "36913784-3b85-45fa-b71b-37241bcaff1d",
-          "LastModified": "2024-05-18T15:46:45.677Z"
+          "LastModified": "2024-05-29T09:24:15.267Z"
+        },
+        {
+          "ParentTypeId": "403865ac-8f31-414d-8adf-bae90de48fd8",
+          "FieldNamespace": "Telerik.Sitefinity.DynamicTypes.Model.ServiceLevels.ServicesLevel",
+          "Name": "ServiceLevelCode",
+          "Title": "Service level code",
+          "FieldType": 1,
+          "SpecialType": 0,
+          "MediaType": "",
+          "FieldTypeDisplayName": "ShortText",
+          "IsRequired": true,
+          "LengthValidationMessage": "",
+          "Ordinal": 2,
+          "CanCreateItemsWhileSelecting": true,
+          "WidgetTypeName": "Telerik.Sitefinity.Web.UI.Fields.TextField",
+          "DBType": "VARCHAR",
+          "ClassificationId": "e5cd6d69-1543-427b-ad62-688a99f5e7d4",
+          "DBLength": "",
+          "InstructionalChoice": "- Select -",
+          "NumberUnit": "",
+          "ColumnName": "",
+          "InstructionalText": "",
+          "ImageExtensions": "",
+          "VideoExtensions": "",
+          "FileExtensions": "",
+          "DefaultValue": "",
+          "Choices": "",
+          "ChoiceRenderType": "",
+          "ShowInGrid": true,
+          "GridColumnOrdinal": 1,
+          "ParentSectionId": "42afe75a-e91d-4a22-855f-ae17e27232a4",
+          "TypeUIName": "\n                                Short text\n                            ",
+          "Id": "aec03af4-081c-41bf-97e6-6594469b4af0",
+          "LastModified": "2024-05-29T09:24:15.267Z"
         },
         {
           "ParentTypeId": "403865ac-8f31-414d-8adf-bae90de48fd8",
@@ -69,11 +103,11 @@
           "DefaultValue": "",
           "Choices": "",
           "ChoiceRenderType": "",
-          "GridColumnOrdinal": 2,
+          "GridColumnOrdinal": -1,
           "ParentSectionId": "42afe75a-e91d-4a22-855f-ae17e27232a4",
           "TypeUIName": "\n                                Short text\n                            ",
           "Id": "b9fb411f-2ee9-46e8-b7c0-2b28af4de726",
-          "LastModified": "2024-05-18T15:46:45.677Z"
+          "LastModified": "2024-05-29T09:24:15.267Z"
         },
         {
           "ParentTypeId": "403865ac-8f31-414d-8adf-bae90de48fd8",
@@ -85,10 +119,10 @@
           "IsTransient": true,
           "FieldTypeDisplayName": "Unknown",
           "Ordinal": 1,
-          "GridColumnOrdinal": 1,
+          "GridColumnOrdinal": -1,
           "ParentSectionId": "7ebf201e-0fca-4382-9245-caa7e36b9682",
           "Id": "ce74baea-c751-4055-8c40-0d80921a5adc",
-          "LastModified": "2024-05-18T15:46:45.677Z"
+          "LastModified": "2024-05-29T09:24:15.267Z"
         },
         {
           "ParentTypeId": "403865ac-8f31-414d-8adf-bae90de48fd8",
@@ -102,10 +136,10 @@
           "IsRequired": true,
           "Ordinal": 2,
           "RegularExpression": "^[\\p{L}\\-_\\.!~*'()\\d]+$",
-          "GridColumnOrdinal": 2,
+          "GridColumnOrdinal": -1,
           "ParentSectionId": "7ebf201e-0fca-4382-9245-caa7e36b9682",
           "Id": "2166d486-33b7-4969-82b0-e03424ea1db1",
-          "LastModified": "2024-05-18T15:46:45.677Z"
+          "LastModified": "2024-05-29T09:24:15.267Z"
         },
         {
           "ParentTypeId": "403865ac-8f31-414d-8adf-bae90de48fd8",
@@ -118,10 +152,10 @@
           "FieldTypeDisplayName": "Unknown",
           "Ordinal": 3,
           "ShowInGrid": true,
-          "GridColumnOrdinal": 3,
+          "GridColumnOrdinal": 2,
           "ParentSectionId": "7ebf201e-0fca-4382-9245-caa7e36b9682",
           "Id": "dd6bcc8d-e55d-4ab3-9715-ad7c55904c7f",
-          "LastModified": "2024-05-18T15:46:45.677Z"
+          "LastModified": "2024-05-29T09:24:15.267Z"
         },
         {
           "ParentTypeId": "403865ac-8f31-414d-8adf-bae90de48fd8",
@@ -134,10 +168,10 @@
           "FieldTypeDisplayName": "Unknown",
           "Ordinal": 4,
           "ShowInGrid": true,
-          "GridColumnOrdinal": 4,
+          "GridColumnOrdinal": 3,
           "ParentSectionId": "7ebf201e-0fca-4382-9245-caa7e36b9682",
           "Id": "27822c06-3ba3-438f-8ad0-9c249b69bec7",
-          "LastModified": "2024-05-18T15:46:45.677Z"
+          "LastModified": "2024-05-29T09:24:15.267Z"
         },
         {
           "ParentTypeId": "403865ac-8f31-414d-8adf-bae90de48fd8",
@@ -149,10 +183,10 @@
           "IsTransient": true,
           "FieldTypeDisplayName": "Unknown",
           "Ordinal": 5,
-          "GridColumnOrdinal": 5,
+          "GridColumnOrdinal": -1,
           "ParentSectionId": "7ebf201e-0fca-4382-9245-caa7e36b9682",
           "Id": "fefad15a-ac82-4c86-88df-1d2164030cc5",
-          "LastModified": "2024-05-18T15:46:45.677Z"
+          "LastModified": "2024-05-29T09:24:15.267Z"
         },
         {
           "ParentTypeId": "403865ac-8f31-414d-8adf-bae90de48fd8",
@@ -165,10 +199,10 @@
           "FieldTypeDisplayName": "Unknown",
           "Ordinal": 7,
           "ShowInGrid": true,
-          "GridColumnOrdinal": 7,
+          "GridColumnOrdinal": 4,
           "ParentSectionId": "7ebf201e-0fca-4382-9245-caa7e36b9682",
           "Id": "2c635e80-a980-4052-8db4-d78d9db80c3c",
-          "LastModified": "2024-05-18T15:46:45.677Z"
+          "LastModified": "2024-05-29T09:24:15.267Z"
         },
         {
           "ParentTypeId": "403865ac-8f31-414d-8adf-bae90de48fd8",
@@ -181,10 +215,10 @@
           "FieldTypeDisplayName": "Unknown",
           "Ordinal": 8,
           "ShowInGrid": true,
-          "GridColumnOrdinal": 8,
+          "GridColumnOrdinal": 5,
           "ParentSectionId": "7ebf201e-0fca-4382-9245-caa7e36b9682",
           "Id": "362a995f-b635-4ba7-b866-403cb44449ab",
-          "LastModified": "2024-05-18T15:46:45.677Z"
+          "LastModified": "2024-05-29T09:24:15.267Z"
         }
       ],
       "Sections": [
@@ -221,7 +255,7 @@
       "CheckFieldPermissions": false,
       "PageId": "815c8116-a045-4e08-904f-669b0202eb4b",
       "Id": "403865ac-8f31-414d-8adf-bae90de48fd8",
-      "LastModified": "2024-05-18T15:46:52.41Z"
+      "LastModified": "2024-05-29T17:55:28.09Z"
     }
   ],
   "DefaultBackendDefinitionName": null,
