@@ -63,8 +63,8 @@ namespace DF2023.Mvc.Controllers
 
             try
             {
-                bool isUserByEmailInRole = UserExtensions.IsUserByEmailInRole(UserRoles.GuestAdmin, userEmail);
-                if (isUserByEmailInRole == false)
+                Guid isUserByEmailInRole = UserExtensions.IsUserByEmailInRole(UserRoles.GuestAdmin, userEmail);
+                if (isUserByEmailInRole == Guid.Empty)
                 {
                     return this.Ok();
                 }

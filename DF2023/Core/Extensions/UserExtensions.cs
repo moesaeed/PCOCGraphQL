@@ -53,10 +53,11 @@ namespace DF2023.Core.Extensions
             return isUserInRole;
         }
 
-        public static bool IsUserByEmailInRole(string roleName, string email)
+        public static Guid IsUserByEmailInRole(string roleName, string email)
         {
             UserManager userManager = UserManager.GetManager();
             RoleManager roleManager = RoleManager.GetManager();
+            Guid userID = Guid.Empty;
 
             using (ElevatedModeRegion elevatedUserRegion = new ElevatedModeRegion(userManager))
             {
@@ -65,24 +66,24 @@ namespace DF2023.Core.Extensions
                     User user = userManager.GetUserByEmail(email);
                     if (user == null)
                     {
-                        return false;
+                        return userID;
                     }
 
                     bool roleExists = roleManager.RoleExists(roleName);
                     if (roleExists == false)
                     {
-                        return false;
+                        return userID;
                     }
 
                     var isUserInRole = roleManager.IsUserInRole(user.Id, roleName);
                     if (isUserInRole)
                     {
-                        return true;
+                        return user.Id;
                     }
                 }
             }
 
-            return false;
+            return userID;
         }
 
         public static string GetCurrentUserAvatarURL()

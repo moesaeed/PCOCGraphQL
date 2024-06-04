@@ -1200,6 +1200,7 @@
     <Compile Include="Core\Custom\DelegationEmailManager.cs" />
     <Compile Include="Core\Custom\DelegationManager.cs" />
     <Compile Include="Core\Custom\GuestManager.cs" />
+    <Compile Include="Core\Custom\OTPManager.cs" />
     <Compile Include="Core\Extensions\RoleExtensions.cs" />
     <Compile Include="Core\Extensions\StringExtensions.cs" />
     <Compile Include="Core\Extensions\UserExtensions.cs" />
