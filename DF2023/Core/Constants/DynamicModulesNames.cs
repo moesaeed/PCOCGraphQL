@@ -320,21 +320,4 @@
 
         public const string Title = "Title";
     }
-    public static class StringExtensions
-    {
-        public static string SetFirstLetterLowercase(this string input)
-        {
-            if (string.IsNullOrEmpty(input))
-            {
-                return input;
-            }
-
-            if (char.IsLower(input[0]))
-            {
-                return input; // The first character is already lowercase
-            }
-
-            return char.ToLower(input[0]) + input.Substring(1);
-        }
-    }
 }
