@@ -1235,7 +1235,9 @@
     <Compile Include="Mvc\Models\ApiResult.cs" />
     <Compile Include="Mvc\Models\NoStackTraceException.cs" />
     <Compile Include="Mvc\Models\PushNotificationViewModel.cs" />
+    <Compile Include="OwinStartupCustom.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SitefinityOAuthServerProviderCustom.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Sitefinity\Configuration\DataConfig.config" />
@@ -1368,7 +1370,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\Sitefinity\Deployment\" />
+    <ProjectReference Include="..\OTP.Net\OTP.Net.csproj">
+      <Project>{dce0d096-5c59-40ad-a6fc-21184c894c55}</Project>
+      <Name>OTP.Net</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
