@@ -31,6 +31,16 @@
         public const string TitleAr = "TitleAr";
     }
 
+    public static class OTP
+    {
+        public const string OTPDynamicTypeName = "Telerik.Sitefinity.DynamicTypes.Model.OTP.Otp";
+        public const string Title = "Title";
+        public const string UserID = "UserID";
+        public const string OTPCode = "OTPCode";
+        public const string IsLocked = "IsLocked";
+        public const string OTPRequest = "OTPRequest";
+    }
+
     public static class Convention
     {
         public const string ConventionDynamicTypeName = "Telerik.Sitefinity.DynamicTypes.Model.Conventions.Convention";
@@ -319,22 +329,5 @@
         public const string TitleAr = "TitleAr";
 
         public const string Title = "Title";
-    }
-    public static class StringExtensions
-    {
-        public static string SetFirstLetterLowercase(this string input)
-        {
-            if (string.IsNullOrEmpty(input))
-            {
-                return input;
-            }
-
-            if (char.IsLower(input[0]))
-            {
-                return input; // The first character is already lowercase
-            }
-
-            return char.ToLower(input[0]) + input.Substring(1);
-        }
     }
 }

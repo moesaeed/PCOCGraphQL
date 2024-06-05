@@ -1194,13 +1194,16 @@
     <Compile Include="App_Start\RazorGeneratorMvcStart.cs" />
     <Compile Include="AzureWebRole.cs" />
     <Compile Include="Core\Configs\EmailConfig.cs" />
+    <Compile Include="Core\Configs\OTPConfig.cs" />
     <Compile Include="Core\Constants\DynamicModulesNames.cs" />
     <Compile Include="Core\Custom\ContentHandler.cs" />
     <Compile Include="Core\Custom\ContentHandlerFactory.cs" />
     <Compile Include="Core\Custom\DelegationEmailManager.cs" />
     <Compile Include="Core\Custom\DelegationManager.cs" />
     <Compile Include="Core\Custom\GuestManager.cs" />
+    <Compile Include="Core\Custom\OTPManager.cs" />
     <Compile Include="Core\Extensions\RoleExtensions.cs" />
+    <Compile Include="Core\Extensions\StringExtensions.cs" />
     <Compile Include="Core\Extensions\UserExtensions.cs" />
     <Compile Include="Core\FCMHelper.cs" />
     <Compile Include="Core\Helpers\DynamicContentExtension.cs" />
@@ -1212,6 +1215,7 @@
     <Compile Include="Core\Helpers\Process.cs" />
     <Compile Include="Core\Helpers\StringHelper.cs" />
     <Compile Include="CustomMembershipProvider.cs" />
+    <Compile Include="CutomAttributes\AuthorizeOTPAttribute.cs" />
     <Compile Include="CutomAttributes\AuthorizeWithRolesAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -1235,8 +1239,11 @@
     <Compile Include="Mvc\Controllers\UserController.cs" />
     <Compile Include="Mvc\Models\ApiResult.cs" />
     <Compile Include="Mvc\Models\NoStackTraceException.cs" />
+    <Compile Include="Mvc\Models\OTPDTO.cs" />
     <Compile Include="Mvc\Models\PushNotificationViewModel.cs" />
+    <Compile Include="OwinStartupCustom.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SitefinityOAuthServerProviderCustom.cs" />
     <Compile Include="WebPageHelper\GetDataHelper.cs" />
     <Compile Include="WebPageHelper\GraphQLHelper.cs" />
     <Compile Include="WebPageHelper\PanelHelper.cs" />
@@ -1380,7 +1387,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\Sitefinity\Deployment\" />
+    <ProjectReference Include="..\OTP.Net\OTP.Net.csproj">
+      <Project>{dce0d096-5c59-40ad-a6fc-21184c894c55}</Project>
+      <Name>OTP.Net</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

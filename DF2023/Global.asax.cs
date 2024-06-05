@@ -36,6 +36,7 @@ namespace DF2023
         private void RegisterCustomConfigurations()
         {
             Config.RegisterSection<EmailConfig>();
+            Config.RegisterSection<OTPConfig>();
         }
 
         private void DynamicContentCreatedEventHandler(IDynamicContentCreatedEvent eventInfo)

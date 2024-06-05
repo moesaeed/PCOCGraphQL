@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Script.Serialization;
 using System.Web.Security;
-using Telerik.OpenAccess.RT;
+using Telerik.Sitefinity.Data;
 using Telerik.Sitefinity.DynamicModules.Model;
 using Telerik.Sitefinity.Libraries.Model;
 using Telerik.Sitefinity.Model;
@@ -51,6 +51,39 @@ namespace DF2023.Core.Extensions
             }
 
             return isUserInRole;
+        }
+
+        public static Guid IsUserByEmailInRole(string roleName, string email)
+        {
+            UserManager userManager = UserManager.GetManager();
+            RoleManager roleManager = RoleManager.GetManager();
+            Guid userID = Guid.Empty;
+
+            using (ElevatedModeRegion elevatedUserRegion = new ElevatedModeRegion(userManager))
+            {
+                using (ElevatedModeRegion elevatedRoleRegion = new ElevatedModeRegion(roleManager))
+                {
+                    User user = userManager.GetUserByEmail(email);
+                    if (user == null)
+                    {
+                        return userID;
+                    }
+
+                    bool roleExists = roleManager.RoleExists(roleName);
+                    if (roleExists == false)
+                    {
+                        return userID;
+                    }
+
+                    var isUserInRole = roleManager.IsUserInRole(user.Id, roleName);
+                    if (isUserInRole)
+                    {
+                        return user.Id;
+                    }
+                }
+            }
+
+            return userID;
         }
 
         public static string GetCurrentUserAvatarURL()
@@ -283,7 +316,6 @@ namespace DF2023.Core.Extensions
 
         public static bool SetUserCustomfieldValue(string fieldName, string fieldValue, Guid userId)
         {
-            
             UserManager userManager = UserManager.GetManager();
             if (userId != Guid.Empty)
             {
@@ -356,7 +388,7 @@ namespace DF2023.Core.Extensions
             return user;
         }
 
-        public static MembershipCreateStatus CreateUser(string email, string password, string firstName, string lastName, string transaction , string guestData=null, string secretQuestion = null, string secretAnswer = null, bool isApproved = true)
+        public static MembershipCreateStatus CreateUser(string email, string password, string firstName, string lastName, string transaction, string guestData = null, string secretQuestion = null, string secretAnswer = null, bool isApproved = true)
         {
             UserManager userManager = UserManager.GetManager("", transaction);
             UserProfileManager profileManager = UserProfileManager.GetManager(UserProfileManager.GetDefaultProviderName(), transaction);
@@ -387,14 +419,14 @@ namespace DF2023.Core.Extensions
                 {
                     profile.SetValue("FirstName", firstName);
                     profile.SetValue("LastName", lastName);
-                    profile.SetValue("Nickname",$"{firstName} {lastName} {password}");
+                    profile.SetValue("Nickname", $"{firstName} {lastName} {password}");
                 }
                 if (guestData != null)
                 {
                     profile.SetValue(Others.UserCustomField, guestData);
                 }
-                
-                RoleExtensions.AddUserToRoles(existingUser, 
+
+                RoleExtensions.AddUserToRoles(existingUser,
                     new List<string>() {
                  UserRoles.GuestAdmin}, transaction);
             }

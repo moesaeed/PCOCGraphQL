@@ -5,7 +5,6 @@ using DF2023.Mvc.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Web.Security;
 using Telerik.Sitefinity.Data;
 using Telerik.Sitefinity.DynamicModules;
@@ -74,7 +73,7 @@ namespace DF2023.Core.Custom
                     var email = contextValue.ContainsKey(Delegation.ContactEmail.SetFirstLetterLowercase()) ?
                     contextValue[Delegation.ContactEmail.SetFirstLetterLowercase()].ToString() : string.Empty;
 
-                    if (IsValidEmail(email))
+                    if (email.IsValidEmail())
                     {
                         string password = PasswordGenerator.GenerateStrongPassword(8);
                         MembershipCreateStatus membershipCreateStatus =
@@ -191,12 +190,6 @@ namespace DF2023.Core.Custom
             }
 
             return false;
-        }
-
-        public static bool IsValidEmail(string email)
-        {
-            string emailRegex = @"^([\w\.\-]+)@([\w\-]+)\.([a-zA-Z]{2,6})$";
-            return Regex.IsMatch(email, emailRegex);
         }
 
         public static string ConvertDictionaryToString(Dictionary<Guid, Guid> dictionary)

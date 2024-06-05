@@ -1,0 +1,38 @@
+[
+  {
+    "ControlType": "Telerik.Sitefinity.Frontend.DynamicContent.Mvc.Controllers.DynamicContentController",
+    "FriendlyControlName": "OTP - OTPs - single (MVC)",
+    "IsDifferentFromEmbedded": true,
+    "ResourceClassId": null,
+    "AreaName": "OTP - OTP",
+    "Condition": "Telerik.Sitefinity.DynamicTypes.Model.OTP.Otp AND MVC",
+    "NameForDevelopers": "Detail-OTP",
+    "Id": "9036cc27-ce13-4ab4-a839-7c72db31892f",
+    "Name": "Detail.OTP",
+    "Theme": null,
+    "DataType": "ASP_NET_TEMPLATE",
+    "Data": "@model Telerik.Sitefinity.Frontend.Mvc.Models.ContentDetailsViewModel\r\n\r\n@using System.Collections;\r\n@using System.Linq;\r\n@using Telerik.Sitefinity.Frontend.DynamicContent.WidgetTemplates.Fields.Helpers;\r\n@using Telerik.Sitefinity;\r\n@using Telerik.Sitefinity.Data.ContentLinks;\r\n@using Telerik.Sitefinity.Frontend.Mvc.Helpers;\r\n@using Telerik.Sitefinity.Libraries.Model;\r\n@using Telerik.Sitefinity.Localization;\r\n@using Telerik.Sitefinity.Model;\r\n@using Telerik.Sitefinity.Model.ContentLinks;\r\n@using Telerik.Sitefinity.Modules.Pages;\r\n@using Telerik.Sitefinity.Pages.Model;\r\n\r\n<div class=\"@Model.CssClass\" @Html.InlineEditingAttributes(Model.ProviderName, Model.ContentType.FullName, (Guid)Model.Item.Fields.Id)>\r\n    <h3 @Html.InlineEditingFieldAttributes(\"Title\", \"ShortText\")>\r\n        @Model.Item.Fields.Title\r\n    </h3>\r\n    <div>\r\n        @Model.Item.GetDateTime(\"PublicationDate\", \"MMM d, yyyy, HH:mm tt\")\r\n        @Html.CommentsCount(\"\", @Model.Item.DataItem)\r\n    </div>\r\n    \r\n    \r\n@*Start Title field*@\r\n<div>\r\n    <strong> Email :</strong>\r\n\r\n    <span @Html.InlineEditingFieldAttributes(\"Title\", \"ShortText\")>@Model.Item.Fields.Title</span>    \r\n</div>\r\n@*End Title field*@\r\n\r\n@*Start UserID field*@\r\n<div>\r\n    <strong> User i d :</strong>\r\n\r\n    <span @Html.InlineEditingFieldAttributes(\"UserID\", \"ShortText\")>@Model.Item.Fields.UserID</span>    \r\n</div>\r\n@*End UserID field*@\r\n\r\n@*Start OTPCode field*@\r\n<div>\r\n    <strong> OTP code :</strong>\r\n\r\n    <span @Html.InlineEditingFieldAttributes(\"OTPCode\", \"ShortText\")>@Model.Item.Fields.OTPCode</span>    \r\n</div>\r\n@*End OTPCode field*@\r\n\r\n@*Start IsLocked field*@\r\n<div>\r\n    <strong> Is locked :</strong>\r\n\r\n    <span @Html.InlineEditingFieldAttributes(\"IsLocked\", \"YesNo\")>\r\n        @Model.Item.GetBool(\"IsLocked\")\r\n    </span> \r\n</div>\r\n@*End IsLocked field*@\r\n\r\n@*Start OTPRequest field*@\r\n<div>\r\n    <strong> OTP request :</strong>\r\n\r\n    @if(Model.Item.Fields.OTPRequest!=null)\r\n    {\r\n    <span>@Model.Item.Fields.OTPRequest</span>   \r\n    <span></span>\r\n    }\r\n</div>\r\n@*End OTPRequest field*@\r\n    \r\n\r\n    @Html.CommentsList(@Model.Item.DataItem)\r\n</div>",
+    "DateCreated": "2024-06-04T19:13:44.847Z",
+    "ResourceAssemblyName": "Telerik.Sitefinity.Resources",
+    "EmbeddedTemplateName": null,
+    "Owner": "b973888a-1dac-4d56-be2c-e6df7642d0fe"
+  },
+  {
+    "ControlType": "Telerik.Sitefinity.Frontend.DynamicContent.Mvc.Controllers.DynamicContentController",
+    "FriendlyControlName": "OTP - OTPs - list (MVC)",
+    "IsDifferentFromEmbedded": true,
+    "ResourceClassId": null,
+    "AreaName": "OTP - OTP",
+    "Condition": "Telerik.Sitefinity.DynamicTypes.Model.OTP.Otp AND MVC",
+    "NameForDevelopers": "List-OTP",
+    "Id": "5a53b475-9a6a-4107-b178-b2bee86ec0de",
+    "Name": "List.OTP",
+    "Theme": null,
+    "DataType": "ASP_NET_TEMPLATE",
+    "Data": "@model Telerik.Sitefinity.Frontend.DynamicContent.Mvc.Models.DynamicContentListViewModel\r\n\r\n@using Telerik.Sitefinity.Frontend.DynamicContent.WidgetTemplates.Fields.Helpers;\r\n@using Telerik.Sitefinity;\r\n@using Telerik.Sitefinity.Data.ContentLinks;\r\n@using Telerik.Sitefinity.Frontend.Mvc.Helpers;\r\n@using Telerik.Sitefinity.Frontend.Mvc.Models;\r\n@using Telerik.Sitefinity.Web.DataResolving;\r\n@using Telerik.Sitefinity.Model.ContentLinks;\r\n@using Telerik.Sitefinity.Modules.Pages;\r\n\r\n<div class=\"@Model.CssClass\">\r\n    <ul>\r\n        @foreach (var item in Model.Items)\r\n        {\r\n            var navigateUrl = HyperLinkHelpers.GetDetailPageUrl(item, ViewBag.DetailsPageId, ViewBag.OpenInSamePage, Model.UrlKeyPrefix);\r\n            <li @Html.InlineEditingAttributes(Model.ProviderName, Model.ContentType.FullName, (Guid)item.Fields.Id)>\r\n                \r\n\r\n                <h3>\r\n                    <a @Html.InlineEditingFieldAttributes(\"Title\", \"ShortText\") href=\"@navigateUrl\">\r\n                        @item.Fields.Title\r\n                    </a>\r\n                </h3>\r\n                <div>\r\n                    @item.GetDateTime(\"PublicationDate\", \"MMM d, yyyy, HH:mm tt\")\r\n                    @Html.CommentsCount((string)navigateUrl, item.DataItem)\r\n                </div>\r\n            </li>\r\n        }\r\n    </ul>\r\n\r\n    @if (Model.ShowPager)\r\n    {\r\n        @Html.Action(\"Index\", \"ContentPager\", new { currentPage = Model.CurrentPage, \r\n                        totalPagesCount = Model.TotalPagesCount.Value, \r\n                        redirectUrlTemplate = ViewBag.RedirectPageUrlTemplate })\r\n    }\r\n\r\n</div>",
+    "DateCreated": "2024-06-04T19:13:44.847Z",
+    "ResourceAssemblyName": "Telerik.Sitefinity.Resources",
+    "EmbeddedTemplateName": null,
+    "Owner": "b973888a-1dac-4d56-be2c-e6df7642d0fe"
+  }
+]
