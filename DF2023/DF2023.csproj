@@ -1238,6 +1238,7 @@
     <Compile Include="Mvc\Controllers\UserController.cs" />
     <Compile Include="Mvc\Models\ApiResult.cs" />
     <Compile Include="Mvc\Models\NoStackTraceException.cs" />
+    <Compile Include="Mvc\Models\OTPDTO.cs" />
     <Compile Include="Mvc\Models\PushNotificationViewModel.cs" />
     <Compile Include="OwinStartupCustom.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

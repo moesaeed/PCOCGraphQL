@@ -1,5 +1,6 @@
 ﻿using DF2023.Core;
 using DF2023.Core.Constants;
+using DF2023.Core.Custom;
 using DF2023.Core.Extensions;
 using DF2023.CutomAttributes;
 using DF2023.Mvc.Models;
@@ -63,16 +64,9 @@ namespace DF2023.Mvc.Controllers
 
             try
             {
-                Guid isUserByEmailInRole = UserExtensions.IsUserByEmailInRole(UserRoles.GuestAdmin, userEmail);
-                if (isUserByEmailInRole == Guid.Empty)
-                {
-                    return this.Ok();
-                }
-                
-                var key = KeyGeneration.GenerateRandomKey(OtpHashMode.Sha512);
-                var totp = new Totp(key, mode: OtpHashMode.Sha512, step: 60);
-                var result = totp.ComputeTotp();
 
+                OTPManager oTPManager = new OTPManager();
+                string result =oTPManager.GenerateOPT(userEmail);
                 apiResult = new ApiResult("OTP", true, result);
             }
             catch (Exception ex)
