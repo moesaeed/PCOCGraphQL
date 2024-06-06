@@ -1,15 +1,8 @@
 ﻿using DF2023.WebPageHelper;
-using IdentityModel.Client;
 using System;
 using System.Web;
-using System.Web.Security;
 using Telerik.Sitefinity.Security;
 using Telerik.Sitefinity.Security.Claims;
-using System;
-using Telerik.Sitefinity.Security;
-using Telerik.Sitefinity.Security.Claims;
-using Telerik.Sitefinity.Security.Model;
-using System.Web;
 using System.Linq;
 using Telerik.Sitefinity.Services;
 using System.Security.Claims;
@@ -20,16 +13,31 @@ namespace DF2023.WebPages
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if(!IsPostBack)
+            {
+                Conventions.DataSource = GetDataHelper.GetConventionsForDropDown(GetBaseUrl());
+                Conventions.DataTextField = "Title";
+                Conventions.DataValueField = "Id";
+                Conventions.DataBind();
+            }
         }
 
         protected void btnGenerateDelegation_Click(object sender, EventArgs e)
         {
+            int NumberOfDelegationToGenerate = 0;
+            if (!string.IsNullOrWhiteSpace(NbrDelegation.Text))
+                NumberOfDelegationToGenerate = Convert.ToInt32(NbrDelegation.Text);
             string token = GetAuthenticatedUserAccessToken();
+            PanelHelper.CreateDelegation(GetBaseUrl(), NumberOfDelegationToGenerate,Conventions.SelectedValue,token);
+        }
+
+        private string GetBaseUrl()
+        {
             var requestUrl = HttpContext.Current?.Request?.Url;
             string baseUrl = $"{requestUrl.Scheme}://{requestUrl.Host}:{requestUrl.Port}/";
-            PanelHelper.Create8TousandsDelegation(baseUrl, token);
+            return baseUrl;
         }
+
         public string GetAuthenticatedUserAccessToken()
         {
             var token = "Yjk3Mzg4OGEtMWRhYy00ZDU2LWJlMmMtZTZkZjc2NDJkMGZlLT1wcm92aWRlcj0tRGVmYXVsdC09c2VjcmV0a2V5PS1ZeT1YYm1UUV5LdTorbnRhQ3Z7PlB3SHR4bHRYJVFoTTtTbUpXYkA+cFBTRVMhVS1uUjRbU01NRUgvaFJOJlpYcFNuUXt2dEJ9dUZNXTtNYX10VmJZXl4yRCRKakxJOXdHRF9IQDBOd19JWlE9eU1qSCMoP0RiRl93QnBlbUttPQ==";

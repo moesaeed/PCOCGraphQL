@@ -1,14 +1,12 @@
 ﻿namespace DF2023.WebPageModel
 {
-    public class DelegationModel
+    public class DelegationModel:BaseModel
     {
         public DelegationModel() { }
 
         public string ContactPhoneNumber { get; set; }
 
         public string ContactEmail { get; set; }
-
-        public string Title { get; set; }
 
         public string NumberOfOfficialDelegates { get; set; }
 
@@ -31,5 +29,7 @@
         public string ContactName { get; set; }
 
         public string SecondaryEmail { get; set; }
+
+        public string SystemParentId { get; set; }
     }
 }

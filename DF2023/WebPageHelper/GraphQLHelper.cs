@@ -8,8 +8,8 @@ namespace DF2023.WebPageHelper
 {
     public static class GraphQLHelper
     {
-        public static JObject ExecuteQueryAsync(string endPoint, string graphqlQuery, JObject variables, string token = "")
-        {
+        public static JObject ExecuteQueryAsync(string baseUrl, string graphqlQuery, JObject variables, string token = "")
+        { 
             var serializedData = JsonConvert.SerializeObject(new
             {
                 query = graphqlQuery,
@@ -17,10 +17,10 @@ namespace DF2023.WebPageHelper
             });
 
             var payload = new StringContent(serializedData, Encoding.UTF8, "application/json");
-
             HttpClient _httpClient = new HttpClient();
             if(!string.IsNullOrWhiteSpace(token))
                 _httpClient.DefaultRequestHeaders.Add("X-SF-Access-Key", token);
+            string endPoint = baseUrl + "graphqllayer/GraphQLMutation/Mutation";
 
             using (var response = _httpClient.PostAsync(endPoint, payload).Result)
             {
