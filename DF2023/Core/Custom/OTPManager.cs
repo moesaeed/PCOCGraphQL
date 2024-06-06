@@ -3,6 +3,7 @@ using DF2023.Core.Extensions;
 using DF2023.Mvc.Models;
 using OtpNet;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Telerik.Sitefinity;
@@ -19,7 +20,7 @@ namespace DF2023.Core.Custom
 {
     public class OTPManager
     {
-        public OTPDTO GetUser(Guid userId)
+        private OTPDTO GetUser(Guid userId)
         {
             using (CultureRegion cr = new CultureRegion(new CultureInfo("en")))
             {
@@ -52,7 +53,7 @@ namespace DF2023.Core.Custom
             return null;
         }
 
-        public void UpdateUserAttempts(OTPDTO oTPDTO)
+        private void UpdateUserAttempts(OTPDTO oTPDTO)
         {
             using (CultureRegion cr = new CultureRegion(new CultureInfo("en")))
             {
@@ -84,13 +85,22 @@ namespace DF2023.Core.Custom
             }
         }
 
-        public string GenerateOPT(string userEmail)
+        public string GenerateOTP(string userEmail)
         {
             // 1. Retrieve user information
-            Guid userId = UserExtensions.IsUserByEmailInRole(UserRoles.GuestAdmin, userEmail);
+            var roles = new List<string>()
+            {
+                UserRoles.GuestAdmin,
+                UserRoles.PCOC
+            };
+
+            Guid userId = UserExtensions.IsUserByEmailInRoles(roles, userEmail);
             if (userId == Guid.Empty)
             {
-                return null;
+                if (userId == Guid.Empty)
+                {
+                    return null;
+                }
             }
 
             OTPDTO oTPDTO = GetUser(userId);

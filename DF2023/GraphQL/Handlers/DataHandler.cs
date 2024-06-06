@@ -65,6 +65,8 @@ namespace DF2023.GraphQL.Handlers
                 {
                     if (sitefinityMetaField.ClrType == typeof(string).FullName ||
                         sitefinityMetaField.ClrType == typeof(Lstring).FullName ||
+                        sitefinityMetaField.ClrType == typeof(DateTime?).FullName ||
+                        sitefinityMetaField.ClrType == typeof(DateTime).FullName ||
                         sitefinityMetaField.ClrType == typeof(Nullable<decimal>).FullName)
                     {
                         return HandleStringOrder(sitefinityMetaField, orderItem.Value.ToString(), items);
