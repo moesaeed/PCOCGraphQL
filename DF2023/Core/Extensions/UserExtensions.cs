@@ -53,7 +53,7 @@ namespace DF2023.Core.Extensions
             return isUserInRole;
         }
 
-        public static Guid IsUserByEmailInRole(string roleName, string email)
+        public static Guid IsUserByEmailInRoles(List<string> roleNames, string email)
         {
             UserManager userManager = UserManager.GetManager();
             RoleManager roleManager = RoleManager.GetManager();
@@ -69,16 +69,12 @@ namespace DF2023.Core.Extensions
                         return userID;
                     }
 
-                    bool roleExists = roleManager.RoleExists(roleName);
-                    if (roleExists == false)
+                    foreach (var roleName in roleNames)
                     {
-                        return userID;
-                    }
-
-                    var isUserInRole = roleManager.IsUserInRole(user.Id, roleName);
-                    if (isUserInRole)
-                    {
-                        return user.Id;
+                        if (roleManager.RoleExists(roleName) && roleManager.IsUserInRole(user.Id, roleName))
+                        {
+                            return user.Id;
+                        }
                     }
                 }
             }

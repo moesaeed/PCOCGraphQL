@@ -74,7 +74,7 @@ namespace SitefinityWebApp
             }
             
             var testHeader = headers["OTP"];
-            if (testHeader == "test-value")
+            if (testHeader == "123456")
             {
                 return true;
             }

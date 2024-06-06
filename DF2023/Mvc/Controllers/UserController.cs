@@ -53,7 +53,7 @@ namespace DF2023.Mvc.Controllers
 
         [AuthorizeOTPAttribute]
         [HttpPost]
-        public IHttpActionResult GenerateOPT(string userEmail)
+        public IHttpActionResult GenerateOTP(string userEmail)
         {
             if (string.IsNullOrWhiteSpace(userEmail) || userEmail.IsValidEmail() == false)
             {
@@ -66,7 +66,7 @@ namespace DF2023.Mvc.Controllers
             {
 
                 OTPManager oTPManager = new OTPManager();
-                string result =oTPManager.GenerateOPT(userEmail);
+                string result =oTPManager.GenerateOTP(userEmail);
                 apiResult = new ApiResult("OTP", true, result);
             }
             catch (Exception ex)
