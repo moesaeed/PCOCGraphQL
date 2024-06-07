@@ -1188,6 +1188,9 @@
     <Content Include="App_Data\Sitefinity\TrackingConsent\consentDialog.html" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
+    <Content Include="WebAssets\Css\style.css" />
+    <Content Include="WebAssets\Images\logo.png" />
+    <Content Include="WebAssets\Scripts\mainscript.js" />
     <Content Include="WebPages\DelegationPanel.aspx" />
   </ItemGroup>
   <ItemGroup>
@@ -1247,7 +1250,16 @@
     <Compile Include="WebPageHelper\GetDataHelper.cs" />
     <Compile Include="WebPageHelper\GraphQLHelper.cs" />
     <Compile Include="WebPageHelper\PanelHelper.cs" />
+    <Compile Include="WebPageModel\BaseModel.cs" />
+    <Compile Include="WebPageModel\ConventionModel.cs" />
     <Compile Include="WebPageModel\DelegationModel.cs" />
+    <Compile Include="WebPages\CPanel.Master.cs">
+      <DependentUpon>CPanel.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\CPanel.Master.designer.cs">
+      <DependentUpon>CPanel.Master</DependentUpon>
+    </Compile>
     <Compile Include="WebPages\DelegationPanel.aspx.cs">
       <DependentUpon>DelegationPanel.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1385,6 +1397,7 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+    <Content Include="WebPages\CPanel.Master" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OTP.Net\OTP.Net.csproj">
@@ -1400,6 +1413,7 @@
     <Analyzer Include="..\packages\AWSSDK.S3.3.7.9.15\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
     <Analyzer Include="..\packages\AWSSDK.SQS.3.7.2.68\analyzers\dotnet\cs\AWSSDK.SQS.CodeAnalysis.dll" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -1,33 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using DF2023.Core.Constants;
 using DF2023.WebPageModel;
-using Nest;
 using Newtonsoft.Json.Linq;
-using Telerik.Sitefinity.Security;
-using Telerik.Sitefinity.Services;
 
 namespace DF2023.WebPageHelper
 {
     public static class PanelHelper
     {
 
-        public static void Create8TousandsDelegation(string baseUrl, string token)
+        public static void CreateDelegation(string baseUrl,int numberOfDelegationToCreate, string parentId, string token)
         {
-            var endpoint = $"{baseUrl}graphqllayer/GraphQLMutation/Mutation";
-            var countries = GetDataHelper.GetCountries(endpoint);
-            var services = GetDataHelper.GetServicesLevel(endpoint);
-            var enities = GetDataHelper.GetEntities(endpoint);
-
+            //var endpoint = $"{baseUrl}graphqllayer/GraphQLMutation/Mutation";
+            var countries = GetDataHelper.GetCountries(baseUrl);
+            var services = GetDataHelper.GetServicesLevel(baseUrl);
+            var enities = GetDataHelper.GetEntities(baseUrl);
+            
             List<JObject> list = new List<JObject>();
-            for (int i = 0;i<=10;i++)
+            for (int i = 0;i< numberOfDelegationToCreate; i++)
             {
                 var rdCountry = new Random().Next(0,countries.Count -1);
                 var rdService = new Random().Next(0, services.Count - 1);
                 var rdEntity = new Random().Next(0, enities.Count - 1);
-                var delagationModel = GenerateDelegationModel(enities[rdEntity].ToString(), services[rdService].ToString(), countries[rdCountry].ToString());
-                var returnedDelegation = CreateNewDelegation(endpoint, token, delagationModel);
+                var delagationModel = GenerateDelegationModel(parentId,enities[rdEntity].ToString(), services[rdService].ToString(), countries[rdCountry].ToString());
+                var returnedDelegation = CreateNewDelegation(baseUrl, token, delagationModel);
                 if(returnedDelegation !=null)
                     list.Add(returnedDelegation);
             }
@@ -35,7 +31,7 @@ namespace DF2023.WebPageHelper
             var countDelegation = list.Count;
         }
 
-        private static DelegationModel GenerateDelegationModel(String entity, String serviceLevel, string country)
+        private static DelegationModel GenerateDelegationModel(string parentId, string entity, string serviceLevel, string country)
         {
             string Title = GenerateName(new Random().Next(1, 20));
             string ContactPhoneNumber = GenerateNumberAsString(new Random().Next(7, 10));
@@ -43,7 +39,7 @@ namespace DF2023.WebPageHelper
             string NumberOfOfficialDelegates = new Random().Next(1, 10).ToString();
             string TitleAr = $"{Title} - Ar";
             string RemainingNumberOfOfficialDelegates = new Random().Next(1, 5).ToString();
-            string IsSingle = new Random().Next(0, 1) == 0 ? "True" : "False";
+            string IsSingle = new Random().Next(0, 1) == 0 ? "true" : "false";
             string ContactName = GenerateName(new Random().Next(1, 20));
             string SecondaryEmail = $"{ContactName}@email.com";
             DelegationModel model = new DelegationModel()
@@ -59,12 +55,13 @@ namespace DF2023.WebPageHelper
                 SecondaryEmail = SecondaryEmail,
                 Country = country,
                 Entity = entity,
-                ServicesLevel = serviceLevel
+                ServicesLevel = serviceLevel,
+                SystemParentId = parentId
             };
             return model;
         }
 
-        private static JObject CreateNewDelegation(string endpoint,string token, DelegationModel model)
+        private static JObject CreateNewDelegation(string baseUrl, string token, DelegationModel model)
         {
 
             string query = $@"mutation {{
@@ -86,13 +83,13 @@ namespace DF2023.WebPageHelper
                                 servicesLevel: {{
                                   id: ""{model.ServicesLevel}""
                                 }},
-                                systemParentId: ""2a38b7cd-b193-41e7-a050-3238fecfe07b""
+                                systemParentId: ""{model.SystemParentId}""
                               }}) {{
                                 id,
                                 title
                               }}
                             }}";
-            var delegation = GraphQLHelper.ExecuteQueryAsync(endpoint, query, null);
+            var delegation = GraphQLHelper.ExecuteQueryAsync(baseUrl, query, null,token);
             return delegation;
         }
 
