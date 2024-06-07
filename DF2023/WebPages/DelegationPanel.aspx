@@ -19,6 +19,20 @@
             </div>
         </div>
     </div>
+
+        <div class="sf-fieldWrp row">
+        <div class="sf_colsIn columns large-12">
+            <div class="point-text">
+                <h6 class="point-title">Add Random Guests</h6>
+            </div>
+            <div class="sf-fieldWrp">
+                <asp:TextBox runat="server" ClientIDMode="Static" ID="NbrGuests" placeholder="ex:100"></asp:TextBox>
+            </div>
+            <div class="sf-fieldWrp">
+                <asp:Button runat="server" ClientIDMode="Static" ID="btnGenerateGuests" Text="Submit" OnClick="btnGenerateGuests_Click" />
+            </div>
+        </div>
+    </div>
 </asp:Content>
 
 

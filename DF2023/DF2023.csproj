@@ -1253,6 +1253,7 @@
     <Compile Include="WebPageModel\BaseModel.cs" />
     <Compile Include="WebPageModel\ConventionModel.cs" />
     <Compile Include="WebPageModel\DelegationModel.cs" />
+    <Compile Include="WebPageModel\GuestModel.cs" />
     <Compile Include="WebPages\CPanel.Master.cs">
       <DependentUpon>CPanel.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

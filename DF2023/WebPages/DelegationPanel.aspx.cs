@@ -31,6 +31,15 @@ namespace DF2023.WebPages
             PanelHelper.CreateDelegation(GetBaseUrl(), NumberOfDelegationToGenerate,Conventions.SelectedValue,token);
         }
 
+        protected void btnGenerateGuests_Click(object sender, EventArgs e)
+        {
+            int NumberOfGuestToGenerate = 0;
+            if (!string.IsNullOrWhiteSpace(NbrGuests.Text))
+                NumberOfGuestToGenerate = Convert.ToInt32(NbrGuests.Text);
+            string token = GetAuthenticatedUserAccessToken();
+            PanelHelper.CreateGuest(GetBaseUrl(), NumberOfGuestToGenerate, Conventions.SelectedValue, token);
+        }
+
         private string GetBaseUrl()
         {
             var requestUrl = HttpContext.Current?.Request?.Url;
@@ -108,5 +117,7 @@ namespace DF2023.WebPages
 
             return null;
         }
+
+
     }
 }
