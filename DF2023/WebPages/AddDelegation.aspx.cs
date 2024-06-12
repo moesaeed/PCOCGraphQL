@@ -6,14 +6,25 @@ using Telerik.Sitefinity.Security.Claims;
 using System.Linq;
 using Telerik.Sitefinity.Services;
 using System.Security.Claims;
+using System.Web.UI.WebControls;
+using System.Web.UI;
+using DF2023.Core.Extensions;
+using Telerik.OpenAccess.SPI;
+using DF2023.WebPageModel;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using GraphQL;
+using ServiceStack;
+using ServiceStack.Text;
+using System.Collections.Generic;
 
 namespace DF2023.WebPages
 {
-    public partial class DelegationPanel : System.Web.UI.Page
+    public partial class AddDelegation : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if(!IsPostBack)
+            if (!IsPostBack)
             {
                 Conventions.DataSource = GetDataHelper.GetConventionsForDropDown(GetBaseUrl());
                 Conventions.DataTextField = "Title";
@@ -28,7 +39,46 @@ namespace DF2023.WebPages
             if (!string.IsNullOrWhiteSpace(NbrDelegation.Text))
                 NumberOfDelegationToGenerate = Convert.ToInt32(NbrDelegation.Text);
             string token = GetAuthenticatedUserAccessToken();
-            PanelHelper.CreateDelegation(GetBaseUrl(), NumberOfDelegationToGenerate,Conventions.SelectedValue,token);
+            var listDelegationCreated = PanelHelper.CreateDelegation(GetBaseUrl(), NumberOfDelegationToGenerate, Conventions.SelectedValue, token);
+            grid.DataSource = listDelegationCreated.Results;
+            grid.DataBind();
+
+            if(listDelegationCreated.Errors!=null && listDelegationCreated.Errors.Any())
+            {
+                labFailedResult.Text = labFailedResult.Text.Replace("[XXX]", $"[{listDelegationCreated.Errors.Count().ToString()}]");
+                labFailedResult.Visible = true;
+                FailedResult.Visible = true;
+                FailedResult.DataSource = listDelegationCreated.Errors;
+                FailedResult.DataBind();
+            }
+        }
+
+        protected void grid_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "ViewItem")
+            {
+                string itemId = e.CommandArgument.ToString();
+                string url = $"../Sitefinity/adminapp/content/conventions/{Conventions.SelectedValue}/delegations/{itemId}/edit?sf_provider=OpenAccessProvider&sf_culture=en";
+                ScriptManager.RegisterStartupScript(this, GetType(), "OpenItemInNewTab", $"window.open('{url}', '_blank')", true);
+            }
+            else if(e.CommandName == "ViewUser")
+            {
+                string itemId = e.CommandArgument.ToString();
+                var user = UserExtensions.GetUserByEmail(itemId).Id;
+                string url = $"../Sitefinity/Administration/Users";
+                ScriptManager.RegisterStartupScript(this, GetType(), "OpenItemInNewTab", $"window.open('{url}', '_blank')", true);
+
+            }
+        }
+
+
+        protected void btnGenerateGuests_Click(object sender, EventArgs e)
+        {/*
+            int NumberOfGuestToGenerate = 0;
+            if (!string.IsNullOrWhiteSpace(NbrGuests.Text))
+                NumberOfGuestToGenerate = Convert.ToInt32(NbrGuests.Text);
+            string token = GetAuthenticatedUserAccessToken();
+            PanelHelper.CreateGuest(GetBaseUrl(), NumberOfGuestToGenerate, Conventions.SelectedValue, token);*/
         }
 
         private string GetBaseUrl()
@@ -108,5 +158,7 @@ namespace DF2023.WebPages
 
             return null;
         }
+
+
     }
 }

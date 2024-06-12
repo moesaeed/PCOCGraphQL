@@ -1191,7 +1191,8 @@
     <Content Include="WebAssets\Css\style.css" />
     <Content Include="WebAssets\Images\logo.png" />
     <Content Include="WebAssets\Scripts\mainscript.js" />
-    <Content Include="WebPages\DelegationPanel.aspx" />
+    <Content Include="WebPages\AddGuests.aspx" />
+    <Content Include="WebPages\AddDelegation.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RazorGeneratorMvcStart.cs" />
@@ -1253,6 +1254,14 @@
     <Compile Include="WebPageModel\BaseModel.cs" />
     <Compile Include="WebPageModel\ConventionModel.cs" />
     <Compile Include="WebPageModel\DelegationModel.cs" />
+    <Compile Include="WebPageModel\GuestModel.cs" />
+    <Compile Include="WebPages\AddGuests.aspx.cs">
+      <DependentUpon>AddGuests.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\AddGuests.aspx.designer.cs">
+      <DependentUpon>AddGuests.aspx</DependentUpon>
+    </Compile>
     <Compile Include="WebPages\CPanel.Master.cs">
       <DependentUpon>CPanel.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1260,12 +1269,12 @@
     <Compile Include="WebPages\CPanel.Master.designer.cs">
       <DependentUpon>CPanel.Master</DependentUpon>
     </Compile>
-    <Compile Include="WebPages\DelegationPanel.aspx.cs">
-      <DependentUpon>DelegationPanel.aspx</DependentUpon>
+    <Compile Include="WebPages\AddDelegation.aspx.cs">
+      <DependentUpon>AddDelegation.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WebPages\DelegationPanel.aspx.designer.cs">
-      <DependentUpon>DelegationPanel.aspx</DependentUpon>
+    <Compile Include="WebPages\AddDelegation.aspx.designer.cs">
+      <DependentUpon>AddDelegation.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

@@ -11,7 +11,7 @@ namespace DF2023.WebPages
 {
 
 
-    public partial class DelegationPanel
+    public partial class AddDelegation
     {
 
         /// <summary>
@@ -40,5 +40,32 @@ namespace DF2023.WebPages
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnGenerateDelegation;
+
+        /// <summary>
+        /// labFailedResult control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label labFailedResult;
+
+        /// <summary>
+        /// FailedResult control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ListBox FailedResult;
+
+        /// <summary>
+        /// grid control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grid;
     }
 }
