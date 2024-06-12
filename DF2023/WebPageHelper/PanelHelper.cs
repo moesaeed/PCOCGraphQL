@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using DF2023.Core.Constants;
 using DF2023.WebPageModel;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace DF2023.WebPageHelper
@@ -9,39 +11,50 @@ namespace DF2023.WebPageHelper
     public static class PanelHelper
     {
 
-        public static void CreateDelegation(string baseUrl,int numberOfDelegationToCreate, string parentId, string token)
+        public static (List<DelegationModel> Results, List<string> Errors) CreateDelegation(string baseUrl, int numberOfDelegationToCreate, string parentId, string token)
         {
-            //var endpoint = $"{baseUrl}graphqllayer/GraphQLMutation/Mutation";
             var countries = GetDataHelper.GetCountries(baseUrl);
             var services = GetDataHelper.GetServicesLevel(baseUrl);
             var enities = GetDataHelper.GetEntities(baseUrl);
-            
-            List<JObject> list = new List<JObject>();
-            for (int i = 0;i< numberOfDelegationToCreate; i++)
+            //Gulae@email.com
+            List<DelegationModel> list = new List<DelegationModel>();
+            List<string> listError = new List<string>();
+            for (int i = 0; i < numberOfDelegationToCreate; i++)
             {
-                var rdCountry = new Random().Next(0,countries.Count -1);
+                var rdCountry = new Random().Next(0, countries.Count - 1);
                 var rdService = new Random().Next(0, services.Count - 1);
                 var rdEntity = new Random().Next(0, enities.Count - 1);
-                var delagationModel = GenerateDelegationModel(parentId,enities[rdEntity].ToString(), services[rdService].ToString(), countries[rdCountry].ToString());
+                var delagationModel = GenerateDelegationModel(parentId, enities[rdEntity].ToString(), services[rdService].ToString(), countries[rdCountry].ToString());
                 var returnedDelegation = CreateNewDelegation(baseUrl, token, delagationModel);
-                if(returnedDelegation !=null)
-                    list.Add(returnedDelegation);
+                if (returnedDelegation != null)
+                {
+                    if (returnedDelegation.ContainsKey("data"))
+                    {
+                        list.Add(JsonConvert.DeserializeObject<DelegationModel>(returnedDelegation["data"]["delegationSave"].ToString()));
+                    }
+                    else
+                    {
+                        var error = JsonConvert.DeserializeObject<string>(returnedDelegation["error"].ToString());
+                        error = $"Failed to save the delegation Title:{delagationModel.Title} , Email:{delagationModel.ContactEmail} , ContactName: {delagationModel.ContactName} \n Exception: {error}";
+                        listError.Add(error);
+                    }
+                }
             }
 
-            var countDelegation = list.Count;
+            return (list, listError);
         }
 
         private static DelegationModel GenerateDelegationModel(string parentId, string entity, string serviceLevel, string country)
         {
             string Title = GenerateName(new Random().Next(1, 20));
             string ContactPhoneNumber = GenerateNumberAsString(new Random().Next(7, 10));
-            string ContactEmail = $"{Title}@email.com";
+            string ContactEmail = $"{Title.Replace(" ","")}@email.com";
             string NumberOfOfficialDelegates = new Random().Next(1, 10).ToString();
             string TitleAr = $"{Title} - Ar";
             string RemainingNumberOfOfficialDelegates = new Random().Next(1, 5).ToString();
             string IsSingle = new Random().Next(0, 1) == 0 ? "true" : "false";
             string ContactName = GenerateName(new Random().Next(1, 20));
-            string SecondaryEmail = $"{ContactName}@email.com";
+            string SecondaryEmail = $"{ContactName.Replace(" ","")}@email.com";
             DelegationModel model = new DelegationModel()
             {
                 Title = Title,
@@ -86,24 +99,41 @@ namespace DF2023.WebPageHelper
                                 systemParentId: ""{model.SystemParentId}""
                               }}) {{
                                 id,
-                                title
+                                title,
+                                contactEmail,
+                                contactPhoneNumber,
+                                isSingle,
+                                contactName,
+                                secondaryEmail
                               }}
                             }}";
             var delegation = GraphQLHelper.ExecuteQueryAsync(baseUrl, query, null,token);
             return delegation;
         }
 
-        public static void CreateGuest(string baseUrl, int numberOfGuestsToCreate, string parentId, string token)
+        public static (List<GuestModel> Results, List<string> Errors) CreateGuest(string baseUrl, int numberOfGuestsToCreate, string parentId, string token)
         {
-            List<JObject> list = new List<JObject>();
+            List<GuestModel> list = new List<GuestModel>();
+            List<string> listError = new List<string>();
             for (int i = 0; i < numberOfGuestsToCreate; i++)
             {
                 var guestModel = GenerateGuestModel(parentId);
                 var returnedGuest = CreateNewGuest(baseUrl, token, guestModel);
                 if (returnedGuest != null)
-                    list.Add(returnedGuest);
+                {
+                    if (returnedGuest.ContainsKey("data"))
+                    {
+                        list.Add(JsonConvert.DeserializeObject<GuestModel>(returnedGuest["data"]["guestSave"].ToString()));
+                    }
+                    else
+                    {
+                        var error = JsonConvert.DeserializeObject<string>(returnedGuest["error"].ToString());
+                        error = $"Failed to save the delegation Title:{guestModel.Title} , Email:{guestModel.FirstName} \n Exception: {error}";
+                        listError.Add(error);
+                    }
+                }
             }
-            var countGuest = list.Count;
+            return (list, listError);
         }
 
         private static JObject CreateNewGuest(string baseUrl, string token, GuestModel model)

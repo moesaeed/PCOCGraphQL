@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net;
 using System.Text;
+using System;
+using Telerik.Sitefinity.Abstractions;
 
 namespace DF2023.WebPageHelper
 {
@@ -27,7 +29,16 @@ namespace DF2023.WebPageHelper
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     string responseBody = response.Content.ReadAsStringAsync().Result;
-                    return JsonConvert.DeserializeObject<JObject>(responseBody);
+                    try
+                    {
+                        return JsonConvert.DeserializeObject<JObject>(responseBody);
+                    }
+                    catch(Exception ex)
+                    {
+                        Log.Write($"[GQL] Payload {payload} \n Exception {ex.ToString()}");
+                        return new JObject(new JProperty("error", responseBody.ToString()));
+                        
+                    }   
                 }
                 else
                 {
