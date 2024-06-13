@@ -1240,10 +1240,12 @@
     <Compile Include="Mvc\Controllers\GraphQLMutationController.cs" />
     <Compile Include="Mvc\Controllers\RolesController.cs" />
     <Compile Include="Mvc\Controllers\DelegationController.cs" />
+    <Compile Include="Mvc\Controllers\ProcessImageController.cs" />
     <Compile Include="Mvc\Controllers\UserController.cs" />
     <Compile Include="Mvc\Models\ApiResult.cs" />
     <Compile Include="Mvc\Models\NoStackTraceException.cs" />
     <Compile Include="Mvc\Models\OTPDTO.cs" />
+    <Compile Include="Mvc\Models\ProcessingImageDto.cs" />
     <Compile Include="Mvc\Models\PushNotificationViewModel.cs" />
     <Compile Include="OwinStartupCustom.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

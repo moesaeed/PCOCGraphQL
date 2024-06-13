@@ -4,7 +4,6 @@ using DF2023.Core.Custom;
 using DF2023.Core.Extensions;
 using DF2023.CutomAttributes;
 using DF2023.Mvc.Models;
-using OtpNet;
 using System;
 using System.Globalization;
 using System.Web.Http;
@@ -64,9 +63,8 @@ namespace DF2023.Mvc.Controllers
 
             try
             {
-
                 OTPManager oTPManager = new OTPManager();
-                string result =oTPManager.GenerateOTP(userEmail);
+                string result = oTPManager.GenerateOTP(userEmail);
                 apiResult = new ApiResult("OTP", true, result);
             }
             catch (Exception ex)

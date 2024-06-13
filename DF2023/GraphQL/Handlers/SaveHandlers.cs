@@ -1,4 +1,5 @@
 ﻿using DF2023.Core.Custom;
+using DF2023.Core.Extensions;
 using DF2023.Core.Helpers;
 using DF2023.GraphQL.Classes;
 using DF2023.Mvc.Models;
@@ -29,6 +30,12 @@ namespace DF2023.GraphQL.Handlers
     {
         public static object HandleSave(IResolveFieldContext context, string fullTypeName)
         {
+            var userId = UserExtensions.GetCurentUserId();
+            if (userId == Guid.Empty)
+            {
+                return null;
+            }
+
             Dictionary<string, Object> args = context.Arguments.Values.FirstOrDefault().Value as Dictionary<string, Object>;
             var mappedManager = ManagerBase.GetMappedManager(fullTypeName);
             if (mappedManager is DynamicModuleManager)
