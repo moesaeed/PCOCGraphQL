@@ -1,11 +1,12 @@
 ﻿using DF2023.Mvc.Models;
 using IdentityModel.Client;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Text.Json;
 using System.Web.Http;
 
 namespace DF2023.Mvc.Controllers
@@ -18,38 +19,61 @@ namespace DF2023.Mvc.Controllers
         public IHttpActionResult ProcessFaceDetection(ProcessingImageDto imageDto)
         {
             ApiResult apiResult = null;
-
-            string accessToken = GetAccessToken();
-            apiResult = SendFaceDetectionRequest(imageDto, apiResult, accessToken);
+            try
+            {
+                string accessToken = GetAccessToken();
+                var faceDetectionURL = $"{baseURL}/api/ProcessImage/ProcessFaceDetection";
+                var responseBody = SendFaceDetectionRequest(imageDto, accessToken, faceDetectionURL);
+                apiResult = JsonConvert.DeserializeObject<ApiResult>(responseBody);
+            }
+            catch (Exception ex)
+            {
+                apiResult = new ApiResult(ex.Message, false, null);
+            }
 
             return this.Ok(apiResult);
         }
 
-        private ApiResult SendFaceDetectionRequest(ProcessingImageDto imageDto, ApiResult apiResult, string accessToken)
+        [HttpPost]
+        public IHttpActionResult ProcessImagePassport(ProcessingImageDto imageDto)
+        {
+            try
+            {
+                string accessToken = GetAccessToken();
+                var faceDetectionURL = $"{baseURL}/api/ProcessImage/ProcessImagePassport";
+                var responseBody = SendFaceDetectionRequest(imageDto, accessToken, faceDetectionURL);
+
+                string dataString = JObject.Parse(responseBody)["Data"].ToString(); // Extract the "Data" part
+
+                PassportImageResult result = JsonConvert.DeserializeObject<PassportImageResult>(dataString);
+
+                return this.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return this.Ok();
+            }
+        }
+
+        private string SendFaceDetectionRequest(ProcessingImageDto imageDto, string accessToken, string url)
         {
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken); 
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-                var content = new StringContent(JsonSerializer.Serialize(imageDto), Encoding.UTF8, "application/json"); 
-                var faceDetectionURL = $"{baseURL}/api/ProcessImage/ProcessFaceDetection";
-                var response = client.PostAsync(faceDetectionURL, content).Result;
-                try
+                var content = new StringContent(JsonConvert.SerializeObject(imageDto), Encoding.UTF8, "application/json");
+
+                var response = client.PostAsync(url, content).Result;
+
+                if (response.IsSuccessStatusCode)
                 {
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var responseBody = response.Content?.ReadAsStringAsync().Result;
-                        apiResult = JsonSerializer.Deserialize<ApiResult>(responseBody);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    apiResult = new ApiResult(ex.Message, false, null);
+                    var responseBody = response.Content?.ReadAsStringAsync().Result;
+                    return responseBody;
                 }
             }
 
-            return apiResult;
+            return null;
         }
 
         private string GetAccessToken()
