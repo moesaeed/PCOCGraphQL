@@ -42,12 +42,11 @@
                      <asp:GridView ID="grid" ClientIDMode="Static" runat="server" AutoGenerateColumns="false" OnRowCommand="grid_RowCommand" DataKeyNames="Id">
                          <Columns>
                              <asp:BoundField DataField="Title" HeaderText="Title" />
-                             <asp:BoundField DataField="TitleAr" HeaderText="Title (Ar)" />
-                             <asp:BoundField DataField="ContactName" HeaderText="Contact Name" />
-                             <asp:BoundField DataField="ContactEmail" HeaderText="Email" />
-                             <asp:BoundField DataField="ContactPhoneNumber" HeaderText="Phone" />
-                             <asp:BoundField DataField="SecondaryEmail" HeaderText="Secondary Email" />
-                             <asp:BoundField DataField="IsSingle" HeaderText="IsSingle" />
+                             <asp:BoundField DataField="FirstName" HeaderText="First Name" />
+                             <asp:BoundField DataField="LastName" HeaderText="Last Name" />
+                             <asp:BoundField DataField="Phone" HeaderText="Phone" />
+                             <asp:BoundField DataField="Email" HeaderText="Email" />
+                             <asp:BoundField DataField="IsLocal" HeaderText="IsLocal" />
                              <asp:TemplateField HeaderText="Actions">
                                  <ItemTemplate>
                                      <asp:ImageButton runat="server" ClientIDMode="Static" ID="btnView" ImageUrl="~/WebAssets/Images/view50x50.png" CommandName="ViewItem" ToolTip="View" CommandArgument='<%# Eval("Id") %>' />

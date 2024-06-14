@@ -23,6 +23,7 @@
                 </div>
             </div>
 
+
             <div class="collapse site-header__nav-search-wrap">
                 <div id="Header_T08A5E52C026_Col01" class="sf_colsIn site-header__nav" data-sf-element="Nav" data-placeholder-label="Nav">
                     <div class="navigation">
@@ -30,7 +31,7 @@
                             <div class="navbar-collapse" id='navbar-1'>
                                 <ul class="navbar-nav flex-wrap">
                                     <li class="nav-item dropdown ">
-                                        <a href="#">State of Qatar</a>
+                                        <a class="nav-link dropdown-toggle" href="#">State of Qatar</a>
                                         <ul id="navbarDropdownMenu-d660075f-8bfc-49bb-b575-4a35be9bbbf3" class="dropdown-menu">
                                             <li>
                                                 <a class="dropdown-item " href="state-of-qatar/Key-Facts-and-Information.html" target="_self">Key Facts and Information</a>

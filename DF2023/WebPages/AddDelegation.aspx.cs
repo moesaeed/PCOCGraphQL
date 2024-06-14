@@ -39,7 +39,7 @@ namespace DF2023.WebPages
             if (!string.IsNullOrWhiteSpace(NbrDelegation.Text))
                 NumberOfDelegationToGenerate = Convert.ToInt32(NbrDelegation.Text);
             string token = GetAuthenticatedUserAccessToken();
-            var listDelegationCreated = PanelHelper.CreateDelegation(GetBaseUrl(), NumberOfDelegationToGenerate, Conventions.SelectedValue, token);
+            var listDelegationCreated = PanelHelper.CreateDelegation(GetBaseUrl(), NumberOfDelegationToGenerate, Guid.Parse(Conventions.SelectedValue), token);
             grid.DataSource = listDelegationCreated.Results;
             grid.DataBind();
 

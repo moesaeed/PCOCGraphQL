@@ -30,7 +30,7 @@ namespace DF2023.WebPages
             if (!string.IsNullOrWhiteSpace(NbrGuest.Text))
                 NumberOfGuestToGenerate = Convert.ToInt32(NbrGuest.Text);
             string token = GetAuthenticatedUserAccessToken();
-            var listguestCreated = PanelHelper.CreateGuest(GetBaseUrl(), NumberOfGuestToGenerate, Conventions.SelectedValue, token);
+            var listguestCreated = PanelHelper.CreateGuest(GetBaseUrl(), NumberOfGuestToGenerate,Guid.Parse(Conventions.SelectedValue), token);
             grid.DataSource = listguestCreated.Results;
             grid.DataBind();
 
@@ -44,6 +44,10 @@ namespace DF2023.WebPages
             }
         }
 
+        protected void grid_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+
+        }
         private string GetBaseUrl()
         {
             var requestUrl = HttpContext.Current?.Request?.Url;
