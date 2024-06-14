@@ -1,8 +1,10 @@
 ﻿using DF2023.Core.Constants;
 using DF2023.Core.Extensions;
+using DF2023.Mvc.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using Telerik.Sitefinity.DynamicModules;
 using Telerik.Sitefinity.DynamicModules.Model;
 using Telerik.Sitefinity.GenericContent.Model;
@@ -152,6 +154,29 @@ namespace DF2023.Core.Custom
                 return guests;
             }
             return null;
+        }
+
+        public override void DuringProcessData(DynamicContent item, Dictionary<string, object> contextValue)
+        {
+            //var guestJson = contextValue.ContainsKey(Guest.GuestJSON) ? contextValue[Guest.GuestJSON].ToString() : string.Empty;
+            var delegationID = contextValue.ContainsKey(Guest.GuestJSON) ? Guid.Parse(contextValue[Guest.GuestJSON].ToString()) : Guid.Empty;
+
+            if (delegationID != Guid.Empty)
+            {
+                var originalGuestJson = item.GetValue(Guest.GuestJSON);
+
+                //GuestJSOn is empty
+                if (originalGuestJson == null)
+                {
+                    GuestJson guest = new GuestJson();
+                    guest.DelegationID = delegationID;
+
+                    FlatGuest flatGuest = new FlatGuest();
+                    flatGuest.Guest = new List<GuestJson>() { guest };
+
+                    contextValue[Guest.GuestJSON] = JsonSerializer.Serialize(flatGuest);
+                }
+            }
         }
     }
 }

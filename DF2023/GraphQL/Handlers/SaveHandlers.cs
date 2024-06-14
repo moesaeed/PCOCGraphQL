@@ -1,4 +1,5 @@
-﻿using DF2023.Core.Custom;
+﻿using DF2023.Core.Constants;
+using DF2023.Core.Custom;
 using DF2023.Core.Extensions;
 using DF2023.Core.Helpers;
 using DF2023.GraphQL.Classes;
@@ -140,6 +141,8 @@ namespace DF2023.GraphQL.Handlers
                 else
                     item = dynamicManager.GetDataItems(type).FirstOrDefault(i => i.Id == id);
 
+                handler.DuringProcessData(item, contextValue);
+
                 List<DynamicContent> oldrelatedItems = null;
                 foreach (var field in contextValue.Where(f => !f.Key.ToLower().StartsWith("child")))
                 {
@@ -199,12 +202,26 @@ namespace DF2023.GraphQL.Handlers
                 var innerManager = ManagerBase.GetMappedManager(relatedFieldType);
                 IDataItem toRelate = null;
                 if (innerManager is DynamicModuleManager)
-                    toRelate = HandleDynamicContentItemCreation(innerManager, relatedFieldType, newObject.ToObjectDictionary());
+                {
+                    var newObjectAsDictionary = newObject.ToObjectDictionary();
+
+                    if (item.GetType().ToString() == Delegation.DelegationDynamicTypeName
+                        && normalizedFieldName == Delegation.Guests
+                        && relatedFieldType == Guest.GuestDynamicTypeName)
+                    {
+                        //set up json
+                        newObjectAsDictionary[Guest.GuestJSON] = item.Id;
+                    }
+
+                    toRelate = HandleDynamicContentItemCreation(innerManager, relatedFieldType, newObjectAsDictionary);
+                }
                 else
                     toRelate = HandleLibraryItem(innerManager, relatedFieldType, newObject.ToObjectDictionary());
 
                 if (toRelate != null)
+                {
                     item.CreateRelation(toRelate, normalizedFieldName);
+                }
             }
         }
     }

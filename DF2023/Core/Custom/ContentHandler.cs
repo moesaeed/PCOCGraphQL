@@ -13,6 +13,8 @@ namespace DF2023.Core.Custom
         public abstract void PreProcessData(Dictionary<string, Object> contextValue);
 
         public abstract void PostProcessData(DynamicContent item);
+
+        public abstract void DuringProcessData(DynamicContent item, Dictionary<string, Object> contextValue);
     }
 
     public class DefaultContentHandler : ContentHandler
@@ -31,6 +33,11 @@ namespace DF2023.Core.Custom
         {
             errorMsg = null;
             return true;
+        }
+
+        public override void DuringProcessData(DynamicContent item, Dictionary<string, object> contextValue)
+        {
+            // No During-Processing for unsupported types
         }
     }
 }

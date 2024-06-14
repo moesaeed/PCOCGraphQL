@@ -1243,6 +1243,7 @@
     <Compile Include="Mvc\Controllers\ProcessImageController.cs" />
     <Compile Include="Mvc\Controllers\UserController.cs" />
     <Compile Include="Mvc\Models\ApiResult.cs" />
+    <Compile Include="Mvc\Models\FlatGuest.cs" />
     <Compile Include="Mvc\Models\NoStackTraceException.cs" />
     <Compile Include="Mvc\Models\OTPDTO.cs" />
     <Compile Include="Mvc\Models\ProcessingImageDto.cs" />

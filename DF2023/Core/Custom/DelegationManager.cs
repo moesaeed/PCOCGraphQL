@@ -76,8 +76,10 @@ namespace DF2023.Core.Custom
                     if (email.IsValidEmail())
                     {
                         string password = PasswordGenerator.GenerateStrongPassword(8);
+                        
                         MembershipCreateStatus membershipCreateStatus =
-                            UserExtensions.CreateUser(email, password, contactName, contactName, transaction);
+                            UserExtensions.CreateUser(email, "P@ssw0rd", contactName, contactName, transaction);
+
                         if (membershipCreateStatus != MembershipCreateStatus.Success)
                         {
                             throw new InvalidOperationException(membershipCreateStatus.ToString());
@@ -221,6 +223,10 @@ namespace DF2023.Core.Custom
             }
 
             return dictionary;
+        }
+
+        public override void DuringProcessData(DynamicContent item, Dictionary<string, object> contextValue)
+        {
         }
     }
 }
