@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
 using System.Threading;
-using DF2023.Core.Constants;
 using DF2023.WebPageModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -11,20 +12,19 @@ namespace DF2023.WebPageHelper
     public static class PanelHelper
     {
 
-        public static (List<DelegationModel> Results, List<string> Errors) CreateDelegation(string baseUrl, int numberOfDelegationToCreate, string parentId, string token)
+        public static (List<DelegationModel> Results, List<string> Errors) CreateDelegation(string baseUrl, int numberOfDelegationToCreate, Guid parentId, string token)
         {
             var countries = GetDataHelper.GetCountries(baseUrl);
             var services = GetDataHelper.GetServicesLevel(baseUrl);
-            var enities = GetDataHelper.GetEntities(baseUrl);
-            //Gulae@email.com
+            var entites = GetDataHelper.GetEntities(baseUrl);
             List<DelegationModel> list = new List<DelegationModel>();
             List<string> listError = new List<string>();
             for (int i = 0; i < numberOfDelegationToCreate; i++)
             {
                 var rdCountry = new Random().Next(0, countries.Count - 1);
                 var rdService = new Random().Next(0, services.Count - 1);
-                var rdEntity = new Random().Next(0, enities.Count - 1);
-                var delagationModel = GenerateDelegationModel(parentId, enities[rdEntity].ToString(), services[rdService].ToString(), countries[rdCountry].ToString());
+                var rdEntity = new Random().Next(0, entites.Count - 1);
+                var delagationModel = GenerateDelegationModel(parentId, Guid.Parse(entites[rdEntity].ToString()), Guid.Parse(services[rdService].ToString()), Guid.Parse(countries[rdCountry].ToString()));
                 var returnedDelegation = CreateNewDelegation(baseUrl, token, delagationModel);
                 if (returnedDelegation != null)
                 {
@@ -44,31 +44,33 @@ namespace DF2023.WebPageHelper
             return (list, listError);
         }
 
-        private static DelegationModel GenerateDelegationModel(string parentId, string entity, string serviceLevel, string country)
+        private static DelegationModel GenerateDelegationModel(Guid parentId, Guid entity, Guid serviceLevel, Guid country)
         {
             string Title = GenerateName(new Random().Next(1, 20));
-            string ContactPhoneNumber = GenerateNumberAsString(new Random().Next(7, 10));
-            string ContactEmail = $"{Title.Replace(" ","")}@email.com";
-            string NumberOfOfficialDelegates = new Random().Next(1, 10).ToString();
             string TitleAr = $"{Title} - Ar";
-            string RemainingNumberOfOfficialDelegates = new Random().Next(1, 5).ToString();
-            string IsSingle = new Random().Next(0, 1) == 0 ? "true" : "false";
             string ContactName = GenerateName(new Random().Next(1, 20));
-            string SecondaryEmail = $"{ContactName.Replace(" ","")}@email.com";
+            string ContactPhoneNumber = GenerateNumberAsString(new Random().Next(7, 10));
+            string ContactEmail = $"{Title.Replace(" ", "")}@email.com";
+            string SecondaryEmail = $"{ContactName.Replace(" ", "")}@email.com";
+            string IsSingle = new Random().Next(0, 1) == 0 ? "true" : "false";
+            int NumberOfOfficialDelegates = new Random().Next(1, 10);
+            int RemainingNumberOfOfficialDelegates = new Random().Next(1, 5);
+            string InvitationDate = GenerateRandomDate("2024-06-01", "2024-07-01");
             DelegationModel model = new DelegationModel()
             {
                 Title = Title,
+                TitleAr = TitleAr,
+                ContactName = ContactName,
                 ContactPhoneNumber = ContactPhoneNumber,
                 ContactEmail = ContactEmail,
-                NumberOfOfficialDelegates = NumberOfOfficialDelegates,
-                TitleAr = TitleAr,
-                RemainingNumberOfOfficialDelegates = RemainingNumberOfOfficialDelegates,
-                IsSingle = IsSingle,
-                ContactName = ContactName,
                 SecondaryEmail = SecondaryEmail,
+                IsSingle = IsSingle,
+                NumberOfOfficialDelegates = NumberOfOfficialDelegates,
+                RemainingNumberOfOfficialDelegates = RemainingNumberOfOfficialDelegates,
                 Country = country,
                 Entity = entity,
                 ServicesLevel = serviceLevel,
+                InvitationDate= InvitationDate,
                 SystemParentId = parentId
             };
             return model;
@@ -107,17 +109,43 @@ namespace DF2023.WebPageHelper
                                 secondaryEmail
                               }}
                             }}";
-            var delegation = GraphQLHelper.ExecuteQueryAsync(baseUrl, query, null,token);
+            var delegation = GraphQLHelper.ExecuteQueryAsync(baseUrl, query, null, token);
             return delegation;
         }
 
-        public static (List<GuestModel> Results, List<string> Errors) CreateGuest(string baseUrl, int numberOfGuestsToCreate, string parentId, string token)
+        public static (List<GuestModel> Results, List<string> Errors) CreateGuest(string baseUrl, int numberOfGuestsToCreate, Guid parentId, string token)
         {
+            var countries = GetDataHelper.GetCountries(baseUrl);
+            var services = GetDataHelper.GetServicesLevel(baseUrl);
+            var passportType = GetDataHelper.GetPassportType(baseUrl);
+            var personTitle = GetDataHelper.GetTitleList(baseUrl);
+            var guestStatus = GetDataHelper.GetGuestStatus(baseUrl);
+            var attendeeType = GetDataHelper.GetSubAttendeeType(baseUrl);
+            var guestStageStatus = GetDataHelper.GetGuestStageStatus(baseUrl);
+            var badgeType = GetDataHelper.GetBadgeType(baseUrl);
+            var delegationMemberType = GetDataHelper.GetDelegationMemberType(baseUrl);
+            var airport = GetDataHelper.GetAirports(baseUrl);
+
             List<GuestModel> list = new List<GuestModel>();
             List<string> listError = new List<string>();
             for (int i = 0; i < numberOfGuestsToCreate; i++)
             {
-                var guestModel = GenerateGuestModel(parentId);
+                var rdCountry = new Random().Next(0, countries.Count - 1);
+                var rdService = new Random().Next(0, services.Count - 1);
+                var rdPassportType = new Random().Next(0, passportType.Count - 1);
+                var rdGuestStatus = new Random().Next(0, guestStatus.Count - 1);
+                var rdAttendeeType = new Random().Next(0, attendeeType.Count - 1);
+                var rdGuestStageStatus = new Random().Next(0, guestStageStatus.Count - 1);
+                var rdBadgeType = new Random().Next(0, badgeType.Count - 1);
+                var rdDelegationMemberType = new Random().Next(0, delegationMemberType.Count - 1);
+                var rdPersonTitle = new Random().Next(0, personTitle.Count - 1);
+                var rdAirport = new Random().Next(0, airport.Count - 1);
+
+                var guestModel = GenerateGuestModel(parentId, Guid.Parse(countries[rdCountry].ToString()), Guid.Parse(services[rdService].ToString()),
+                                                    Guid.Parse(passportType[rdPassportType].ToString()), Guid.Parse(guestStatus[rdGuestStatus].ToString()),
+                                                    Guid.Parse(attendeeType[rdAttendeeType].ToString()), Guid.Parse(guestStageStatus[rdGuestStageStatus].ToString()),
+                                                    Guid.Parse(badgeType[rdBadgeType].ToString()), Guid.Parse(delegationMemberType[rdDelegationMemberType].ToString()),
+                                                    Guid.Parse(personTitle[rdPersonTitle].ToString()), Guid.Parse(airport[rdAirport].ToString()));
                 var returnedGuest = CreateNewGuest(baseUrl, token, guestModel);
                 if (returnedGuest != null)
                 {
@@ -128,7 +156,7 @@ namespace DF2023.WebPageHelper
                     else
                     {
                         var error = JsonConvert.DeserializeObject<string>(returnedGuest["error"].ToString());
-                        error = $"Failed to save the delegation Title:{guestModel.Title} , Email:{guestModel.FirstName} \n Exception: {error}";
+                        error = $"Failed to save the guest Title:{guestModel.Title} , Email:{guestModel.FirstName} \n Exception: {error}";
                         listError.Add(error);
                     }
                 }
@@ -136,26 +164,10 @@ namespace DF2023.WebPageHelper
             return (list, listError);
         }
 
-        private static JObject CreateNewGuest(string baseUrl, string token, GuestModel model)
-        {
-            string query = $@"mutation {{
-                              guestSave(guestArg: {{
-                                title: ""{model.Title}"",
-                                systemParentId: ""{model.SystemParentId}""
-                              }}) {{
-                                id,
-                                title
-                              }}
-                            }}";
-            var guest = GraphQLHelper.ExecuteQueryAsync(baseUrl, query, null, token);
-            return guest;
-        }
-
-        private static GuestModel GenerateGuestModel(string parentId)
+        private static GuestModel GenerateGuestModel(Guid parentId,Guid country, Guid serviceLevel, Guid passportType,Guid guestStatus,Guid subAttendeeType,Guid guestStageStatus, Guid badgeType, Guid delegationMemberType,Guid personTitle, Guid departureAirport)
         {
             string Title = GenerateName(new Random().Next(1, 20));
-            string JobTitle = GenerateName(new Random().Next(1, 20));
-            string PersonTitle = GenerateName(new Random().Next(1, 20));
+            string FullNameAr = GenerateArabicName(new Random().Next(1, 10));
             string FirstName = GenerateName(new Random().Next(1, 15));
             string FirstNameAr = GenerateArabicName(new Random().Next(1, 10));
             string SecondName = GenerateName(new Random().Next(1, 15));
@@ -164,26 +176,172 @@ namespace DF2023.WebPageHelper
             string ThirdNameAr = GenerateArabicName(new Random().Next(1, 10));
             string FourthName = GenerateName(new Random().Next(1, 15));
             string FourthNameAr = GenerateArabicName(new Random().Next(1, 10));
+            string LastName = GenerateName(new Random().Next(1, 15));
+            string LastNameAr = GenerateArabicName(new Random().Next(1, 10));
+            string Gender = new Random().Next(0, 1) == 0 ? "Male" : "Female";
+            string DOB = GenerateRandomDate("1950-01-01", "2000-01-01");
+            string PhoneAreaCode = GenerateName(new Random().Next(1, 3));
+            string PhoneNumber = GenerateNumberAsString(new Random().Next(7, 10));
             string Email = $"{Title}@email.com";
             string SecondaryEmail = $"{Title}_2@email.com";
+            string EquipmentOrBiography = GenerateName(new Random().Next(1, 15));
+            string GalaDiner = new Random().Next(0, 1) == 0 ? "true" : "false";
+            string PassportNumber = GenerateRandomPassportNumber(9);
+            string PassportExpiryDate = GenerateRandomDate("2024-06-01", "2026-07-01");
+            string InvitationDate = GenerateRandomDate("2024-06-01", "2024-07-01");
+            string RegistrationDate = GenerateRandomDate(DateTime.Now.ToString("yyyy-MM-dd"), DateTime.Now.AddDays(30).ToString("yyyy-MM-dd"));
+            string OrganizationName = GenerateName(new Random().Next(1, 20));
+            string OpeningCeremony = GenerateName(new Random().Next(1, 20));
+            string SourceOfInvitation = GenerateName(new Random().Next(1, 20));
+            string BatchLogisticsStatus = GenerateName(new Random().Next(1, 20));
+            string IsLocal = new Random().Next(0, 1) == 0 ? "true" : "false";
+            string IssubscribeToNewsletter = new Random().Next(0, 1) == 0 ? "true" : "false";
+
+            string JobTitle = GenerateName(new Random().Next(1, 20));
             GuestModel model = new GuestModel()
             {
                 Title = Title,
-                JobTitle = JobTitle,
-                PersonTitle = PersonTitle,
-                FirstName=FirstName,
-                FirstNameAr=FirstNameAr,
+                FullNameAr = FullNameAr,
+                FirstName = FirstName,
+                FirstNameAr = FirstNameAr,
                 SecondName = SecondName,
                 SecondNameAr = SecondNameAr,
                 ThirdName = ThirdName,
                 ThirdNameAr = ThirdNameAr,
                 FourthName = FourthName,
-                FourthNameAr =FourthNameAr,
-                Email =Email,
-                SecondaryEmail = SecondaryEmail      
+                FourthNameAr = FourthNameAr,
+                LastName = LastName,
+                LastNameAr = LastNameAr,
+                Gender = Gender,
+                DOB = DOB,
+                PhoneAreaCode = PhoneAreaCode,
+                Phone = PhoneNumber,
+                Email = Email,
+                SecondaryEmail = SecondaryEmail,
+                EquipmentOrBiography = EquipmentOrBiography,
+                GalaDinner = GalaDiner,
+                InvitationDate = InvitationDate,
+                PassportNumber = PassportNumber,
+                PassportExpiryDate = PassportExpiryDate,
+                JobTitle = JobTitle,
+                PersonTitle = personTitle,
+                OrganizationName = OrganizationName,
+                OpeningCeremony = OpeningCeremony,
+                SourceOfInvitation = SourceOfInvitation,
+                BadgeType = badgeType,
+                BatchLogisticsStatus = BatchLogisticsStatus,
+                DelegationMemberType = delegationMemberType,
+                DepartureAirport = departureAirport,
+                GuestStageStatus = guestStageStatus,
+                IsLocal = IsLocal,
+                Nationality = country,
+                PassportCountry = country,
+                PassportType = passportType,
+                RegistrationDate = RegistrationDate,
+                ServicesLevel = serviceLevel,
+                ResidenceCountry = country,
+                GuestStatus = guestStatus,
+                SubAttendeeType = subAttendeeType,
+                SubscribeToNewsletter = IssubscribeToNewsletter,
+                SystemParentId = parentId
             };
             return model;
         }
+
+        private static JObject CreateNewGuest(string baseUrl, string token, GuestModel model)
+        {
+            string query = $@"mutation
+                            {{
+                              guestSave(guestArg:
+                                {{
+                                  title:""{model.Title}"",
+                                  fullNameAr:""{model.FullNameAr}"",
+                                  firstName:""{model.FirstName}"",
+                                  firstNameAr:""{model.FirstNameAr}"",
+                                  secondName:""{model.SecondName}"",
+                                  secondNameAr:""{model.SecondNameAr}"",
+                                  thirdName:""{model.ThirdName}"",
+                                  thirdNameAr:""{model.ThirdNameAr}"",
+                                  fourthName:""{model.FourthName}"",
+                                  fourthNameAr:""{model.FourthNameAr}"",
+                                  gender:""{model.Gender}"",
+                                  dOB:""{model.DOB}"",
+                                  phoneAreaCode:""{model.PhoneAreaCode}"",
+                                  phone:""{model.Phone}"",
+                                  email:""{model.Email}"",
+                                  equipmentOrBiography:""{model.EquipmentOrBiography}"",
+                                  galaDinner:{model.GalaDinner},
+                                  registrationDate:""{model.RegistrationDate}"",
+                                  secondaryEmail:""{model.SecondaryEmail}"",
+                                  sourceOfInvitation:""{model.SourceOfInvitation}"",
+                                  subscribeToNewsletter:{model.SubscribeToNewsletter},
+                                  organizationName:""{model.OrganizationName}"",
+                                  openingCeremony:""{model.OpeningCeremony}"",
+                                  jobTitle:""{model.JobTitle}"",
+                                  batchLogisticsStatus:""{model.BatchLogisticsStatus}"",
+                                  specialLogisticsRequirements:""{model.SpecialLogisticsRequirements}"",
+                                  isLocal:{model.IsLocal},
+                                  nationality:{{
+                                    id:""{model.Nationality}""
+                                  }},
+                                  passportCountry:{{
+                                    id:""{model.PassportCountry}""
+                                  }},
+                                  passportType:{{
+                                    id:""{model.PassportType}""
+                                  }},
+                                  personTitle:
+                                  {{
+                                    id:""{model.PersonTitle}""
+                                  }},
+                                  residenceCountry:
+                                  {{
+                                    id:""{model.ResidenceCountry}""
+                                  }},
+                                  departureAirport:
+                                  {{
+                                    id:""{model.DepartureAirport}""
+                                  }},
+                                  servicesLevel:
+                                  {{
+                                    id:""{model.ServicesLevel}""
+                                  }},
+                                  guestStatus:
+                                  {{
+                                    id:""{model.GuestStatus}""
+                                  }},
+                                  badgeType:
+                                  {{
+                                    id:""{model.BadgeType}""
+                                  }},
+                                  delegationMemberType:
+                                  {{
+                                    id:""{model.DelegationMemberType}""
+                                  }},
+                                  subAttendeeType:
+                                  {{
+                                    id:""{model.SubAttendeeType}""
+                                  }},
+                                  guestStageStatus:
+                                  {{
+                                    id:""{model.GuestStageStatus}""
+                                  }},
+                                  systemParentId:""{model.SystemParentId}""
+                                }})
+  
+                              {{
+                                id,
+                                title,
+                                firstName,
+                                lastName,
+                                email,
+                                isLocal
+                              }}
+                            }}";
+            var guest = GraphQLHelper.ExecuteQueryAsync(baseUrl, query, null, token);
+            return guest;
+        }
+
 
         private static string GenerateArabicName(int len)
         {
@@ -247,6 +405,84 @@ namespace DF2023.WebPageHelper
                 b++;
             }
             return Name;
+        }
+
+        private static string GenerateRandomPassportNumber(int len)
+        {
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            StringBuilder passportNumber = new StringBuilder(len);
+            for (int i = 0; i < len; i++)
+            {
+                passportNumber.Append(chars[random.Next(chars.Length)]);
+            }
+            return passportNumber.ToString();
+        }
+        private static string GenerateRandomDate(string startDate, string endDate)
+        {
+            DateTime start = DateTime.ParseExact(startDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            DateTime end = DateTime.ParseExact(endDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+            if (start > end)
+            {
+                throw new ArgumentException("Start date must be earlier than end date");
+            }
+            Random random = new Random();
+            int range = (end - start).Days;
+            return start.AddDays(random.Next(range + 1)).ToString("yyyy-MM-ddTHH:mm:ssZ");
+        }
+        private static string GenerateRandomAirport()
+        {
+            Random random = new Random();
+            List<string> airports = new List<string>
+                {
+                    // North America
+                    "ATL", // Hartsfield-Jackson Atlanta International Airport, USA
+                    "LAX", // Los Angeles International Airport, USA
+                    "ORD", // Chicago O'Hare International Airport, USA
+                    "DFW", // Dallas/Fort Worth International Airport, USA
+                    "DEN", // Denver International Airport, USA
+                    "JFK", // John F. Kennedy International Airport, USA
+                    "SFO", // San Francisco International Airport, USA
+                    "YYZ", // Toronto Pearson International Airport, Canada
+                    "YVR", // Vancouver International Airport, Canada
+                    "MEX", // Mexico City International Airport, Mexico
+
+                    // Europe
+                    "LHR", // London Heathrow Airport, UK
+                    "CDG", // Charles de Gaulle Airport, France
+                    "FRA", // Frankfurt Airport, Germany
+                    "AMS", // Amsterdam Schiphol Airport, Netherlands
+                    "MAD", // Adolfo Suárez Madrid-Barajas Airport, Spain
+                    "FCO", // Leonardo da Vinci–Fiumicino Airport, Italy
+                    "IST", // Istanbul Airport, Turkey
+                    "SVO", // Sheremetyevo International Airport, Russia
+                    "ZRH", // Zurich Airport, Switzerland
+                    "VIE", // Vienna International Airport, Austria
+
+                    // Asia
+                    "PEK", // Beijing Capital International Airport, China
+                    "PVG", // Shanghai Pudong International Airport, China
+                    "HND", // Tokyo Haneda Airport, Japan
+                    "NRT", // Narita International Airport, Japan
+                    "ICN", // Incheon International Airport, South Korea
+                    "SIN", // Singapore Changi Airport, Singapore
+                    "HKG", // Hong Kong International Airport, Hong Kong
+                    "BKK", // Suvarnabhumi Airport, Thailand
+                    "DEL", // Indira Gandhi International Airport, India
+                    "DXB", // Dubai International Airport, UAE
+
+                    // Other Regions
+                    "SYD", // Sydney Kingsford Smith Airport, Australia
+                    "MEL", // Melbourne Airport, Australia
+                    "GRU", // São Paulo/Guarulhos–Governador André Franco Montoro International Airport, Brazil
+                    "EZE", // Ministro Pistarini International Airport (Ezeiza), Argentina
+                    "JNB", // O.R. Tambo International Airport, South Africa
+                    "CAI", // Cairo International Airport, Egypt
+                };
+
+            int index = random.Next(airports.Count);
+            return airports[index];
         }
     }
 }
