@@ -166,7 +166,7 @@ namespace DF2023.Core.Custom
                 var originalGuestJson = item.GetValue(Guest.GuestJSON);
 
                 //GuestJSOn is empty
-                if (originalGuestJson == null)
+                if (originalGuestJson == null || string.IsNullOrWhiteSpace(originalGuestJson.ToString()))
                 {
                     GuestJson guest = new GuestJson();
                     guest.DelegationID = delegationID;
@@ -175,6 +175,27 @@ namespace DF2023.Core.Custom
                     flatGuest.Guest = new List<GuestJson>() { guest };
 
                     contextValue[Guest.GuestJSON] = JsonSerializer.Serialize(flatGuest);
+                }
+                else if (!string.IsNullOrWhiteSpace(originalGuestJson.ToString()))
+                {
+                    var flatGuest = JsonSerializer.Deserialize<FlatGuest>(originalGuestJson.ToString());
+                    if (flatGuest != null && flatGuest.Guest?.Count > 0)
+                    {
+                        foreach (var guestJson in flatGuest.Guest)
+                        {
+                            if (guestJson.DelegationID == delegationID)
+                            {
+                                contextValue[Guest.GuestJSON] = JsonSerializer.Serialize(flatGuest);
+                                return;
+                            }
+                            else
+                            {
+                                flatGuest.Guest.Add(new GuestJson() { DelegationID = delegationID });
+                                contextValue[Guest.GuestJSON] = JsonSerializer.Serialize(flatGuest);
+                                return;
+                            }
+                        }
+                    }
                 }
             }
         }
