@@ -1193,6 +1193,7 @@
     <Content Include="WebAssets\Scripts\mainscript.js" />
     <Content Include="WebPages\AddGuests.aspx" />
     <Content Include="WebPages\AddDelegation.aspx" />
+    <Content Include="WebPages\Dashboard.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RazorGeneratorMvcStart.cs" />
@@ -1278,6 +1279,13 @@
     </Compile>
     <Compile Include="WebPages\AddDelegation.aspx.designer.cs">
       <DependentUpon>AddDelegation.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebPages\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
