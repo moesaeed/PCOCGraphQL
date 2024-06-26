@@ -34,6 +34,20 @@ namespace DF2023.Core.Extensions
             return identity.UserId;
         }
 
+        public static string  GetCurentUserFirstLastName()
+        {
+            UserManager userManager = UserManager.GetManager();
+            Guid userId = GetCurentUserId();
+            User user = userManager.GetUser(userId);
+            
+            UserProfileManager userProfileManager = UserProfileManager.GetManager();
+            UserProfile profile = userProfileManager.GetUserProfile(user.Id, typeof(SitefinityProfile).FullName);
+            var firstName = DataExtensions.GetValue(profile, "FirstName").ToString();
+            var lastName = DataExtensions.GetValue(profile, "LastName").ToString();
+
+            return $"{firstName} {lastName}";
+        }
+
         public static bool IsCurrentUserInRole(string roleName)
         {
             bool isUserInRole = false;

@@ -50,6 +50,25 @@ namespace DF2023.Mvc.Controllers
             return this.Ok(apiResult);
         }
 
+        [Authorize]
+        [HttpGet]
+        public IHttpActionResult GetCurrentUserName()
+        {
+            ApiResult apiResult = null;
+            try
+            {
+                string data = UserExtensions.GetCurentUserFirstLastName();
+
+                apiResult = new ApiResult("Current User name", true, data);
+            }
+            catch (Exception ex)
+            {
+                apiResult = new ApiResult(ex.Message, false, null);
+            }
+
+            return this.Ok(apiResult);
+        }
+
         [AuthorizeOTPAttribute]
         [HttpPost]
         public IHttpActionResult GenerateOTP(string userEmail)
