@@ -98,6 +98,23 @@ namespace DF2023.GraphQL.Handlers
                         sitefinityMetaField.ClrType == typeof(Lstring).FullName ||
                         sitefinityMetaField.ClrType == typeof(ChoiceOption).FullName)
                     {
+                        //var dbContext = (manager.Provider as IOpenAccessDataProvider).GetContext();
+                        //string sqlQueryString = @"SELECT GuestJSON , base_id
+                        //                            FROM conventions_guest
+                        //                            WHERE GuestJSON IS NOT NULL
+                        //                            AND LEN(TRIM(GuestJSON)) > 0
+                        //                            AND EXISTS (
+                        //                            SELECT 1
+                        //                            FROM OPENJSON(GuestJSON, '$.Guest')
+                        //                            WHERE JSON_VALUE([value], '$.DelegationID') like '%ececcc48%'
+                        //                            )";
+
+                        //OAParameter oaParameter = new OAParameter();
+                        //oaParameter.ParameterName = "CategoryId";
+                        //oaParameter.DbType = System.Data.DbType.Int32;
+                        //oaParameter.Value = 1;
+                        //IEnumerable<dynamic> cars = dbContext.ExecuteQuery<dynamic>(sqlQueryString, oaParameter);
+
                         string expression = GetLinqExpressionFromGraphQLStringFilter(sitefinityMetaField, filter.Key, JObject.FromObject(filter.Value));
                         return items.Where(expression);
                     }
@@ -116,7 +133,7 @@ namespace DF2023.GraphQL.Handlers
                             return items.Where(i => i.GetValue<bool?>("IsRelatedToDirectory") == false);
                         else
                             return items.Where(i=> i.GetValue<bool?>("IsRelatedToDirectory") == true);*/
-                        items= items.Where(expression);
+                        items = items.Where(expression);
                     }
                     else if (sitefinityMetaField.ClrType == typeof(RelatedItems).FullName)
                     {

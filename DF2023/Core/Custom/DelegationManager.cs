@@ -183,7 +183,7 @@ namespace DF2023.Core.Custom
             else
             {
                 var item = dynamicManager.GetDataItems(type).FirstOrDefault(i => i.Id == id);
-                string currentEmail = item.GetValue<string>(Delegation.ContactEmail).ToLower();
+                string currentEmail = item.GetValue<string>(Delegation.ContactEmail)?.ToLower();
                 if (!string.IsNullOrWhiteSpace(email) && !string.IsNullOrWhiteSpace(currentEmail) && email != currentEmail)
                 {
                     errorMsg = "You can't change email address";
