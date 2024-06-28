@@ -180,6 +180,12 @@ namespace DF2023.GraphQL.Handlers
                 item.ApprovalWorkflowState = ApprovalStatusConstants.Published;
                 ILifecycleDataItem publishedItem = dynamicManager.Lifecycle.Publish(item);
                 item.SetWorkflowStatus(dynamicManager.Provider.ApplicationName, "Published");
+
+                //SystemManager.RunWithElevatedPrivilege(d =>
+                //{
+                //    manager.SaveChanges();
+                //});
+
                 manager.SaveChanges();
 
                 var versionManager = VersionManager.GetManager();
@@ -213,7 +219,20 @@ namespace DF2023.GraphQL.Handlers
                         newObjectAsDictionary[Guest.GuestJSON] = item.Id;
                     }
 
-                    toRelate = HandleDynamicContentItemCreation(innerManager, relatedFieldType, newObjectAsDictionary);
+                    if (ContentPermissionValidator.SkipCreatingContent(relatedFieldType))
+                    {
+                        var id = newObjectAsDictionary.ContainsKey("id") ? Guid.Parse(newObjectAsDictionary["id"].ToString()) : Guid.Empty;
+                        if (id != Guid.Empty && !string.IsNullOrWhiteSpace(relatedFieldType))
+                        {
+                            var type = TypeResolutionService.ResolveType(relatedFieldType);
+                            var dynamicManager = DynamicModuleManager.GetManager();
+                            toRelate = dynamicManager.GetDataItems(type).FirstOrDefault(i => i.Id == id);
+                        }
+                    }
+                    else
+                    {
+                        toRelate = HandleDynamicContentItemCreation(innerManager, relatedFieldType, newObjectAsDictionary);
+                    }
                 }
                 else
                     toRelate = HandleLibraryItem(innerManager, relatedFieldType, newObject.ToObjectDictionary());

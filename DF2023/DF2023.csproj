@@ -1203,6 +1203,7 @@
     <Compile Include="Core\Constants\DynamicModulesNames.cs" />
     <Compile Include="Core\Custom\ContentHandler.cs" />
     <Compile Include="Core\Custom\ContentHandlerFactory.cs" />
+    <Compile Include="Core\Custom\ContentPermissionValidator.cs" />
     <Compile Include="Core\Custom\DelegationEmailManager.cs" />
     <Compile Include="Core\Custom\DelegationManager.cs" />
     <Compile Include="Core\Custom\GuestManager.cs" />

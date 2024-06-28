@@ -108,7 +108,7 @@ namespace DF2023.Core.Custom
                     {
                         var convention = GetConventionData(item.SystemParentId, dynamicManager);
                         string currentEmail = item.GetValue<string>(Guest.Email).ToLower();
-                        string currentPassportNumber = item.GetValue<string>(Guest.PassportNumber).ToLower();
+                        string currentPassportNumber = item.GetValue<string>(Guest.PassportNumber)?.ToLower();
 
                         if (!string.IsNullOrWhiteSpace(email) && email != currentEmail)
                         {
