@@ -1219,6 +1219,7 @@
     <Compile Include="Core\Helpers\PasswordGenerator.cs" />
     <Compile Include="Core\Helpers\Process.cs" />
     <Compile Include="Core\Helpers\StringHelper.cs" />
+    <Compile Include="Core\Helpers\VersioningHelper.cs" />
     <Compile Include="CustomMembershipProvider.cs" />
     <Compile Include="CutomAttributes\AuthorizeOTPAttribute.cs" />
     <Compile Include="CutomAttributes\AuthorizeWithRolesAttribute.cs" />
