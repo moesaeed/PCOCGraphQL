@@ -5,7 +5,6 @@ using System.Net;
 using System.Text;
 using System;
 using Telerik.Sitefinity.Abstractions;
-using Newtonsoft.Json.Serialization;
 
 namespace DF2023.WebPageHelper
 {
@@ -13,12 +12,6 @@ namespace DF2023.WebPageHelper
     {
         public static JObject ExecuteQueryAsync(string baseUrl, string graphqlQuery, JObject variables, string token = "")
         {
-           /* var settings = new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                Formatting = Formatting.Indented,
-                Converters = { new BooleanJsonConverter() }
-            };*/
             var serializedData = JsonConvert.SerializeObject(new
             {
                 query = graphqlQuery,
@@ -44,7 +37,6 @@ namespace DF2023.WebPageHelper
                     {
                         Log.Write($"[GQL] Payload {payload} \n Exception {ex.ToString()}");
                         return new JObject(new JProperty("error", responseBody.ToString()));
-
                     }
                 }
                 else
@@ -52,25 +44,6 @@ namespace DF2023.WebPageHelper
                     throw new WebException("Web service error: \n" + response.Content.ReadAsStringAsync().Result + "\nOriginal query: " + serializedData);
                 }
             }
-        }
-    }
-
-    public class BooleanJsonConverter : JsonConverter
-    {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            bool boolValue = (bool)value;
-            writer.WriteRawValue(boolValue ? "true" : "false");
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            return reader.Value.ToString().ToLower() == "true";
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(bool);
         }
     }
 }
