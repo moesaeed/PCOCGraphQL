@@ -30,7 +30,7 @@ namespace DF2023.Core.Helpers
                 .OrderByDescending(itm => itm.Version)
                 .ToList();
 
-            if (changes.Count <= 1)
+            if (changes.Count < 2)
                 return null;
 
             var fieldsToCompare = GetVisibleDynamicContentFields(item)
@@ -39,14 +39,18 @@ namespace DF2023.Core.Helpers
 
             var relatedFieldNames = GetRelatedDataDynamicContentFields(item);
 
-            var lastedPublished = changes.Where(x => x.IsLastPublishedVersion).FirstOrDefault();
+            //var lastedPublished = changes.Where(x => x.IsLastPublishedVersion).FirstOrDefault();
+            //if (lastedPublished == null) return null;
+
+            var lastedPublished = changes[0];
             if (lastedPublished == null) return null;
 
             MyBinarySerializer serializer = new MyBinarySerializer();
             serializer.helper = new BinaryHelper(new MemoryStream(lastedPublished.Data), System.Text.Encoding.UTF8);
             var jsonLastPublished = serializer.helper.GetPlainJson();
 
-            var previousChanged = changes.Where(v => v.Version == changes.Max(x => x.Version)).FirstOrDefault();
+            //var previousChanged = changes.Where(v => v.Version == changes.Max(x => x.Version)).FirstOrDefault();
+            var previousChanged = changes[1];
             serializer.helper = new BinaryHelper(new MemoryStream(previousChanged.Data), System.Text.Encoding.UTF8);
             var jsonPreviousChanged = serializer.helper.GetPlainJson();
 

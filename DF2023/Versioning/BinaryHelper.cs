@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ServiceStack.Html;
 using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.DynamicModules.Model;
 using Telerik.Sitefinity.Model;
@@ -80,11 +82,12 @@ namespace DF2023.Versioning
 
             return graph;
         }
-
+        
         public JObject GetPlainJson()
         {
             try
             {
+                this.binaryStream.Seek(0, SeekOrigin.Begin);
                 byte[] result = new byte[this.binaryStream.Length];
                 this.binaryStream.Read(result, 0, result.Length);
                 var itemDeserialized = Encoding.UTF8.GetString(result);
@@ -95,7 +98,7 @@ namespace DF2023.Versioning
             {
                 return null;
             }
-        }
+        } 
 
         public void Read(byte[] buffer, int length)
         {

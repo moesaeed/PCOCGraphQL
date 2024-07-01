@@ -1,5 +1,4 @@
-﻿using DF2023.Core;
-using DF2023.Core.Helpers;
+﻿using DF2023.Core.Helpers;
 using DF2023.GraphQL.Classes;
 using DF2023.GraphQL.Handlers;
 using GraphQL;
@@ -67,7 +66,7 @@ namespace DF2023.GraphQL
             RootSubscriptionsType = new ObjectGraphType()
             {
                 Name = "Subscription",
-                Description = "Contains subscriptions for all contnet types."
+                Description = "Contains subscriptions for all content types."
             };
             InputObjectGraphType stringFilters, intFilters, floatFilters, decimalFilters, relatedFilters, dateTimeFilters;
             RegisterCommonFilters(out stringFilters, out intFilters, out floatFilters, out decimalFilters, out relatedFilters, out dateTimeFilters);
@@ -77,6 +76,7 @@ namespace DF2023.GraphQL
                             t.Namespace.Contains(librariesNamespace))
                 .ToList();
 
+
             GenerateContentTypeSchema(schema,
                 stringFilters,
                 relatedFilters,
@@ -85,7 +85,8 @@ namespace DF2023.GraphQL
                 decimalFilters,
                 floatFilters,
                 librariesNamespace,
-                sitefinityTypes);
+                sitefinityTypes,
+                RegisterDifType());
 
             schema.RegisterType(RootQueryType);
             schema.RegisterType(RootMutationType);
@@ -271,8 +272,25 @@ namespace DF2023.GraphQL
                             });
         }
 
+        private ObjectGraphType RegisterDifType()
+        {
+            var diffType = new ObjectGraphType()
+            {
+                Name = "Diff"
+            };
+
+            diffType.Field<StringGraphType>("PropertyName");
+            diffType.Field<StringGraphType>("OldValue");
+            diffType.Field<StringGraphType>("NewValue");
+            diffType.Field<StringGraphType>("DiffHtml");
+            diffType.Field<BooleanGraphType>("AreDifferent");
+            diffType.Field<BooleanGraphType>("IsHtmlEnchancedField");
+            diffType.Field<StringGraphType>("CompareType");
+            return diffType;
+        }
+
         private void GenerateContentTypeSchema(ISchema schema, InputObjectGraphType stringFilters, InputObjectGraphType relatedFilters, InputObjectGraphType dateTimeFilters, InputObjectGraphType intFilters,
-            InputObjectGraphType decimalFilters, InputObjectGraphType floatFilters, string librariesNamespace, List<MetaTypeModel> sitefinityTypes)
+            InputObjectGraphType decimalFilters, InputObjectGraphType floatFilters, string librariesNamespace, List<MetaTypeModel> sitefinityTypes, ObjectGraphType diffType)
         {
             sitefinityTypes
                 .ForEach(sitefinityType =>
@@ -297,6 +315,13 @@ namespace DF2023.GraphQL
                             return ((MediaContent)context.Source).Title?.ToString();
                         });
                     }
+
+                    dtoType.Field("diff",
+                        new ListGraphType(diffType),
+                        resolve: (IResolveFieldContext context) =>
+                        {
+                            return VersioningHelper.GetDiff(context.Source.GetType().FullName, ((IDataItem)context.Source).Id);
+                        });
 
                     var responseType = new ObjectGraphType() { Name = $"{lowCaseClassName}Response" };
                     responseType.Field($"{lowCaseClassName}Items", new ListGraphType(dtoType), resolve: (IResolveFieldContext context) =>
@@ -455,6 +480,7 @@ namespace DF2023.GraphQL
                         }
                         return null;
                     });
+
 
                     InputObjectGraphType subOptions = GenerateSubscriptionOptions(lowCaseClassName, dtoType, sitefinityType);
                     schema.RegisterType(subOptions);

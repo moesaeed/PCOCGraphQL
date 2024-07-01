@@ -1411,6 +1411,7 @@
     <Content Include="App_Data\RadSpell\en-US.tdf" />
     <Content Include="App_Data\RadSpell\de-DE.tdf" />
     <Content Include="App_Data\GeoLocation\GeoLite2-City.mmdb" />
+    <Content Include="App_Data\Sitefinity\Configuration\VersionConfig.config" />
     <None Include="packages.config" />
     <Content Include="Sitefinity\ExternalLibraries\LibWebP\libwebp_x86.sflib" />
     <Content Include="Sitefinity\ExternalLibraries\LibWebP\libwebp_x64.sflib" />
