@@ -1,6 +1,7 @@
 ﻿using DF2023.Core.Constants;
 using DF2023.Core.Extensions;
 using DF2023.Mvc.Models;
+using ServiceStack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,6 +52,30 @@ namespace DF2023.Core.Custom
 
         public override void PreProcessData(Dictionary<string, object> contextValue)
         {
+            object guestStatus = contextValue.ContainsKey(Guest.GuestStatus.SetFirstLetterLowercase()) ?
+                    contextValue[Guest.GuestStatus.SetFirstLetterLowercase()] : null;
+
+            if (guestStatus != null)
+            {
+                var newDicrionaryList = guestStatus as object[];
+                foreach (var newObject in newDicrionaryList)
+                {
+                    var newObjectAsDictionary = newObject.ToObjectDictionary();
+                    var id = newObjectAsDictionary.ContainsKey("id") ? Guid.Parse(newObjectAsDictionary["id"].ToString()) : Guid.Empty;
+                    if (id != Guid.Empty)
+                    {
+                        var type = TypeResolutionService.ResolveType(Gueststatus.GueststatusDynamicTypeName);
+                        var dynamicManager = DynamicModuleManager.GetManager();
+                        var relatedGuestStatus = dynamicManager.GetDataItems(type).FirstOrDefault(i => i.Id == id);
+                        var status = relatedGuestStatus?.GetValue<string>(Gueststatus.Title);
+
+                        if (!string.IsNullOrWhiteSpace(status) && status == Gueststatus.Registered)
+                        {
+                            contextValue[Guest.RegistrationDate] = DateTime.UtcNow;
+                        }
+                    }
+                }
+            }
         }
 
         public static bool CheckGuestDuplicates(Dictionary<string, object> contextValue, out string errorMsg)

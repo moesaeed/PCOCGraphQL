@@ -293,6 +293,8 @@
         public const string TitleAr = "TitleAr";
 
         public const string Title = "Title";
+
+        public const string Registered = "Registered";
     }
 
     public static class Passporttype
