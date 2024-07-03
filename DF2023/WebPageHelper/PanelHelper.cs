@@ -11,12 +11,13 @@ namespace DF2023.WebPageHelper
 {
     public static class PanelHelper
     {
+        #region Delegation
 
         public static (List<DelegationModel> Results, List<string> Errors) CreateDelegation(string baseUrl, int numberOfDelegationToCreate, Guid parentId, string token)
         {
-            var countries = GetDataHelper.GetCountries(baseUrl);
-            var services = GetDataHelper.GetServicesLevel(baseUrl);
-            var entites = GetDataHelper.GetEntities(baseUrl);
+            var countries = GetDataHelper.GetData(baseUrl, "country");
+            var services = GetDataHelper.GetData(baseUrl, "servicesLevel");
+            var entites = GetDataHelper.GetData(baseUrl, "entity");
             List<DelegationModel> list = new List<DelegationModel>();
             List<string> listError = new List<string>();
             for (int i = 0; i < numberOfDelegationToCreate; i++)
@@ -113,18 +114,21 @@ namespace DF2023.WebPageHelper
             return delegation;
         }
 
+        #endregion
+
+        #region Guests
         public static (List<GuestModel> Results, List<string> Errors) CreateGuest(string baseUrl, int numberOfGuestsToCreate, Guid parentId, string token)
         {
-            var countries = GetDataHelper.GetCountries(baseUrl);
-            var services = GetDataHelper.GetServicesLevel(baseUrl);
-            var passportType = GetDataHelper.GetPassportType(baseUrl);
-            var personTitle = GetDataHelper.GetTitleList(baseUrl);
-            var guestStatus = GetDataHelper.GetGuestStatus(baseUrl);
-            var attendeeType = GetDataHelper.GetSubAttendeeType(baseUrl);
-            var guestStageStatus = GetDataHelper.GetGuestStageStatus(baseUrl);
-            var badgeType = GetDataHelper.GetBadgeType(baseUrl);
-            var delegationMemberType = GetDataHelper.GetDelegationMemberType(baseUrl);
-            var airport = GetDataHelper.GetAirports(baseUrl);
+            var countries = GetDataHelper.GetData(baseUrl,"country");
+            var services = GetDataHelper.GetData(baseUrl, "servicesLevel");
+            var passportType = GetDataHelper.GetData(baseUrl, "passporttype");
+            var personTitle = GetDataHelper.GetData(baseUrl, "titlelist");
+            var guestStatus = GetDataHelper.GetData(baseUrl, "gueststatus");
+            var attendeeType = GetDataHelper.GetData(baseUrl, "subattendeetype");
+            var guestStageStatus = GetDataHelper.GetData(baseUrl, "gueststagestatus");
+            var badgeType = GetDataHelper.GetData(baseUrl, "badgetype");
+            var delegationMemberType = GetDataHelper.GetData(baseUrl, "delegationmembertype");
+            var airport = GetDataHelper.GetData(baseUrl, "airport");
 
             List<GuestModel> list = new List<GuestModel>();
             List<string> listError = new List<string>();
@@ -342,6 +346,7 @@ namespace DF2023.WebPageHelper
             return guest;
         }
 
+        #endregion
 
         private static string GenerateArabicName(int len)
         {
@@ -418,6 +423,7 @@ namespace DF2023.WebPageHelper
             }
             return passportNumber.ToString();
         }
+       
         private static string GenerateRandomDate(string startDate, string endDate)
         {
             DateTime start = DateTime.ParseExact(startDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
@@ -431,6 +437,7 @@ namespace DF2023.WebPageHelper
             int range = (end - start).Days;
             return start.AddDays(random.Next(range + 1)).ToString("yyyy-MM-ddTHH:mm:ssZ");
         }
+       
         private static string GenerateRandomAirport()
         {
             Random random = new Random();

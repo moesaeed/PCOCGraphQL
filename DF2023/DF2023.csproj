@@ -1220,6 +1220,7 @@
     <Compile Include="Core\Helpers\PasswordGenerator.cs" />
     <Compile Include="Core\Helpers\Process.cs" />
     <Compile Include="Core\Helpers\StringHelper.cs" />
+    <Compile Include="Core\Helpers\VersioningHelper.cs" />
     <Compile Include="CustomMembershipProvider.cs" />
     <Compile Include="CutomAttributes\AuthorizeOTPAttribute.cs" />
     <Compile Include="CutomAttributes\AuthorizeWithRolesAttribute.cs" />
@@ -1253,6 +1254,11 @@
     <Compile Include="OwinStartupCustom.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SitefinityOAuthServerProviderCustom.cs" />
+    <Compile Include="Versioning\BinaryHelper.cs" />
+    <Compile Include="Versioning\DFVersionFormatter.cs" />
+    <Compile Include="Versioning\MyBinarySerializer.cs" />
+    <Compile Include="Versioning\SerializationUtilities.cs" />
+    <Compile Include="Versioning\SerializedObjectFlags.cs" />
     <Compile Include="WebPageHelper\GetDataHelper.cs" />
     <Compile Include="WebPageHelper\GraphQLHelper.cs" />
     <Compile Include="WebPageHelper\PanelHelper.cs" />
@@ -1406,6 +1412,7 @@
     <Content Include="App_Data\RadSpell\en-US.tdf" />
     <Content Include="App_Data\RadSpell\de-DE.tdf" />
     <Content Include="App_Data\GeoLocation\GeoLite2-City.mmdb" />
+    <Content Include="App_Data\Sitefinity\Configuration\VersionConfig.config" />
     <None Include="packages.config" />
     <Content Include="Sitefinity\ExternalLibraries\LibWebP\libwebp_x86.sflib" />
     <Content Include="Sitefinity\ExternalLibraries\LibWebP\libwebp_x64.sflib" />
