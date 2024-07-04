@@ -1244,6 +1244,7 @@
     <Compile Include="Mvc\Controllers\DelegationController.cs" />
     <Compile Include="Mvc\Controllers\ProcessImageController.cs" />
     <Compile Include="Mvc\Controllers\UserController.cs" />
+    <Compile Include="Mvc\Controllers\VersioningController.cs" />
     <Compile Include="Mvc\Models\ApiResult.cs" />
     <Compile Include="Mvc\Models\FlatGuest.cs" />
     <Compile Include="Mvc\Models\NoStackTraceException.cs" />

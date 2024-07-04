@@ -13,6 +13,9 @@ using System.IO;
 using DF2023.Versioning;
 using Newtonsoft.Json.Linq;
 using Telerik.Sitefinity.DynamicModules.Builder.Model;
+using Telerik.Sitefinity.Versioning.Model;
+using Telerik.Sitefinity;
+using Telerik.Sitefinity.RelatedData;
 
 namespace DF2023.Core.Helpers
 {
@@ -20,54 +23,33 @@ namespace DF2023.Core.Helpers
     {
         public static List<CompareResult> GetDiff(string itemType, Guid id)
         {
-            DynamicModuleManager manager = new DynamicModuleManager();
-            VersionManager versionManager = VersionManager.GetManager();
-            var typeResolved = TypeResolutionService.ResolveType(itemType);
-            var item = manager.GetDataItem(typeResolved, id);
+            var versionHistory = GetItemVersionHistory(itemType, id,true);
+            var changes = versionHistory.Changes;
+            var item = versionHistory.item;
 
-            var changes = versionManager
-                .GetItemVersionHistory(id)
-                .OrderByDescending(itm => itm.Version)
-                .ToList();
+            if (changes.Count < 2) return null;
+            if (changes[0] == null) return null;
+            if (changes[1] == null) return null;
 
-            if (changes.Count < 2)
-                return null;
+            var jsonLastPublished = GetData(changes[0]);
+            var jsonPreviousChanged = GetData(changes[1]);
 
             var fieldsToCompare = GetVisibleDynamicContentFields(item)
                 .Where(f => !(f.FieldType == FieldType.RelatedData || f.FieldType == FieldType.RelatedMedia || f.FieldType == FieldType.Choices))
                 .ToList();
-
             var relatedFieldNames = GetRelatedDataDynamicContentFields(item);
 
-            //var lastedPublished = changes.Where(x => x.IsLastPublishedVersion).FirstOrDefault();
-            //if (lastedPublished == null) return null;
-
-            var lastedPublished = changes[0];
-            if (lastedPublished == null) return null;
-
-            MyBinarySerializer serializer = new MyBinarySerializer();
-            serializer.helper = new BinaryHelper(new MemoryStream(lastedPublished.Data), System.Text.Encoding.UTF8);
-            var jsonLastPublished = serializer.helper.GetPlainJson();
-
-            //var previousChanged = changes.Where(v => v.Version == changes.Max(x => x.Version)).FirstOrDefault();
-            var previousChanged = changes[1];
-            serializer.helper = new BinaryHelper(new MemoryStream(previousChanged.Data), System.Text.Encoding.UTF8);
-            var jsonPreviousChanged = serializer.helper.GetPlainJson();
-
             List<CompareResult> result = new List<CompareResult>();
-
             if (jsonPreviousChanged != null && jsonLastPublished != null)
             {
                 foreach (var regularField in fieldsToCompare)
                 {
                     result.Add(CompareSimpleField(regularField, jsonLastPublished, jsonPreviousChanged, regularField.FieldType));
                 }
-
                 foreach (var relatedField in relatedFieldNames)
                 {
                     result.Add(CompareRelatedItemFields(relatedField, jsonLastPublished, jsonPreviousChanged));
                 }
-
                 return result
                     .Where(r => r.AreDifferent)
                     .ToList();
@@ -78,10 +60,75 @@ namespace DF2023.Core.Helpers
             }
         }
 
+        public static List<HChanges> GetFullHistory(string itemType, Guid id)
+        {
+            var versionHistory = GetItemVersionHistory(itemType, id);
+            var changes = versionHistory.Changes;
+            var item = versionHistory.item;
+            if (changes.Count < 2) return null;
+            var fieldsToCompare = GetVisibleDynamicContentFields(item)
+                .Where(f => !(f.FieldType == FieldType.RelatedData || f.FieldType == FieldType.RelatedMedia || f.FieldType == FieldType.Choices))
+                .ToList();
+            var relatedFieldNames = GetRelatedDataDynamicContentFields(item);
 
+            List<HChanges> finalResult = new List<HChanges>();
+            for (int i = 0; i<changes.Count -1;i++)
+            {
+                HChanges ch = new HChanges
+                {
+                    version = changes[i].Version.ToString(),
+                    user = changes[i].GetUserDisplayName(),
+                    modified = changes[i].LastModified.ToString()
+                };
 
+                List<CompareResult> result = new List<CompareResult>();
+                var jsonLast = GetData(changes[i+1]);
+                var jsonPrevious= GetData(changes[i]);
+                if (jsonPrevious!= null && jsonLast != null)
+                {
+                    foreach (var regularField in fieldsToCompare)
+                    {
+                        result.Add(CompareSimpleField(regularField, jsonLast, jsonPrevious, regularField.FieldType));
+                    }
+                    foreach (var relatedField in relatedFieldNames)
+                    {
+                        result.Add(CompareRelatedItemFields(relatedField, jsonLast, jsonPrevious));
+                    }
+                    ch.results = result.Where(r => r.AreDifferent).ToList();
+                    if(ch.results.Count > 0)
+                        finalResult.Add(ch);
+                }
+            }
+            return finalResult;
+        }
 
+        private static (DynamicContent item, List<Change> Changes) GetItemVersionHistory(string itemType, Guid id, bool isDescending = false)
+        {
+            DynamicModuleManager manager = new DynamicModuleManager();
+            VersionManager versionManager = VersionManager.GetManager();
+            var typeResolved = TypeResolutionService.ResolveType(itemType);
+            var item = manager.GetDataItem(typeResolved, id);
 
+            var changes = versionManager
+                .GetItemVersionHistory(id).ToList();
+            if(isDescending)
+            {
+                changes = changes.OrderByDescending(itm => itm.Version).ToList();
+            }
+            else
+            {
+                changes = changes.OrderBy(itm => itm.Version).ToList();
+            }
+            return (item, changes);
+        }
+
+        private static JObject GetData(Change changeItem)
+        {
+            MyBinarySerializer serializer = new MyBinarySerializer();
+            serializer.helper = new BinaryHelper(new MemoryStream(changeItem.Data), System.Text.Encoding.UTF8);
+            var jsonChanges = serializer.helper.GetPlainJson();
+            return jsonChanges;
+        }
 
         private static List<DynamicModuleField> GetRelatedDataDynamicContentFields(DynamicContent item)
         {
@@ -153,10 +200,10 @@ namespace DF2023.Core.Helpers
             }
 
             JArray lastPublishedArray = (JArray)jsonLastPublished[relatedField.Name];
-            JArray lastChangedArray = (JArray)jsonPreviousChanged[relatedField.Name];
+            JArray previousChangedArray = (JArray)jsonPreviousChanged[relatedField.Name];
 
-            result.OldValue = string.Join(",", lastPublishedArray.OrderBy(itm => itm["Id"].ToString()).Select(itm => itm["Id"].ToString()));
-            result.NewValue = string.Join(",", lastChangedArray.OrderBy(itm => itm["Id"].ToString()).Select(itm => itm["Id"].ToString()));
+            result.NewValue = string.Join(",", lastPublishedArray.OrderBy(itm => itm["Id"].ToString()).Select(itm => itm["Id"].ToString()));
+            result.OldValue = string.Join(",", previousChangedArray.OrderBy(itm => itm["Id"].ToString()).Select(itm => itm["Id"].ToString()));
             if (result.OldValue != result.NewValue)
             {
                 result.AreDifferent = true;
@@ -178,20 +225,20 @@ namespace DF2023.Core.Helpers
                 jsonPreviousChanged[regularField.Name] = null;
             }
 
-            var valNew = (string)Convert.ChangeType(jsonPreviousChanged[regularField.Name], typeof(string));
-            var valOld = (string)Convert.ChangeType(jsonLastPublished[regularField.Name], typeof(string));
+            var valOld = (string)Convert.ChangeType(jsonPreviousChanged[regularField.Name], typeof(string));
+            var valNew = (string)Convert.ChangeType(jsonLastPublished[regularField.Name], typeof(string));
 
             if (fieldtype == FieldType.DateTime)
             {
                 if (jsonPreviousChanged[regularField.Name] != null && !string.IsNullOrWhiteSpace(jsonPreviousChanged[regularField.Name].ToString()))
                 {
                     var vlues = (DateTime)Convert.ChangeType(jsonPreviousChanged[regularField.Name], typeof(DateTime));
-                    valNew = vlues.ToString("yyyy-MM-ddTHH:mm:ss.fff");
+                    valOld = vlues.ToString("yyyy-MM-ddTHH:mm:ss.fff");
                 }
                 if (jsonLastPublished[regularField.Name] != null && !string.IsNullOrWhiteSpace(jsonLastPublished[regularField.Name].ToString()))
                 {
                     var vlues = (DateTime)Convert.ChangeType(jsonLastPublished[regularField.Name], typeof(DateTime));
-                    valOld = vlues.ToString("yyyy-MM-ddTHH:mm:ss.fff");
+                    valNew = vlues.ToString("yyyy-MM-ddTHH:mm:ss.fff");
                 }
             }
 
@@ -205,5 +252,13 @@ namespace DF2023.Core.Helpers
             return result;
         }
 
+    }
+
+    public class HChanges
+    {
+        public string version { get; set; }
+        public string modified { get; set; }
+        public string user { get; set; }
+        public List<CompareResult> results { get; set; }
     }
 }

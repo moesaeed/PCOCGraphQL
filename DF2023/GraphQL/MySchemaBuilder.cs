@@ -16,6 +16,7 @@ using Telerik.Sitefinity.RelatedData;
 using Telerik.Sitefinity.Security;
 using Telerik.Sitefinity.Security.Model;
 using Telerik.Sitefinity.Utilities.TypeConverters;
+using Telerik.Sitefinity.Versioning;
 using Telerik.Web.UI;
 
 using TypesGQL = GraphQL.Types;
@@ -86,7 +87,8 @@ namespace DF2023.GraphQL
                 floatFilters,
                 librariesNamespace,
                 sitefinityTypes,
-                RegisterDifType());
+                RegisterDifType(),
+                RegisterFullHistoryType());
 
             schema.RegisterType(RootQueryType);
             schema.RegisterType(RootMutationType);
@@ -288,9 +290,30 @@ namespace DF2023.GraphQL
             diffType.Field<StringGraphType>("CompareType");
             return diffType;
         }
+        
+        private ObjectGraphType RegisterFullHistoryType()
+        {
+            var historyType = new ObjectGraphType()
+            {
+                Name = "FullHistory"
+            };
+            historyType.Field<StringGraphType>("Version");
+            historyType.Field<StringGraphType>("User");
+            historyType.Field<StringGraphType>("Modified");
 
+            var hChangesType = new ObjectGraphType()
+            {
+                Name = "HChanges"
+            };
+            hChangesType.Field<StringGraphType>("HPropertyName");
+            hChangesType.Field<StringGraphType>("HOldValue");
+            hChangesType.Field<StringGraphType>("HNewValue");
+
+            historyType.Field("HChanges", new ListGraphType(hChangesType));
+            return historyType;
+        }
         private void GenerateContentTypeSchema(ISchema schema, InputObjectGraphType stringFilters, InputObjectGraphType relatedFilters, InputObjectGraphType dateTimeFilters, InputObjectGraphType intFilters,
-            InputObjectGraphType decimalFilters, InputObjectGraphType floatFilters, string librariesNamespace, List<MetaTypeModel> sitefinityTypes, ObjectGraphType diffType)
+            InputObjectGraphType decimalFilters, InputObjectGraphType floatFilters, string librariesNamespace, List<MetaTypeModel> sitefinityTypes, ObjectGraphType diffType, ObjectGraphType historyType)
         {
             sitefinityTypes
                 .ForEach(sitefinityType =>
@@ -321,6 +344,13 @@ namespace DF2023.GraphQL
                         resolve: (IResolveFieldContext context) =>
                         {
                             return VersioningHelper.GetDiff(context.Source.GetType().FullName, ((IDataItem)context.Source).Id);
+                        });
+
+                    dtoType.Field("FullHistory",
+                        new ListGraphType(historyType),
+                        resolve: (IResolveFieldContext context) =>
+                        {
+                            return VersioningHelper.GetFullHistory(context.Source.GetType().FullName, ((IDataItem)context.Source).Id);
                         });
 
                     var responseType = new ObjectGraphType() { Name = $"{lowCaseClassName}Response" };
