@@ -1,6 +1,7 @@
 ﻿using DF2023.Core.Configs;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Http;
 using Telerik.Microsoft.Practices.Unity;
@@ -86,7 +87,7 @@ namespace DF2023
                 HttpContext.Current.Response.AddHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
                 // The following line solves the error message
                 // If any http headers are shown in preflight error in browser console add them below
-                HttpContext.Current.Response.AddHeader("Access-Control-Allow-Headers", $"Content-Type, Accept, Pragma, Cache-Control, Authorization, ExternalApiRequest");
+                HttpContext.Current.Response.AddHeader("Access-Control-Allow-Headers", $"Content-Type, Accept, Pragma, Cache-Control, Authorization, ExternalApiRequest, Otp");
                 HttpContext.Current.Response.AddHeader("Access-Control-Max-Age", "1728000");
                 HttpContext.Current.Response.End();
             }
@@ -94,20 +95,44 @@ namespace DF2023
 
         private void AddCorsRules()
         {
-            var allowOriginUrls = new List<string>()
+            var whiteList = new List<string>()
             {
-                "http://fcal.sitefinityapps.com",
-                "https://localhost",
-                "http://localhost:20090" ,
-                "ecfltter.mofa.gov.qa",
-                "ec",
-                "http://ec",
-                "https://ecfltter.mofa.gov.qa",
-                "https://2fa.mofa.gov.qa"
+                "reg.sitefinityapps.com",
+                "pcoc.sitefinityapps.com",
+                "https://reg.sitefinityapps.com",
+                "https://pcoc.sitefinityapps.com",
             };
 
-            this.Response.Headers.Remove("Access-Control-Allow-Origin");
-            this.Response.AddHeader("Access-Control-Allow-Origin", "*");
+            var referrerAuthority = this.Request?.UrlReferrer?.GetLeftPart(UriPartial.Authority);
+            if (string.IsNullOrWhiteSpace(referrerAuthority) || referrerAuthority.Contains("conferences.sitefinityapps.com"))
+            {
+                return;
+            }
+            if (referrerAuthority != null && whiteList.Any(h => h == referrerAuthority))
+            {
+                this.Response.Headers.Remove("Access-Control-Allow-Origin");
+                this.Response.AddHeader("Access-Control-Allow-Origin", referrerAuthority);
+            }
+
+            //var url = this.Request.UrlReferrer.Authority;
+            //var host = this.Request.UrlReferrer.Authority;
+
+            var url = this.Request.Url;
+            // var host = url.Host;
+            //if (whiteList.Any(h => h == host))
+            //{
+            //    this.Response.Headers.Remove("Access-Control-Allow-Origin");
+            //    this.Response.AddHeader("Access-Control-Allow-Origin", this.Request.UrlReferrer.GetLeftPart(UriPartial.Authority));
+            //}
+
+            //if (whiteList.Any(h => h == host))
+            //{
+            //    this.Response.Headers.Remove("Access-Control-Allow-Origin");
+            //    this.Response.AddHeader("Access-Control-Allow-Origin", this.Request.UrlReferrer.GetLeftPart(UriPartial.Authority));
+            //}
+
+            //this.Response.Headers.Remove("Access-Control-Allow-Origin");
+            //this.Response.AddHeader("Access-Control-Allow-Origin", "*");
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)

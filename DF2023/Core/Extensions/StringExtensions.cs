@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Web;
+﻿using System.Text.RegularExpressions;
 
 namespace DF2023.Core.Extensions
 {
@@ -20,7 +16,7 @@ namespace DF2023.Core.Extensions
 
         public static bool IsValidEmail(this string email)
         {
-            string emailRegex = @"^([\w\.\-]+)@([\w\-]+)\.([a-zA-Z]{2,6})$";
+            string emailRegex = @"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$";
             return Regex.IsMatch(email, emailRegex);
         }
     }
