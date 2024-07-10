@@ -1,21 +1,22 @@
 ﻿using Newtonsoft.Json.Linq;
+using ServiceStack;
 using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Telerik.Sitefinity.Data.Metadata;
-using Telerik.Sitefinity.DynamicModules.Model;
 using Telerik.Sitefinity.DynamicModules;
+using Telerik.Sitefinity.DynamicModules.Model;
 using Telerik.Sitefinity.Model;
 using Telerik.Sitefinity.RelatedData;
-using ServiceStack;
-using System.Text;
 
 namespace DF2023.Versioning
 {
     public class MyBinarySerializer
     {
         public BinaryHelper helper;
+
         public CultureInfo PersistSpecificCulture
         {
             get;
@@ -51,10 +52,8 @@ namespace DF2023.Versioning
 
         private void InternalSerialize(object obj, Type objectType)
         {
-
             JObject objSimple = JObject.FromObject(new
             {
-
             });
 
             var type = MetadataManager
@@ -103,13 +102,13 @@ namespace DF2023.Versioning
                         var items = dynamicContentOriginal.GetRelatedItems(field.FieldName);
 
                         objSimple[field.FieldName] = JArray.FromObject(items
-                            .Cast<IDynamicFieldsContainer>()
+                        .Cast<IDynamicFieldsContainer>()
                         .ToList()
-                            .Select(itm => new
-                            {
-                                Title = itm.GetString("Title")?.ToString(),
-                                Id = itm.GetValue("Id")
-                            }));
+                        .Select(itm => new
+                        {
+                            Title = itm.GetValue("Title")?.ToString(),
+                            Id = itm.GetValue("Id")
+                        }));
                     }
                 }
 
