@@ -183,6 +183,29 @@ namespace DF2023.Core.Custom
 
         public override void DuringProcessData(DynamicContent item, Dictionary<string, object> contextValue)
         {
+            var firstName = contextValue.ContainsKey("firstName") ? contextValue["firstName"].ToString() : string.Empty;
+            var lastName = contextValue.ContainsKey("lastName") ? contextValue["lastName"].ToString() : string.Empty;
+            string fullName = string.Empty;
+            if (!string.IsNullOrWhiteSpace(firstName))
+            {
+                fullName = firstName;
+            }
+            if (!string.IsNullOrWhiteSpace(lastName))
+            {
+                fullName += " " + lastName;
+            }
+
+            if (!string.IsNullOrWhiteSpace(fullName))
+            {
+                item.SetValue(Guest.Title, fullName);
+            }
+
+            var title = item.GetValue(Guest.Title).ToString();
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                item.SetValue(Guest.Title, item.Id.ToString());
+            }
+
             //var guestJson = contextValue.ContainsKey(Guest.GuestJSON) ? contextValue[Guest.GuestJSON].ToString() : string.Empty;
             var delegationID = contextValue.ContainsKey(Guest.GuestJSON) ? Guid.Parse(contextValue[Guest.GuestJSON].ToString()) : Guid.Empty;
 

@@ -310,7 +310,11 @@ namespace DF2023.GraphQL.Handlers
 
         private static IQueryable<DynamicContent> HandleStringOrder(MetaFieldModel sitefinityMetaField, string filterDirection, IQueryable<DynamicContent> items)
         {
-            items = items.OrderBy(sitefinityMetaField.FieldName + " " + filterDirection);
+            if (items != null && items.Count() > 0)
+            {
+                items = items.OrderBy(sitefinityMetaField.FieldName + " " + filterDirection);
+            }
+
             return items;
         }
     }
