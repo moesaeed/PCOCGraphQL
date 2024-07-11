@@ -143,9 +143,28 @@ namespace DF2023.GraphQL.Handlers
                         if (filterObj.ContainsKey("_any"))
                         {
                             var ids = ((JArray)filterObj["_any"]).Select(itm => Guid.Parse(itm["id"].ToString()));
-                            var id0 = ids.FirstOrDefault();
-                            var itemsAsList = items.ToList();
-                            items = DynamicContentExtension.FilterDataByChild(items, id0, chileType, parentType, filter.Key);
+
+                            if (ids != null && ids.Count() > 1)
+                            {
+                                List<QueryFilter> queryFilters = new List<QueryFilter>();
+
+                                foreach (var item in ids)
+                                {
+                                    queryFilters.Add(new QueryFilter()
+                                    {
+                                        ChildId = item,
+                                        ChildItemType = chileType,
+                                        FieldName = filter.Key
+                                    });
+                                }
+                                items = DynamicContentExtension.FilterDataByChilds(items, parentType, queryFilters, true);
+                            }
+                            else
+                            {
+                                var id0 = ids.FirstOrDefault();
+                                var itemsAsList = items.ToList();
+                                items = DynamicContentExtension.FilterDataByChild(items, id0, chileType, parentType, filter.Key);
+                            }
                         }
                         else if (filterObj.ContainsKey("_all"))
                         {
