@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin;
+﻿using DF2023.Core.Custom;
+using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
 using System;
 using System.Threading.Tasks;
@@ -73,8 +74,15 @@ namespace SitefinityWebApp
                 return false;
             }
             
-            var testHeader = headers["OTP"];
-            if (testHeader == "123456")
+            var otp = headers["OTP"];
+            if (otp == "123456")
+            {
+                return true;
+            }
+
+            OTPManager oTPManager = new OTPManager();
+            bool isValid= oTPManager.ValidateOTP(username, otp);
+            if (isValid)
             {
                 return true;
             }

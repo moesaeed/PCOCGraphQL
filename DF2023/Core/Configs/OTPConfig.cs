@@ -45,5 +45,25 @@ namespace DF2023.Core.Configs
                 this[nameof(EndpointHeaderKey)] = value;
             }
         }
+
+
+        [ConfigurationProperty(nameof(MaxAttempts))]
+        [ObjectInfo(
+            Title = "Max attemp of OTP",
+            Description = "The maximum number of attempts then user will get locked")
+        ]
+        public int MaxAttempts
+        {
+            get
+            {
+                int? nullableInt = this[nameof(MaxAttempts)] as int?;
+                int maxAtt= nullableInt ?? 0;
+                return maxAtt;
+            }
+            set
+            {
+                this[nameof(MaxAttempts)] = value;
+            }
+        }
     }
 }

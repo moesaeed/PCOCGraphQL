@@ -1,4 +1,5 @@
-﻿using DF2023.Core.Constants;
+﻿using DF2023.Core.Configs;
+using DF2023.Core.Constants;
 using DF2023.Core.Extensions;
 using DF2023.Mvc.Models;
 using OtpNet;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Telerik.Sitefinity;
+using Telerik.Sitefinity.Configuration;
 using Telerik.Sitefinity.Data;
 using Telerik.Sitefinity.DynamicModules;
 using Telerik.Sitefinity.Lifecycle;
@@ -65,6 +67,7 @@ namespace DF2023.Core.Custom
                     if (item == null)
                     {
                         item = dynamicManager.CreateDataItem(type, oTPDTO.UserID, "/DynamicModule");
+                        item.SetString("UrlName", oTPDTO.UserID.ToString());
                     }
 
                     item.SetValue(OTP.Title, oTPDTO.Email);
@@ -141,7 +144,8 @@ namespace DF2023.Core.Custom
                 return false;
             }
 
-            const int maxAttempts = 5;
+            var config = Config.Get<OTPConfig>();
+            var maxAttempts = config.MaxAttempts;
 
             if (oTPDTO.OTPRequests < maxAttempts)
             {
@@ -159,6 +163,44 @@ namespace DF2023.Core.Custom
             var key = KeyGeneration.GenerateRandomKey(OtpHashMode.Sha512);
             var totp = new Totp(key, mode: OtpHashMode.Sha512, step: 60);
             return totp.ComputeTotp();
+        }
+
+        public bool ValidateOTP(string userEmail, string otp)
+        {
+            if (string.IsNullOrWhiteSpace(userEmail) || string.IsNullOrWhiteSpace(otp))
+            {
+                return false;
+            }
+
+            bool isValid = false;
+            var user = UserExtensions.GetUserByEmail(userEmail);
+            if (user == null)
+            {
+                return false;
+            }
+
+            var item = GetUser(user.Id);
+            if (item == null)
+            {
+                return false;
+            }
+
+            // Validate user and track attempts
+            if (ValidateUser(item) == false)
+            {
+                return false;
+            }
+
+            if (item.OTPCode == otp)
+            {
+                isValid = true;
+                item.OTPRequests = 0;
+                string otpCode = GenerateOtpCode();
+                item.OTPCode = otpCode;
+            }
+
+            UpdateUserAttempts(item);
+            return isValid;
         }
     }
 }
