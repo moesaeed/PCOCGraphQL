@@ -111,5 +111,23 @@ namespace DF2023.Mvc.Controllers
 
             return this.Ok(apiResult);
         }
+
+        [AuthorizeOTPAttribute]
+        [HttpPost]
+        public IHttpActionResult ChangeUserPassword(string userEmail, string newPassword, string verificationCode)
+        {
+            ApiResult apiResult = null;
+
+            try
+            {
+                apiResult = UserExtensions.ChangeUserPassword(userEmail, newPassword, verificationCode);
+            }
+            catch (Exception ex)
+            {
+                apiResult = new ApiResult(ex.Message, false, null);
+            }
+
+            return this.Ok(apiResult);
+        }
     }
 }
