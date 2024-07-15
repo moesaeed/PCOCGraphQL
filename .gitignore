@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /Telerik.Sitefinity.DynamicModules.StrongTypes
+/DF2023/App_Data/Sitefinity/Search/advanced-settings-search
