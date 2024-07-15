@@ -154,7 +154,7 @@ namespace DF2023.Core.Custom
             return false;
         }
 
-        private string GenerateOtpCode()
+        public string GenerateOtpCode()
         {
             var key = KeyGeneration.GenerateRandomKey(OtpHashMode.Sha512);
             var totp = new Totp(key, mode: OtpHashMode.Sha512, step: 60);

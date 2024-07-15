@@ -93,5 +93,23 @@ namespace DF2023.Mvc.Controllers
 
             return this.Ok(apiResult);
         }
+
+        [AuthorizeOTPAttribute]
+        [HttpGet]
+        public IHttpActionResult IsUserRegistered(string userEmail, string verificationCode)
+        {
+            ApiResult apiResult = null;
+
+            try
+            {
+                apiResult = UserExtensions.IsUserRegistered(userEmail, verificationCode);
+            }
+            catch (Exception ex)
+            {
+                apiResult = new ApiResult(ex.Message, false, null);
+            }
+
+            return this.Ok(apiResult);
+        }
     }
 }

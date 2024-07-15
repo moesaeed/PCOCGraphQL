@@ -78,7 +78,7 @@ namespace DF2023.Core.Custom
                         string password = PasswordGenerator.GenerateStrongPassword(8);
                         
                         MembershipCreateStatus membershipCreateStatus =
-                            UserExtensions.CreateUser(email, "P@ssw0rd", contactName, contactName, transaction);
+                            UserExtensions.CreateUser(email, "@wes0m$37", contactName, contactName, transaction);
 
                         if (membershipCreateStatus != MembershipCreateStatus.Success)
                         {

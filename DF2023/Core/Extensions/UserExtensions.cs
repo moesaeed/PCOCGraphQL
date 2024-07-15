@@ -1,4 +1,7 @@
 ﻿using DF2023.Core.Constants;
+using DF2023.Core.Custom;
+using DF2023.Mvc.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,12 +37,12 @@ namespace DF2023.Core.Extensions
             return identity.UserId;
         }
 
-        public static string  GetCurentUserFirstLastName()
+        public static string GetCurentUserFirstLastName()
         {
             UserManager userManager = UserManager.GetManager();
             Guid userId = GetCurentUserId();
             User user = userManager.GetUser(userId);
-            
+
             UserProfileManager userProfileManager = UserProfileManager.GetManager();
             UserProfile profile = userProfileManager.GetUserProfile(user.Id, typeof(SitefinityProfile).FullName);
             var firstName = DataExtensions.GetValue(profile, "FirstName").ToString();
@@ -430,6 +433,10 @@ namespace DF2023.Core.Extensions
                     profile.SetValue("FirstName", firstName);
                     profile.SetValue("LastName", lastName);
                     profile.SetValue("Nickname", $"{firstName} {lastName} {email}");
+
+                    OTPManager oTPManager = new OTPManager();
+                    string result = oTPManager.GenerateOtpCode();
+                    profile.SetValue("VerificationCode", result);
                 }
                 if (guestData != null)
                 {
@@ -442,6 +449,50 @@ namespace DF2023.Core.Extensions
             }
 
             return status;
+        }
+
+        public static ApiResult IsUserRegistered(string userEmail, string verificationCode)
+        {
+            ApiResult result = new ApiResult(null, false, null);
+
+            if (string.IsNullOrWhiteSpace(verificationCode) || string.IsNullOrWhiteSpace(userEmail))
+            {
+                result.Message = "User email and verification code can't be null";
+                return result;
+            }
+
+            User user = GetUserByEmail(userEmail);
+            if (user == null)
+            {
+                result.Message = "User not found";
+
+                return result;
+            }
+
+            UserProfileManager profileManager = UserProfileManager.GetManager();
+            var profile = profileManager.GetUserProfile<SitefinityProfile>(user);
+
+            if (profile == null
+                || profile.DoesFieldExist(Others.VerificationCode) == false
+                || profile.DoesFieldExist(Others.Registered) == false)
+            {
+                result.Message = "No VerificationCode nor Registered exist";
+                return result;
+            }
+
+            string VerificationCode = profile.GetValue<string>(Others.VerificationCode);
+            bool registered = profile.GetValue<bool>(Others.Registered);
+
+            if (VerificationCode != verificationCode)
+            {
+                result.Message = "Verification code is not matching";
+                return result;
+            }
+
+            result.Status = "Y";
+            result.Data = registered;
+
+            return result;
         }
     }
 }

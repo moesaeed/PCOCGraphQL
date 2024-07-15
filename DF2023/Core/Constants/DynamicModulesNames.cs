@@ -3,6 +3,9 @@
     public static class Others
     {
         public const string UserCustomField = "About";
+        public const string VerificationCode = "VerificationCode";
+        public const string Registered = "Registered";
+
     }
 
     public static class UserRoles
