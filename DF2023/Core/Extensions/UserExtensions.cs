@@ -495,61 +495,66 @@ namespace DF2023.Core.Extensions
             return result;
         }
 
-        public static ApiResult ChangeUserPassword(string userEmail, string newPassword, string verificationCode)
+        public static ApiResult ChangeUserPassword(string userEmail, string newPassword, string verificationCode, string otp)
         {
             if (string.IsNullOrWhiteSpace(verificationCode)
                 || string.IsNullOrWhiteSpace(userEmail)
-                || string.IsNullOrWhiteSpace(newPassword))
+                || string.IsNullOrWhiteSpace(newPassword)
+                || string.IsNullOrWhiteSpace(otp))
             {
-                return new ApiResult("User email, new password and verification code can't be null", false, false);
+                return new ApiResult("User email, OTP, new password and verification code can't be null", false, false);
             }
 
-            var uManager = UserManager.GetManager();
-            UserManager userManager = UserManager.GetManager();
+            var userManager = UserManager.GetManager();
+
             UserProfileManager profileManager = UserProfileManager.GetManager();
 
-            using (new ElevatedModeRegion(uManager))
+            using (new ElevatedModeRegion(userManager))
             {
-                using (new ElevatedModeRegion(userManager))
+                using (new ElevatedModeRegion(profileManager))
                 {
-                    using (new ElevatedModeRegion(profileManager))
+                    User user = GetUserByEmail(userEmail);
+                    if (user == null)
                     {
-                        User user = GetUserByEmail(userEmail);
-                        if (user == null)
-                        {
-                            return new ApiResult("User not found", false, null);
-                        }
-
-                        var profile = profileManager.GetUserProfile<SitefinityProfile>(user);
-
-                        if (profile == null
-                            || profile.DoesFieldExist(Others.VerificationCode) == false
-                            || profile.DoesFieldExist(Others.Registered) == false)
-                        {
-                            return new ApiResult("No VerificationCode nor Registered exist", false, null);
-                        }
-
-                        string VerificationCode = profile.GetValue<string>(Others.VerificationCode);
-                        bool registered = profile.GetValue<bool>(Others.Registered);
-
-                        if (VerificationCode != verificationCode || registered == true)
-                        {
-                            return new ApiResult("Verification code is not matching or you already registered", false, null);
-                        }
-
-                        // first reset the user's password - that would gives us the "current" password
-                        string tempPass = uManager.ResetPassword(user.Id, string.Empty);
-
-                        // now that we have the current password, we can change it
-                        uManager.ChangePassword(user.Id, tempPass, newPassword);
-
-                        profile.SetValue(Others.Registered, true);
-                        profileManager.SaveChanges();
-
-                        uManager.SaveChanges();
-
-                        return new ApiResult(null, true, true);
+                        return new ApiResult("User not found", false, null);
                     }
+
+                    OTPManager oTPManager = new OTPManager();
+                    bool isValid = oTPManager.ValidateOTP(userEmail, otp);
+                    if (isValid == false)
+                    {
+                        return new ApiResult("Wrong OTP", false, null);
+                    }
+
+                    var profile = profileManager.GetUserProfile<SitefinityProfile>(user);
+
+                    if (profile == null
+                        || profile.DoesFieldExist(Others.VerificationCode) == false
+                        || profile.DoesFieldExist(Others.Registered) == false)
+                    {
+                        return new ApiResult("No VerificationCode nor Registered exist", false, null);
+                    }
+
+                    string VerificationCode = profile.GetValue<string>(Others.VerificationCode);
+                    bool registered = profile.GetValue<bool>(Others.Registered);
+
+                    if (VerificationCode != verificationCode || registered == true)
+                    {
+                        return new ApiResult("Verification code is not matching or you already registered", false, null);
+                    }
+
+                    // first reset the user's password - that would gives us the "current" password
+                    string tempPass = userManager.ResetPassword(user.Id, string.Empty);
+
+                    // now that we have the current password, we can change it
+                    userManager.ChangePassword(user.Id, tempPass, newPassword);
+
+                    profile.SetValue(Others.Registered, true);
+                    profileManager.SaveChanges();
+
+                    userManager.SaveChanges();
+
+                    return new ApiResult(null, true, true);
                 }
             }
         }
