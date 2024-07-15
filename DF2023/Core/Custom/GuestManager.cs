@@ -108,7 +108,7 @@ namespace DF2023.Core.Custom
                         var duplicatePassport = guests.Where(x => x.GetValue<string>(Guest.PassportNumber).ToLower() == passportNumber);
                         if (duplicatePassport.Any())
                         {
-                            errorMsg = "There is a guest with the same passport number";
+                            errorMsg = "Please contact the event organizers. An application has already been made with the same passport number";
                             return true;
                         }
                     }
@@ -118,7 +118,7 @@ namespace DF2023.Core.Custom
                         var duplicateEmail = guests.Where(x => x.GetValue<string>(Guest.Email).ToLower() == email);
                         if (duplicateEmail.Any())
                         {
-                            errorMsg = "There is a guest with the same email";
+                            errorMsg = "Please contact the event organizers. An application has already been made with the same email";
                             return true;
                         }
                     }
@@ -150,7 +150,7 @@ namespace DF2023.Core.Custom
                             var guests = GetConventionGuests(convention, dynamicManager, type);
                             if (guests?.Any() == true && guests.Where(x => x.GetValue<string>(Guest.PassportNumber) == passportNumber).Any())
                             {
-                                errorMsg = "There is a guest with the same passport number";
+                                errorMsg = "Please contact the event organizers. An application has already been made with the same passport number";
                                 return true;
                             }
                         }
