@@ -195,7 +195,7 @@ namespace DF2023.Core.Custom
             {
                 isValid = true;
                 item.OTPRequests = 0;
-                string otpCode = GenerateOtpCode();
+                string otpCode = Guid.NewGuid().ToString();
                 item.OTPCode = otpCode;
             }
 
