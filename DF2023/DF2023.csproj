@@ -1259,6 +1259,7 @@
     <Compile Include="Versioning\MyBinarySerializer.cs" />
     <Compile Include="Versioning\SerializationUtilities.cs" />
     <Compile Include="Versioning\SerializedObjectFlags.cs" />
+    <Compile Include="WebPageHelper\CommonHelper.cs" />
     <Compile Include="WebPageHelper\GetDataHelper.cs" />
     <Compile Include="WebPageHelper\GraphQLHelper.cs" />
     <Compile Include="WebPageHelper\PanelHelper.cs" />

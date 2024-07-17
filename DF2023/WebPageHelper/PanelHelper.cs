@@ -13,7 +13,7 @@ namespace DF2023.WebPageHelper
     {
         #region Delegation
 
-        public static (List<DelegationModel> Results, List<string> Errors) CreateDelegation(string baseUrl, int numberOfDelegationToCreate, Guid parentId, string token)
+        public static (List<DelegationModel> Results, List<string> Errors) CreateDelegation(string baseUrl, int numberOfDelegationToCreate, Guid parentId, string token, int isSingleStats, string invitationDate)
         {
             var countries = GetDataHelper.GetData(baseUrl, "country");
             var services = GetDataHelper.GetData(baseUrl, "servicesLevel");
@@ -25,7 +25,7 @@ namespace DF2023.WebPageHelper
                 var rdCountry = new Random().Next(0, countries.Count - 1);
                 var rdService = new Random().Next(0, services.Count - 1);
                 var rdEntity = new Random().Next(0, entites.Count - 1);
-                var delagationModel = GenerateDelegationModel(parentId, Guid.Parse(entites[rdEntity].ToString()), Guid.Parse(services[rdService].ToString()), Guid.Parse(countries[rdCountry].ToString()));
+                var delagationModel = GenerateDelegationModel(parentId, Guid.Parse(entites[rdEntity].ToString()), Guid.Parse(services[rdService].ToString()), Guid.Parse(countries[rdCountry].ToString()), isSingleStats, invitationDate);
                 var returnedDelegation = CreateNewDelegation(baseUrl, token, delagationModel);
                 if (returnedDelegation != null)
                 {
@@ -45,7 +45,7 @@ namespace DF2023.WebPageHelper
             return (list, listError);
         }
 
-        private static DelegationModel GenerateDelegationModel(Guid parentId, Guid entity, Guid serviceLevel, Guid country)
+        private static DelegationModel GenerateDelegationModel(Guid parentId, Guid entity, Guid serviceLevel, Guid country, int isSingleStats, string invitationDate)
         {
             string Title = GenerateName(new Random().Next(1, 20));
             string TitleAr = $"{Title} - Ar";
@@ -53,10 +53,26 @@ namespace DF2023.WebPageHelper
             string ContactPhoneNumber = GenerateNumberAsString(new Random().Next(7, 10));
             string ContactEmail = $"{Title.Replace(" ", "")}@email.com";
             string SecondaryEmail = $"{ContactName.Replace(" ", "")}@email.com";
-            string IsSingle = new Random().Next(0, 1) == 0 ? "true" : "false";
+            string IsSingle = "";
+           switch (isSingleStats)
+            {
+                case 1:
+                    IsSingle = "true";
+                    break;
+                case 0:
+                    IsSingle="false";
+                    break;
+                default:
+                    IsSingle = new Random().Next(0, 1) == 0 ? "true" : "false";
+                    break;
+            }
             int NumberOfOfficialDelegates = new Random().Next(1, 10);
             int RemainingNumberOfOfficialDelegates = new Random().Next(1, 5);
-            string InvitationDate = GenerateRandomDate("2024-06-01", "2024-07-01");
+            string InvitationDate = "";
+            if (!string.IsNullOrWhiteSpace(invitationDate))
+             InvitationDate = GenerateRandomDate(InvitationDate, Convert.ToDateTime(InvitationDate).AddMonths(2).ToString("yyyy-MM-dd"));
+            else
+                InvitationDate = GenerateRandomDate("2024-08-01", "2024-08-01");
             DelegationModel model = new DelegationModel()
             {
                 Title = Title,

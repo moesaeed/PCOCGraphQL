@@ -9,14 +9,6 @@ using System.Security.Claims;
 using System.Web.UI.WebControls;
 using System.Web.UI;
 using DF2023.Core.Extensions;
-using Telerik.OpenAccess.SPI;
-using DF2023.WebPageModel;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using GraphQL;
-using ServiceStack;
-using ServiceStack.Text;
-using System.Collections.Generic;
 
 namespace DF2023.WebPages
 {
@@ -26,7 +18,7 @@ namespace DF2023.WebPages
         {
             if (!IsPostBack)
             {
-                Conventions.DataSource = GetDataHelper.GetConventionsForDropDown(GetBaseUrl());
+                Conventions.DataSource = GetDataHelper.GetConventionsForDropDown(CommonHelper.GetBaseUrl());
                 Conventions.DataTextField = "Title";
                 Conventions.DataValueField = "Id";
                 Conventions.DataBind();
@@ -38,11 +30,13 @@ namespace DF2023.WebPages
             int NumberOfDelegationToGenerate = 0;
             if (!string.IsNullOrWhiteSpace(NbrDelegation.Text))
                 NumberOfDelegationToGenerate = Convert.ToInt32(NbrDelegation.Text);
-            string token = GetAuthenticatedUserAccessToken();
-            var listDelegationCreated = PanelHelper.CreateDelegation(GetBaseUrl(), NumberOfDelegationToGenerate, Guid.Parse(Conventions.SelectedValue), token);
-            grid.DataSource = listDelegationCreated.Results;
-            grid.DataBind();
-
+            string token = CommonHelper.GetAuthenticatedUserAccessToken();
+            var listDelegationCreated = PanelHelper.CreateDelegation(CommonHelper.GetBaseUrl(), NumberOfDelegationToGenerate, Guid.Parse(Conventions.SelectedValue), token, Convert.ToInt32(radioSingleStat.SelectedItem.Value.ToString()), InvitationDate.Text.Trim());
+            if (listDelegationCreated.Results.Any())
+            {
+                grid.DataSource = listDelegationCreated.Results;
+                grid.DataBind();
+            }
             if(listDelegationCreated.Errors!=null && listDelegationCreated.Errors.Any())
             {
                 labFailedResult.Text = labFailedResult.Text.Replace("[XXX]", $"[{listDelegationCreated.Errors.Count().ToString()}]");
@@ -72,23 +66,8 @@ namespace DF2023.WebPages
         }
 
 
-        protected void btnGenerateGuests_Click(object sender, EventArgs e)
-        {/*
-            int NumberOfGuestToGenerate = 0;
-            if (!string.IsNullOrWhiteSpace(NbrGuests.Text))
-                NumberOfGuestToGenerate = Convert.ToInt32(NbrGuests.Text);
-            string token = GetAuthenticatedUserAccessToken();
-            PanelHelper.CreateGuest(GetBaseUrl(), NumberOfGuestToGenerate, Conventions.SelectedValue, token);*/
-        }
 
-        private string GetBaseUrl()
-        {
-            var requestUrl = HttpContext.Current?.Request?.Url;
-            string baseUrl = $"{requestUrl.Scheme}://{requestUrl.Host}:{requestUrl.Port}/";
-            return baseUrl;
-        }
-
-        public string GetAuthenticatedUserAccessToken()
+        private string GetAuthenticatedUserAccessToken_()
         {
             var token = "Yjk3Mzg4OGEtMWRhYy00ZDU2LWJlMmMtZTZkZjc2NDJkMGZlLT1wcm92aWRlcj0tRGVmYXVsdC09c2VjcmV0a2V5PS1ZeT1YYm1UUV5LdTorbnRhQ3Z7PlB3SHR4bHRYJVFoTTtTbUpXYkA+cFBTRVMhVS1uUjRbU01NRUgvaFJOJlpYcFNuUXt2dEJ9dUZNXTtNYX10VmJZXl4yRCRKakxJOXdHRF9IQDBOd19JWlE9eU1qSCMoP0RiRl93QnBlbUttPQ==";
             return token;
@@ -111,7 +90,7 @@ namespace DF2023.WebPages
             return null; // No authenticated user or access token not found
         }
 
-        public string GetAuthenticatedUserAccessKey()
+        private string GetAuthenticatedUserAccessKey()
         {
             // Get the current authenticated user identity
             var identity = SystemManager.CurrentHttpContext.User.Identity as SitefinityIdentity;
