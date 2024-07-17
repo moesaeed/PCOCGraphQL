@@ -1195,6 +1195,7 @@
     <Content Include="ImportRelatedData\flags-svg\AI.svg" />
     <Content Include="ImportRelatedData\flags-svg\AL.svg" />
     <Content Include="ImportRelatedData\flags-svg\AM.svg" />
+    <Content Include="ImportRelatedData\flags-svg\AN.svg" />
     <Content Include="ImportRelatedData\flags-svg\AO.svg" />
     <Content Include="ImportRelatedData\flags-svg\AQ.svg" />
     <Content Include="ImportRelatedData\flags-svg\AR.svg" />
