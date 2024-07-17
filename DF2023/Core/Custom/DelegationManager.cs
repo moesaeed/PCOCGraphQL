@@ -252,6 +252,13 @@ namespace DF2023.Core.Custom
                  .Grant().Modify()
                  .Grant().Create()
                  .Grant().Delete();
+
+            item.ManagePermissions()
+                .ForRole("PCOC")
+                .Grant().View()
+                .Grant().Modify()
+                .Grant().Create()
+                .Grant().Delete();
         }
 
         private static void ClearPermission(DynamicContent item)
