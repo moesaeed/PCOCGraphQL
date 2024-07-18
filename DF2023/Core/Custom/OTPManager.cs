@@ -161,7 +161,9 @@ namespace DF2023.Core.Custom
 
         public string GenerateOtpCode()
         {
-            var key = KeyGeneration.GenerateRandomKey(OtpHashMode.Sha512);
+            //var key = KeyGeneration.GenerateRandomKey(OtpHashMode.Sha512);
+            var config = Config.Get<OTPConfig>();
+            var key = Convert.FromBase64String(config.OTPKey);
             var totp = new Totp(key, mode: OtpHashMode.Sha512, step: 60);
             return totp.ComputeTotp();
         }
@@ -192,7 +194,14 @@ namespace DF2023.Core.Custom
                 return false;
             }
 
-            if (item.OTPCode == otp)
+            bool verified = false;
+            var config = Config.Get<OTPConfig>();
+            var key = Convert.FromBase64String(config.OTPKey);
+            var totp = new Totp(key, mode: OtpHashMode.Sha512, step: 60);
+            long timeStepMatched;
+            verified = totp.VerifyTotp(otp, out timeStepMatched, VerificationWindow.RfcSpecifiedNetworkDelay);
+
+            if (item.OTPCode == otp && verified)
             {
                 isValid = true;
                 item.OTPRequests = 0;

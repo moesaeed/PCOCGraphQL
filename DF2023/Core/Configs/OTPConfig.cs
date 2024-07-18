@@ -10,6 +10,18 @@ namespace DF2023.Core.Configs
         {
         }
 
+        [ConfigurationProperty("OTPKey",
+   DefaultValue = "0TAK/5oLJQlkXNRHAUvsusUV+FYD1TuYKfcOlEkKJ/P1sXtyTEkWlqN6SRMIUIrWhF/dVgu7mw/wOpzFs6zPCg==")]
+        [ObjectInfo(
+   Title = "OTPKey",
+   Description = "The key used to generate OTP")
+]
+        public string OTPKey
+        {
+            get => this["OTPKey"] as string;
+            set => this["OTPKey"] = value;
+        }
+
         [ConfigurationProperty(nameof(EndpointHeaderValue),
             DefaultValue = "074c0be6a99521b2ac83bf49b9808a3f")]
         [ObjectInfo(
@@ -46,7 +58,6 @@ namespace DF2023.Core.Configs
             }
         }
 
-
         [ConfigurationProperty(nameof(MaxAttempts))]
         [ObjectInfo(
             Title = "Max attemp of OTP",
@@ -57,7 +68,7 @@ namespace DF2023.Core.Configs
             get
             {
                 int? nullableInt = this[nameof(MaxAttempts)] as int?;
-                int maxAtt= nullableInt ?? 0;
+                int maxAtt = nullableInt ?? 0;
                 return maxAtt;
             }
             set
