@@ -1187,6 +1187,7 @@
     <Content Include="App_Data\RadCaptcha\Z.wav" />
     <Content Include="App_Data\Sitefinity\TrackingConsent\consentDialog.html" />
     <Content Include="Global.asax" />
+    <Content Include="ImportRelatedData\Airports.aspx" />
     <Content Include="ImportRelatedData\Countries.aspx" />
     <Content Include="ImportRelatedData\flags-svg\AD.svg" />
     <Content Include="ImportRelatedData\flags-svg\AE.svg" />
@@ -1494,6 +1495,14 @@
     <Compile Include="GraphQL\Observers\Content.cs" />
     <Compile Include="GraphQL\Observers\ContentObserver.cs" />
     <Compile Include="GraphQL\Observers\ContentUpdatedEventArgs.cs" />
+    <Compile Include="ImportRelatedData\AirportList.cs" />
+    <Compile Include="ImportRelatedData\Airports.aspx.cs">
+      <DependentUpon>Airports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ImportRelatedData\Airports.aspx.designer.cs">
+      <DependentUpon>Airports.aspx</DependentUpon>
+    </Compile>
     <Compile Include="ImportRelatedData\Countries.aspx.cs">
       <DependentUpon>Countries.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1678,6 +1687,7 @@
     <Content Include="App_Data\RadSpell\de-DE.tdf" />
     <Content Include="App_Data\GeoLocation\GeoLite2-City.mmdb" />
     <Content Include="App_Data\Sitefinity\Configuration\VersionConfig.config" />
+    <Content Include="ImportRelatedData\airports.json" />
     <None Include="packages.config" />
     <Content Include="Sitefinity\ExternalLibraries\LibWebP\libwebp_x86.sflib" />
     <Content Include="Sitefinity\ExternalLibraries\LibWebP\libwebp_x64.sflib" />
