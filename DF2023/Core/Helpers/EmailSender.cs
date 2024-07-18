@@ -3,6 +3,7 @@ using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Configuration;
 
@@ -12,10 +13,18 @@ namespace DF2023.Core.Helpers
     {
         public static bool Send(List<string> recipients, string subject, string emailMessage)
         {
+            if (recipients == null 
+                || recipients.Count == 0 
+                || string.IsNullOrWhiteSpace(subject)
+                || string.IsNullOrWhiteSpace(emailMessage))
+            {
+                return false;
+            }
+
             try
             {
                 var config = Config.Get<EmailConfig>();
-                var apiKey = config.SendGridApiKey;
+                var apiKey = ConfigurationManager.AppSettings["EmailApiKey"];
                 var client = new SendGridClient(apiKey);
                 string emailSenderName = config.EmailSenderName;
                 string email = config.Email;

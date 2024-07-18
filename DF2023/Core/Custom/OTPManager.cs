@@ -1,6 +1,7 @@
 ﻿using DF2023.Core.Configs;
 using DF2023.Core.Constants;
 using DF2023.Core.Extensions;
+using DF2023.Core.Helpers;
 using DF2023.Mvc.Models;
 using OtpNet;
 using System;
@@ -67,7 +68,7 @@ namespace DF2023.Core.Custom
                     if (item == null)
                     {
                         item = dynamicManager.CreateDataItem(type, oTPDTO.UserID, "/DynamicModule");
-                        item.SetString("UrlName", oTPDTO.UserID.ToString());
+                        item.SetString("UrlName", Guid.NewGuid().ToString());
                     }
 
                     item.SetValue(OTP.Title, oTPDTO.Email);
@@ -201,6 +202,28 @@ namespace DF2023.Core.Custom
 
             UpdateUserAttempts(item);
             return isValid;
+        }
+
+        public bool SendOTP(string userEmail, string otp)
+        {
+            if (string.IsNullOrWhiteSpace(userEmail) || string.IsNullOrWhiteSpace(otp))
+            {
+                return false;
+            }
+
+            var config = Config.Get<EmailConfig>();
+
+            string emailSubject = $"{config.OTPEmailSubject} {otp}";
+            var contentItem = ContentBlockExtensions.GetContentItemByTitle(config.OTPEmailMessageContentBlock);
+            string emailBody = null;
+            if (contentItem != null)
+            {
+                emailBody = contentItem.Content.ToString().Replace("OTP", otp);
+            }
+
+            var emailResult = EmailSender.Send(new List<string>() { userEmail }, emailSubject, emailBody);
+
+            return emailResult;
         }
     }
 }

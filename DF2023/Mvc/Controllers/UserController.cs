@@ -78,12 +78,13 @@ namespace DF2023.Mvc.Controllers
                 return this.Ok();
             }
 
-            ApiResult apiResult = null;
+            ApiResult apiResult;
 
             try
             {
                 OTPManager oTPManager = new OTPManager();
                 string result = oTPManager.GenerateOTP(userEmail);
+                oTPManager.SendOTP(userEmail, result);
                 apiResult = new ApiResult("OTP", true, result);
             }
             catch (Exception ex)

@@ -22,16 +22,28 @@ namespace DF2023.Core.Configs
             set => this["EmailSenderName"] = value;
         }
 
-        [ConfigurationProperty("SendGridApiKey",
-            DefaultValue = "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE4wxNitu20v2cpESuwci4XKC0PMuMtc/amOzdqK7mYxsAen4sTprSG7U9gecVab8ydLq3C187zXrFsxAmp/Nb6g==")]
+        [ConfigurationProperty("OTPEmailSubject",
+            DefaultValue = "Your OTP is ")]
         [ObjectInfo(
-            Title = "SendGrid Api Key"
+            Title = "OTP Email Subject"
             )
         ]
-        public string SendGridApiKey
+        public string OTPEmailSubject
         {
-            get => this["SendGridApiKey"] as string;
-            set => this["SendGridApiKey"] = value;
+            get => this["OTPEmailSubject"] as string;
+            set => this["OTPEmailSubject"] = value;
+        }
+
+        [ConfigurationProperty("OTPEmailMessageContentBlock",
+            DefaultValue = "OTP")]
+        [ObjectInfo(
+            Title = "OTP Email Message Content Block"
+            )
+        ]
+        public string OTPEmailMessageContentBlock
+        {
+            get => this["OTPEmailMessageContentBlock"] as string;
+            set => this["OTPEmailMessageContentBlock"] = value;
         }
 
         [ConfigurationProperty("Email",
