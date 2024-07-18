@@ -1200,6 +1200,7 @@
     <Compile Include="AzureWebRole.cs" />
     <Compile Include="Core\Configs\EmailConfig.cs" />
     <Compile Include="Core\Configs\OTPConfig.cs" />
+    <Compile Include="Core\Constants\DFConstants.cs" />
     <Compile Include="Core\Constants\DynamicModulesNames.cs" />
     <Compile Include="Core\Custom\ContentHandler.cs" />
     <Compile Include="Core\Custom\ContentHandlerFactory.cs" />
@@ -1224,6 +1225,7 @@
     <Compile Include="CustomMembershipProvider.cs" />
     <Compile Include="CutomAttributes\AuthorizeOTPAttribute.cs" />
     <Compile Include="CutomAttributes\AuthorizeWithRolesAttribute.cs" />
+    <Compile Include="Handlers\DFHandler.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

@@ -8,6 +8,7 @@ using Telerik.Microsoft.Practices.Unity;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Configuration;
 using Telerik.Sitefinity.Data;
+using Telerik.Sitefinity.Data.Events;
 using Telerik.Sitefinity.DynamicModules.Events;
 using Telerik.Sitefinity.Security.Sanitizers;
 using Telerik.Sitefinity.Services;
@@ -30,6 +31,8 @@ namespace DF2023
             EventHub.Subscribe<IDynamicContentCreatedEvent>(evt => DynamicContentCreatedEventHandler(evt));
             EventHub.Subscribe<IDynamicContentUpdatedEvent>(evt => DynamicContentUpdatedEventHandler(evt));
             EventHub.Subscribe<IDynamicContentDeletingEvent>(evt => DynamicContentDeletingEventHandler(evt));
+
+            EventHub.Subscribe<IDataEvent>(evt =>Handlers.DFHandler.DataEventHandler(evt));
 
             EventHub.Subscribe<ILogoutCompletedEvent>(evt => LogoutEvent(evt));
         }
