@@ -17,6 +17,17 @@
                         <label for="NbrDelegation">Nbr Delegation:</label>
                         <asp:TextBox runat="server" ClientIDMode="Static" ID="NbrDelegation" placeholder="ex:100"></asp:TextBox>
                     </div>
+                    <div class="sf-fieldWrp">
+                        <asp:RadioButtonList ID="radioSingleStat" RepeatLayout="Flow" ClientIDMode="Static" runat="server">
+                            <asp:ListItem Text="Single" Value="1"></asp:ListItem>
+                            <asp:ListItem Text="Not Single" Value="0"></asp:ListItem>
+                            <asp:ListItem Text="Random" Value="2" Selected="True"></asp:ListItem>
+                        </asp:RadioButtonList>
+                    </div>
+                    <div class="sf-fieldWrp">
+                        <label for="NbrDelegation">InvitationDate:</label>
+                        <asp:TextBox runat="server" ClientIDMode="Static" ID="InvitationDate" placeholder="2024-06-01"></asp:TextBox>
+                    </div>
                     <p data-sf-role="error-message" role="alert"></p>
                     <div class="sf-fieldWrp">
                         <asp:Button runat="server" ClientIDMode="Static" ID="btnGenerateDelegation" Text="Submit" OnClick="btnGenerateDelegation_Click" class="button button-primary " />
@@ -28,14 +39,15 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <p><asp:Label Font-Size="Small" Font-Italic="true" Font-Bold="true" ForeColor="#8A1538" ID ="labFailedResult" runat="server" Text="The following Delegation couldn't be saved for some reason [XXX]" Visible="false"></asp:Label></p>
+                    <p>
+                        <asp:Label Font-Size="Small" Font-Italic="true" Font-Bold="true" ForeColor="#8A1538" ID="labFailedResult" runat="server" Text="The following Delegation couldn't be saved for some reason [XXX]" Visible="false"></asp:Label></p>
                     <div class="table-responsive">
                         <asp:ListBox runat="server" ID="FailedResult" ClientIDMode="Static" Visible="false"></asp:ListBox>
                     </div>
                 </div>
             </div>
         </div>
-       <div class="-sf-clearfix"></div>
+        <div class="-sf-clearfix"></div>
         <div class="container">
             <div class="row">
                 <div class="col-md-12">

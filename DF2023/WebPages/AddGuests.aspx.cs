@@ -16,7 +16,7 @@ namespace DF2023.WebPages
         {
             if (!IsPostBack)
             {
-                Conventions.DataSource = GetDataHelper.GetConventionsForDropDown(GetBaseUrl());
+                Conventions.DataSource = GetDataHelper.GetConventionsForDropDown(CommonHelper.GetBaseUrl());
                 Conventions.DataTextField = "Title";
                 Conventions.DataValueField = "Id";
                 Conventions.DataBind();
@@ -29,11 +29,13 @@ namespace DF2023.WebPages
             int NumberOfGuestToGenerate = 0;
             if (!string.IsNullOrWhiteSpace(NbrGuest.Text))
                 NumberOfGuestToGenerate = Convert.ToInt32(NbrGuest.Text);
-            string token = GetAuthenticatedUserAccessToken();
-            var listguestCreated = PanelHelper.CreateGuest(GetBaseUrl(), NumberOfGuestToGenerate,Guid.Parse(Conventions.SelectedValue), token);
-            grid.DataSource = listguestCreated.Results;
-            grid.DataBind();
-
+            string token = CommonHelper.GetAuthenticatedUserAccessToken();
+            var listguestCreated = PanelHelper.CreateGuest(CommonHelper.GetBaseUrl(), NumberOfGuestToGenerate,Guid.Parse(Conventions.SelectedValue), token);
+            if (listguestCreated.Results.Any())
+            {
+                grid.DataSource = listguestCreated.Results;
+                grid.DataBind();
+            }
             if (listguestCreated.Errors != null && listguestCreated.Errors.Any())
             {
                 labFailedResult.Text = labFailedResult.Text.Replace("[XXX]", $"[{listguestCreated.Errors.Count().ToString()}]");
@@ -47,17 +49,6 @@ namespace DF2023.WebPages
         protected void grid_RowCommand(object sender, GridViewCommandEventArgs e)
         {
 
-        }
-        private string GetBaseUrl()
-        {
-            var requestUrl = HttpContext.Current?.Request?.Url;
-            string baseUrl = $"{requestUrl.Scheme}://{requestUrl.Host}:{requestUrl.Port}/";
-            return baseUrl;
-        }
-        public string GetAuthenticatedUserAccessToken()
-        {
-            var token = "Yjk3Mzg4OGEtMWRhYy00ZDU2LWJlMmMtZTZkZjc2NDJkMGZlLT1wcm92aWRlcj0tRGVmYXVsdC09c2VjcmV0a2V5PS1ZeT1YYm1UUV5LdTorbnRhQ3Z7PlB3SHR4bHRYJVFoTTtTbUpXYkA+cFBTRVMhVS1uUjRbU01NRUgvaFJOJlpYcFNuUXt2dEJ9dUZNXTtNYX10VmJZXl4yRCRKakxJOXdHRF9IQDBOd19JWlE9eU1qSCMoP0RiRl93QnBlbUttPQ==";
-            return token;
         }
     }
 }

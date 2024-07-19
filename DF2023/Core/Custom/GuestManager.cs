@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using Telerik.Sitefinity.Data;
 using Telerik.Sitefinity.DynamicModules;
 using Telerik.Sitefinity.DynamicModules.Model;
 using Telerik.Sitefinity.GenericContent.Model;
@@ -17,6 +18,8 @@ namespace DF2023.Core.Custom
 {
     public class GuestManager : ContentHandler
     {
+        public bool IsNewGuest { get; set; }
+
         public override bool IsDataValid(Dictionary<string, object> contextValue, out string errorMsg)
         {
             errorMsg = null;
@@ -30,6 +33,7 @@ namespace DF2023.Core.Custom
             var id = contextValue.ContainsKey("id") ? Guid.Parse(contextValue["id"].ToString()) : Guid.Empty;
             if (id == Guid.Empty)
             {
+                IsNewGuest = true;
                 var email = contextValue.ContainsKey(Guest.Email.SetFirstLetterLowercase()) ? contextValue[Guest.Email.SetFirstLetterLowercase()].ToString() : string.Empty;
                 if (string.IsNullOrWhiteSpace(email))
                 {
@@ -48,6 +52,16 @@ namespace DF2023.Core.Custom
 
         public override void PostProcessData(DynamicContent item)
         {
+            if (IsNewGuest)
+            {
+                //Set permissions for the delegation
+                var manager = ManagerBase.GetMappedManager(item.GetType().FullName);
+                Telerik.Sitefinity.Security.Model.ISecuredObject secureObject = item;
+                manager.BreakPermiossionsInheritance(secureObject);
+                ClearPermission(item);
+                SetPermission(item,item.Owner);
+                manager.SaveChanges();
+            }
         }
 
         public override void PreProcessData(Dictionary<string, object> contextValue)
@@ -247,5 +261,29 @@ namespace DF2023.Core.Custom
                 }
             }
         }
+
+
+        private static void SetPermission(DynamicContent item, Guid userId)
+        {
+            item.ManagePermissions()
+                 .ForUser(userId)
+                 .Grant().View()
+                 .Grant().Modify()
+                 .Grant().Create()
+                 .Grant().Delete();
+
+            item.ManagePermissions()
+                .ForRole("PCOC")
+                .Grant().View()
+                .Grant().Modify()
+                .Grant().Create()
+                .Grant().Delete();
+        }
+
+        private static void ClearPermission(DynamicContent item)
+        {
+            item.ManagePermissions().ClearAll();
+        }
+
     }
 }

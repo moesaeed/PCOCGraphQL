@@ -33,6 +33,24 @@ namespace DF2023.WebPages
         protected global::System.Web.UI.WebControls.TextBox NbrDelegation;
 
         /// <summary>
+        /// radioSingleStat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButtonList radioSingleStat;
+
+        /// <summary>
+        /// InvitationDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox InvitationDate;
+
+        /// <summary>
         /// btnGenerateDelegation control.
         /// </summary>
         /// <remarks>

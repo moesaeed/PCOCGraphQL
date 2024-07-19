@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Telerik.Sitefinity;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Libraries.Model;
 using Telerik.Sitefinity.Modules.Libraries;
@@ -155,5 +156,55 @@ namespace DF2023.Core.Helpers
             return item;
         }
 
+        public static IFolder GetFolder(Guid libraryId, string folderName, string providerName, LibrariesManager mngr = null)
+        {
+            LibrariesManager librariesManager = mngr;
+            if (librariesManager == null)
+            {
+                librariesManager = LibrariesManager.GetManager(providerName);
+            }
+            Album album = librariesManager.GetAlbums().Where(i => i.Id == libraryId).SingleOrDefault();
+            var folder = librariesManager.GetChildFolders(album).FirstOrDefault(i => i.Title == folderName);
+            if(folder==null)
+            {
+                folder= GetOrCreateFolder(providerName, folderName, album, mngr);
+            }
+            return folder;
+        }
+
+        public static IFolder CreateLibrary(Guid libraryId, string folderName, string providerName, LibrariesManager mngr = null)
+        {
+            LibrariesManager librariesManager = mngr;
+            if (librariesManager == null)
+            {
+                librariesManager = LibrariesManager.GetManager(providerName);
+            }
+            Album album = librariesManager.GetAlbums().Where(i => i.Id == libraryId).SingleOrDefault();
+            var folder = GetOrCreateFolder(providerName, folderName, album, mngr);
+            return folder;
+        }
+        public static IFolder GetOrCreateFolder(string providerName, string folderUrlName, IFolder parentFolder, LibrariesManager mngr = null)
+        {
+            LibrariesManager librariesManager = mngr;
+            if (librariesManager == null)
+            {
+                librariesManager = LibrariesManager.GetManager(providerName);
+            }
+            var siteFolder = librariesManager.GetChildFolders(parentFolder).Where(x => x.Title == folderUrlName).FirstOrDefault();
+            if (siteFolder == null)
+            {
+                Guid folderId = Guid.NewGuid();
+                var folder = librariesManager.CreateFolder(folderId, parentFolder);
+                folder.Title = folderUrlName;
+                folder.LastModified = DateTime.UtcNow;
+                folder.UrlName = Regex.Replace(folderUrlName.ToLower(), @"[^\w\-\!\$\'\(\)\=\@\d_]+", "-");
+                if (mngr == null)
+                {
+                    librariesManager.SaveChanges();
+                }
+                return folder;
+            }
+            return siteFolder;
+        }
     }
 }
