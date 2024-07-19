@@ -2,7 +2,6 @@
 using DF2023.Core.Extensions;
 using DF2023.Core.Helpers;
 using DF2023.Mvc.Models;
-using DocumentFormat.OpenXml.ExtendedProperties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +13,6 @@ using Telerik.Sitefinity.GenericContent.Model;
 using Telerik.Sitefinity.Model;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Utilities.TypeConverters;
-using static Telerik.Sitefinity.Publishing.PublishingExtensionMethods;
 
 namespace DF2023.Core.Custom
 {
@@ -78,7 +76,7 @@ namespace DF2023.Core.Custom
                     if (email.IsValidEmail())
                     {
                         string password = PasswordGenerator.GenerateStrongPassword(8);
-                        
+
                         MembershipCreateStatus membershipCreateStatus =
                             UserExtensions.CreateUser(email, "@wes0m$37", contactName, contactName, transaction);
 
@@ -134,8 +132,6 @@ namespace DF2023.Core.Custom
                     string transaction = Guid.NewGuid().ToString();
                     UserExtensions.SetUserCustomfieldValue(Others.UserCustomField, kvp, user.Id);
 
-
-
                     SystemManager.RunWithElevatedPrivilege(d =>
                     {
                         TransactionManager.CommitTransaction(transaction);
@@ -145,8 +141,8 @@ namespace DF2023.Core.Custom
                     var manager = ManagerBase.GetMappedManager(item.GetType().FullName);
                     Telerik.Sitefinity.Security.Model.ISecuredObject secureObject = item;
                     manager.BreakPermiossionsInheritance(secureObject);
-                    ClearPermission(item);
-                    SetPermission(item, user.Id);
+                    PermissionExtensions.ClearPermission(item);
+                    PermissionExtensions.SetPermission(item, new List<Guid>() { user.Id }, new List<string>() { UserRoles.PCOC });
                     manager.SaveChanges();
                 }
             }
@@ -239,31 +235,6 @@ namespace DF2023.Core.Custom
 
         public override void DuringProcessData(DynamicContent item, Dictionary<string, object> contextValue)
         {
-        }
-
-
-
-
-        private static void SetPermission(DynamicContent item, Guid userId)
-        {
-            item.ManagePermissions()
-                 .ForUser(userId)
-                 .Grant().View()
-                 .Grant().Modify()
-                 .Grant().Create()
-                 .Grant().Delete();
-
-            item.ManagePermissions()
-                .ForRole("PCOC")
-                .Grant().View()
-                .Grant().Modify()
-                .Grant().Create()
-                .Grant().Delete();
-        }
-
-        private static void ClearPermission(DynamicContent item)
-        {
-            item.ManagePermissions().ClearAll();
         }
     }
 }

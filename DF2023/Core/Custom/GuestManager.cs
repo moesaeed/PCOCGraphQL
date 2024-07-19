@@ -58,8 +58,9 @@ namespace DF2023.Core.Custom
                 var manager = ManagerBase.GetMappedManager(item.GetType().FullName);
                 Telerik.Sitefinity.Security.Model.ISecuredObject secureObject = item;
                 manager.BreakPermiossionsInheritance(secureObject);
-                ClearPermission(item);
-                SetPermission(item,item.Owner);
+                PermissionExtensions.ClearPermission(item);
+                // TODO: What if PCOC user was creating/adding the guest to exisiting delegation
+                PermissionExtensions.SetPermission(item, new List<Guid>() { item.Owner }, new List<string>() { UserRoles.PCOC });
                 manager.SaveChanges();
             }
         }
@@ -261,29 +262,5 @@ namespace DF2023.Core.Custom
                 }
             }
         }
-
-
-        private static void SetPermission(DynamicContent item, Guid userId)
-        {
-            item.ManagePermissions()
-                 .ForUser(userId)
-                 .Grant().View()
-                 .Grant().Modify()
-                 .Grant().Create()
-                 .Grant().Delete();
-
-            item.ManagePermissions()
-                .ForRole("PCOC")
-                .Grant().View()
-                .Grant().Modify()
-                .Grant().Create()
-                .Grant().Delete();
-        }
-
-        private static void ClearPermission(DynamicContent item)
-        {
-            item.ManagePermissions().ClearAll();
-        }
-
     }
 }

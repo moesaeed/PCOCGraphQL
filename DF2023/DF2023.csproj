@@ -1468,6 +1468,7 @@
     <Compile Include="Core\Custom\GuestManager.cs" />
     <Compile Include="Core\Custom\OTPManager.cs" />
     <Compile Include="Core\Extensions\ContentBlockExtensions.cs" />
+    <Compile Include="Core\Extensions\PermissionExtensions.cs" />
     <Compile Include="Core\Extensions\RoleExtensions.cs" />
     <Compile Include="Core\Extensions\StringExtensions.cs" />
     <Compile Include="Core\Extensions\UserExtensions.cs" />
