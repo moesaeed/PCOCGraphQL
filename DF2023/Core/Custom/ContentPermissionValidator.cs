@@ -13,6 +13,7 @@ namespace DF2023.Core.Custom
             Airport.AirportDynamicTypeName,
             Gueststatus.GueststatusDynamicTypeName,
             Delegationmembertype.DelegationmembertypeDynamicTypeName,
+            ServicesLevel.ServicesLevelDynamicTypeName,
         };
 
         // If Guest Admin user, then we skip creating releated item, and get the item by ID

@@ -67,6 +67,8 @@ namespace DF2023.Core.Custom
                         && !string.IsNullOrEmpty(emailMessage)
                         && filteredRecipients.Count > 0)
                     {
+                        emailMessage = emailMessage.Replace("[Email]", delegation.GetValue<string>(Delegation.ContactEmail));
+                        emailMessage = emailMessage.Replace("[Name]", delegation.GetValue<string>(Delegation.ContactName));
                         result = EmailSender.Send(filteredRecipients, subject, emailMessage);
                     }
                     else

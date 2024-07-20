@@ -215,7 +215,7 @@ namespace DF2023.Core.Custom
                 item.SetValue(Guest.Title, fullName);
             }
 
-            var title = item.GetValue(Guest.Title).ToString();
+            var title = contextValue.ContainsKey(Guest.Title) ? contextValue[Guest.Title].ToString() : string.Empty;
             if (string.IsNullOrWhiteSpace(title))
             {
                 item.SetValue(Guest.Title, item.Id.ToString());
