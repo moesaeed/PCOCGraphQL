@@ -2,10 +2,12 @@
 using DF2023.Core.Constants;
 using DF2023.Core.Custom;
 using DF2023.Core.Extensions;
+using DF2023.Core.Helpers;
 using DF2023.CutomAttributes;
 using DF2023.Mvc.Models;
 using System;
 using System.Globalization;
+using System.Web;
 using System.Web.Http;
 using Telerik.Sitefinity.Services;
 
@@ -122,6 +124,14 @@ namespace DF2023.Mvc.Controllers
             try
             {
                 apiResult = UserExtensions.ChangeUserPassword(userEmail, newPassword, verificationCode, otp);
+                if (apiResult.Status == "Y")
+                {
+                    var currentURL = $"{HttpContext.Current.Request.Url.Scheme}://{HttpContext.Current.Request.Url.Authority}";
+
+                    var token = TokenHelper.GetToken(currentURL, userEmail, newPassword);
+
+                    return this.Ok(token);
+                }
             }
             catch (Exception ex)
             {
