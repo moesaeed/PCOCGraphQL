@@ -11,6 +11,7 @@ using Telerik.Sitefinity.DynamicModules;
 using Telerik.Sitefinity.DynamicModules.Model;
 using Telerik.Sitefinity.GenericContent.Model;
 using Telerik.Sitefinity.Model;
+using Telerik.Sitefinity.RelatedData;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Utilities.TypeConverters;
 
@@ -40,11 +41,6 @@ namespace DF2023.Core.Custom
                     errorMsg = "Email can't be null";
                     return false;
                 }
-
-                //if (string.IsNullOrWhiteSpace(title))
-                //{
-                //    TitleValue = $"{contactName} - {email}";
-                //}
             }
 
             return true;
@@ -257,6 +253,32 @@ namespace DF2023.Core.Custom
                                 contextValue[Guest.GuestJSON] = JsonSerializer.Serialize(flatGuest);
                                 return;
                             }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Define the dynamicManager with transaction as there may be a lot of operations
+        public static void UpdateDelegationGuests(DynamicContent delegation, Dictionary<string, object> data, DynamicModuleManager dynamicManager)
+        {
+            if (delegation != null && data != null && data.Count > 0)
+            {
+                var guests = delegation.GetRelatedItems(Delegation.Guests);
+
+                if (guests != null && guests.Count() > 0)
+                {
+                    List<Guid> guestIds = guests.Select(i => i.Id).ToList();
+                    var collection = dynamicManager.GetDataItems(TypeResolutionService.ResolveType(Guest.GuestDynamicTypeName));
+                    var list = from cl in collection
+                               join itemId in guestIds on cl.Id equals itemId
+                               select cl;
+
+                    foreach (var item in list)
+                    {
+                        foreach (var field in data)
+                        {
+                            item.SetValue(field.Key, field.Value);
                         }
                     }
                 }

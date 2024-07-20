@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Telerik.Sitefinity.Abstractions;
+using Telerik.Sitefinity.Data;
 using Telerik.Sitefinity.DynamicModules;
 using Telerik.Sitefinity.DynamicModules.Model;
 using Telerik.Sitefinity.Model;
@@ -19,7 +20,8 @@ namespace DF2023.Core.Custom
             errorMsg = null;
             try
             {
-                var dynamicManager = DynamicModuleManager.GetManager();
+                string transaction = Guid.NewGuid().ToString();
+                var dynamicManager = DynamicModuleManager.GetManager("", transaction);
                 DynamicContent convention = dynamicManager.GetDataItem(TypeResolutionService.ResolveType(Convention.ConventionDynamicTypeName), conventionID);
                 DynamicContent delegation = dynamicManager.GetDataItem(TypeResolutionService.ResolveType(Delegation.DelegationDynamicTypeName), delegationID);
 
@@ -79,12 +81,16 @@ namespace DF2023.Core.Custom
 
                     if (result)
                     {
-                        var InvitationDate = delegation.GetValue<DateTime?>(Delegation.InvitationDate);
-                        if (InvitationDate == null || (InvitationDate.HasValue && InvitationDate.Value == DateTime.MinValue))
-                        {
-                            delegation.SetValue(Delegation.InvitationDate, DateTime.UtcNow);
-                            dynamicManager.SaveChanges();
-                        }
+                        delegation.SetValue(Delegation.InvitationDate, DateTime.UtcNow);
+
+                        Dictionary<string, object> keyValuePairs = new Dictionary<string, object>()
+                            {
+                                { Guest.InvitationDate, DateTime.UtcNow}
+                            };
+
+                        GuestManager.UpdateDelegationGuests(delegation, keyValuePairs, dynamicManager);
+
+                        TransactionManager.CommitTransaction(transaction);
 
                         return true;
                     }
