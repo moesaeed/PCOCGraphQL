@@ -193,7 +193,7 @@ namespace DF2023.GraphQL.Handlers
                 versionManager.SaveChanges();
 
                 // Post-process data after saving
-                handler.PostProcessData(item);
+                handler.PostProcessData(item, contextValue);
 
                 return item;
             }

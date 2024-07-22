@@ -12,7 +12,7 @@ namespace DF2023.Core.Custom
 
         public abstract void PreProcessData(Dictionary<string, Object> contextValue);
 
-        public abstract void PostProcessData(DynamicContent item);
+        public abstract void PostProcessData(DynamicContent item, Dictionary<string, Object> contextValue = null);
 
         public abstract void DuringProcessData(DynamicContent item, Dictionary<string, Object> contextValue);
     }
@@ -24,7 +24,7 @@ namespace DF2023.Core.Custom
             // No pre-processing for unsupported types
         }
 
-        public override void PostProcessData(DynamicContent item)
+        public override void PostProcessData(DynamicContent item, Dictionary<string, Object> contextValue = null)
         {
             // No post-processing for unsupported types
         }

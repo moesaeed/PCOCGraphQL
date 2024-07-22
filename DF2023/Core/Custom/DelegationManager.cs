@@ -95,7 +95,7 @@ namespace DF2023.Core.Custom
             });
         }
 
-        public override void PostProcessData(DynamicContent item)
+        public override void PostProcessData(DynamicContent item, Dictionary<string, Object> contextValue = null)
         {
             if (IsNewDelegation)
             {
@@ -231,6 +231,20 @@ namespace DF2023.Core.Custom
             }
 
             return dictionary;
+        }
+
+        public static DynamicContent GetDelegation(Guid delegationID, DynamicModuleManager dynamicManager, bool master = false)
+        {
+            DynamicContent delegation = null;
+
+            var type = TypeResolutionService.ResolveType(Delegation.DelegationDynamicTypeName);
+            delegation = dynamicManager.GetDataItems(type).FirstOrDefault(i => i.Id == delegationID);
+            if (delegation != null && master)
+            {
+                var masterDelegation = dynamicManager.Lifecycle.GetMaster(delegation) as DynamicContent;
+            }
+
+            return delegation;
         }
 
         public override void DuringProcessData(DynamicContent item, Dictionary<string, object> contextValue)

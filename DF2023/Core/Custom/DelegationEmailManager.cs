@@ -15,7 +15,7 @@ namespace DF2023.Core.Custom
 {
     public class DelegationEmailManager
     {
-        public static bool SendInvitationEmail(Guid delegationID, Guid conventionID, out string errorMsg)
+        public static bool SendInvitationEmail(Guid delegationID, Guid conventionID, out string errorMsg, bool isConformationEmail = false)
         {
             errorMsg = null;
             try
@@ -44,8 +44,12 @@ namespace DF2023.Core.Custom
                                 ?.FirstOrDefault();
                             if (customTextConfig != null)
                             {
-                                subject = customTextConfig.GetValue<string>(CustomTextConfig.InvitationEmailSubject);
-                                emailMessage = customTextConfig.GetValue<string>(CustomTextConfig.InvitationEmail);
+                                subject = isConformationEmail ?
+                                    customTextConfig.GetValue<string>(CustomTextConfig.ConfirmationEmailSubject) :
+                                    customTextConfig.GetValue<string>(CustomTextConfig.InvitationEmailSubject);
+                                emailMessage = isConformationEmail ?
+                                    customTextConfig.GetValue<string>(CustomTextConfig.ConfirmationEmail) :
+                                    customTextConfig.GetValue<string>(CustomTextConfig.InvitationEmail);
                             }
                         }
                     }
