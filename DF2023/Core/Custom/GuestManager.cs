@@ -20,6 +20,10 @@ namespace DF2023.Core.Custom
     public class GuestManager : ContentHandler
     {
         public bool IsNewGuest { get; set; }
+        public Guid DelegationId { get; set; }
+        public DynamicModuleManager DynamicModuleManager { get; set; }
+        private DynamicContent _delegation;
+        private DateTime _registrationDate { get; set; }
 
         public override bool IsDataValid(Dictionary<string, object> contextValue, out string errorMsg)
         {
@@ -34,6 +38,12 @@ namespace DF2023.Core.Custom
             var id = contextValue.ContainsKey("id") ? Guid.Parse(contextValue["id"].ToString()) : Guid.Empty;
             if (id == Guid.Empty)
             {
+                errorMsg = GetGuestDelegation(contextValue);
+                if (!string.IsNullOrEmpty(errorMsg))
+                {
+                    return false;
+                }
+
                 IsNewGuest = true;
 
                 errorMsg = AllowToAddGuest(contextValue);
@@ -53,42 +63,57 @@ namespace DF2023.Core.Custom
             return true;
         }
 
-        private string AllowToAddGuest(Dictionary<string, object> contextValue)
+        public override void PreProcessData(Dictionary<string, object> contextValue)
         {
-            string errorMsg = null;
-            // Check guest json for delegation ID, Get delegation by ID, check number of offical delegation. For single delegation, allow only one guest
-            var delegationID = contextValue.ContainsKey(Guest.GuestJSON.SetFirstLetterLowercase()) ? Guid.Parse(contextValue[Guest.GuestJSON.SetFirstLetterLowercase()].ToString()) : Guid.Empty;
-
-            if (delegationID != Guid.Empty)
+            var firstName = contextValue.ContainsKey("firstName") ? contextValue["firstName"].ToString() : string.Empty;
+            var lastName = contextValue.ContainsKey("lastName") ? contextValue["lastName"].ToString() : string.Empty;
+            string fullName = string.Empty;
+            if (!string.IsNullOrWhiteSpace(firstName))
             {
-                var dynamicManager = DynamicModuleManager.GetManager();
-                DynamicContent delegation = DelegationManager.GetDelegation(delegationID, dynamicManager);
-                if (delegation != null)
-                {
-                    var numberOfOfficialDelegates = delegation.GetValue<decimal?>(Delegation.NumberOfOfficialDelegates);
-                    int counter = (int)numberOfOfficialDelegates.GetValueOrDefault(0);
-                    var guests = delegation.GetRelatedItems(Delegation.Guests).Count();
-                    var isSingleDelegation = delegation.GetValue<bool?>(Delegation.IsSingle) ?? false;
-                    if ((isSingleDelegation && guests > 0) || (counter <= guests))
-                    {
-                        return errorMsg = "You are not allowed to add more guests";
-                    }
-                }
-                else
-                {
-                    return errorMsg = "Not valid delegation";
-                }
+                fullName = firstName;
+            }
+            if (!string.IsNullOrWhiteSpace(lastName))
+            {
+                fullName += " " + lastName;
+            }
+
+            if (!string.IsNullOrWhiteSpace(fullName))
+            {
+                TitleValue = fullName;
             }
             else
             {
-                return errorMsg = "Not valid delegation";
+                TitleValue = Guid.NewGuid().ToString();
             }
+        }
 
-            return errorMsg;
+        public override void DuringProcessData(DynamicContent item, Dictionary<string, object> contextValue)
+        {
+            if (IsNewGuest)
+            {
+                GuestJson guest = new GuestJson();
+                guest.DelegationID = DelegationId;
+
+                FlatGuest flatGuest = new FlatGuest();
+                flatGuest.Guest = new List<GuestJson>() { guest };
+
+                var json = JsonSerializer.Serialize(flatGuest);
+                item.SetValue(Guest.GuestJSON, json);
+                DateTime? invitationDate = _delegation.GetValue<DateTime?>(Delegation.InvitationDate);
+                if (invitationDate.HasValue && invitationDate.Value > DateTime.MinValue)
+                {
+                    item.SetValue(Guest.InvitationDate, invitationDate);
+                }
+            }
         }
 
         public override void PostProcessData(DynamicContent item, Dictionary<string, Object> contextValue = null)
         {
+            if (_registrationDate > DateTime.MinValue)
+            {
+                item.SetValue(Guest.RegistrationDate, _registrationDate);
+            }
+
             if (IsNewGuest)
             {
                 bool result = RelatedGuestToDelegation(item, contextValue);
@@ -107,56 +132,78 @@ namespace DF2023.Core.Custom
             }
         }
 
-        private bool RelatedGuestToDelegation(DynamicContent item, Dictionary<string, Object> contextValue)
+        public override void PostProcessRelateItem(DynamicContent item, string normalizedFieldName, IDataItem toRelate)
         {
-            Guid delegationId = Guid.Empty;
-            if (contextValue.ContainsKey(Guest.GuestJSON))
+            if (normalizedFieldName == Guest.GuestStatus
+                && toRelate.GetType().ToString() == Gueststatus.GueststatusDynamicTypeName)
             {
-                string guestJson = contextValue.ContainsKey(Guest.GuestJSON.SetFirstLetterLowercase()) ? contextValue[Guest.GuestJSON.SetFirstLetterLowercase()].ToString() : null;
-                if (!string.IsNullOrWhiteSpace(guestJson))
+                bool isGuestAdmin = UserExtensions.IsCurrentUserInRole(UserRoles.GuestAdmin);
+                if (isGuestAdmin)
                 {
-                    var guest = JsonSerializer.Deserialize<FlatGuest>(guestJson);
-                    if (guest != null && guest.Guest != null && guest.Guest.Count() > 0)
-                    {
-                        delegationId = guest.Guest[0].DelegationID;
-                    }
-                }
+                    var statusDynamicContent = toRelate as DynamicContent;
+                    var status = statusDynamicContent?.GetValue<string>(Gueststatus.Title);
 
-                try
-                {
-                    var errorMsg = AllowToAddGuest(contextValue);
-                    if (!string.IsNullOrWhiteSpace(errorMsg))
+                    if (!string.IsNullOrWhiteSpace(status) && status == Gueststatus.Registered)
                     {
-                        return false;
+                        _registrationDate = DateTime.UtcNow;
                     }
-
-                    if (delegationId != Guid.Empty)
-                    {
-                        var dynamicManager = DynamicModuleManager.GetManager();
-                        DynamicContent delegationItem = DelegationManager.GetDelegation(delegationId, dynamicManager, true);
-                        if (delegationItem != null)
-                        {
-                            delegationItem.CreateRelation(item, Delegation.Guests);
-
-                            return true;
-                        }
-                        else
-                        {
-                            DeleteGuest(item);
-                        }
-                    }
-                    else
-                    {
-                        DeleteGuest(item);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw;
                 }
             }
+        }
 
-            return false;
+        private string GetGuestDelegation(Dictionary<string, object> contextValue)
+        {
+            string guestJson = contextValue.ContainsKey(Guest.GuestJSON.SetFirstLetterLowercase()) ? contextValue[Guest.GuestJSON.SetFirstLetterLowercase()].ToString() : null;
+            if (string.IsNullOrWhiteSpace(guestJson))
+            {
+                return "Delegation can't be null";
+            }
+
+            Guid tempDelegationId = Guid.Empty;
+            if (Guid.TryParse(guestJson, out tempDelegationId) == false)
+            {
+                return "Not valid delegation Id";
+            }
+
+            DelegationId = tempDelegationId;
+            DynamicModuleManager = DynamicModuleManager.GetManager();
+            _delegation = DelegationManager.GetDelegation(DelegationId, DynamicModuleManager);
+
+            if (_delegation != null)
+            {
+                return null;
+            }
+
+            return "Not valid delegation";
+        }
+
+        private string AllowToAddGuest(Dictionary<string, object> contextValue)
+        {
+            var numberOfOfficialDelegates = _delegation.GetValue<decimal?>(Delegation.NumberOfOfficialDelegates);
+            int counter = (int)numberOfOfficialDelegates.GetValueOrDefault(0);
+            var guests = _delegation.GetRelatedItems(Delegation.Guests).Count();
+            var isSingleDelegation = _delegation.GetValue<bool?>(Delegation.IsSingle) ?? false;
+            if ((isSingleDelegation && guests > 0) || (counter <= guests))
+            {
+                return "You are not allowed to add more guests";
+            }
+
+            return null;
+        }
+
+        private bool RelatedGuestToDelegation(DynamicContent item, Dictionary<string, Object> contextValue)
+        {
+            var errorMsg = AllowToAddGuest(contextValue);
+
+            if (!string.IsNullOrWhiteSpace(errorMsg))
+            {
+                DeleteGuest(item);
+                return false;
+            }
+
+            _delegation.CreateRelation(item, Delegation.Guests);
+
+            return true;
         }
 
         private void DeleteGuest(DynamicContent item)
@@ -165,35 +212,7 @@ namespace DF2023.Core.Custom
             dynamicModuleManager.DeleteDataItem(item);
         }
 
-        public override void PreProcessData(Dictionary<string, object> contextValue)
-        {
-            object guestStatus = contextValue.ContainsKey(Guest.GuestStatus.SetFirstLetterLowercase()) ?
-                    contextValue[Guest.GuestStatus.SetFirstLetterLowercase()] : null;
-
-            if (guestStatus != null)
-            {
-                var newDicrionaryList = guestStatus as object[];
-                foreach (var newObject in newDicrionaryList)
-                {
-                    var newObjectAsDictionary = newObject.ToObjectDictionary();
-                    var id = newObjectAsDictionary.ContainsKey("id") ? Guid.Parse(newObjectAsDictionary["id"].ToString()) : Guid.Empty;
-                    if (id != Guid.Empty)
-                    {
-                        var type = TypeResolutionService.ResolveType(Gueststatus.GueststatusDynamicTypeName);
-                        var dynamicManager = DynamicModuleManager.GetManager();
-                        var relatedGuestStatus = dynamicManager.GetDataItems(type).FirstOrDefault(i => i.Id == id);
-                        var status = relatedGuestStatus?.GetValue<string>(Gueststatus.Title);
-
-                        if (!string.IsNullOrWhiteSpace(status) && status == Gueststatus.Registered)
-                        {
-                            contextValue[Guest.RegistrationDate] = DateTime.UtcNow;
-                        }
-                    }
-                }
-            }
-        }
-
-        public static bool CheckGuestDuplicates(Dictionary<string, object> contextValue, out string errorMsg)
+        private static bool CheckGuestDuplicates(Dictionary<string, object> contextValue, out string errorMsg)
         {
             errorMsg = null;
 
@@ -294,73 +313,6 @@ namespace DF2023.Core.Custom
                 return guests;
             }
             return null;
-        }
-
-        public override void DuringProcessData(DynamicContent item, Dictionary<string, object> contextValue)
-        {
-            var firstName = contextValue.ContainsKey("firstName") ? contextValue["firstName"].ToString() : string.Empty;
-            var lastName = contextValue.ContainsKey("lastName") ? contextValue["lastName"].ToString() : string.Empty;
-            string fullName = string.Empty;
-            if (!string.IsNullOrWhiteSpace(firstName))
-            {
-                fullName = firstName;
-            }
-            if (!string.IsNullOrWhiteSpace(lastName))
-            {
-                fullName += " " + lastName;
-            }
-
-            if (!string.IsNullOrWhiteSpace(fullName))
-            {
-                item.SetValue(Guest.Title, fullName);
-            }
-
-            var title = contextValue.ContainsKey(Guest.Title) ? contextValue[Guest.Title].ToString() : string.Empty;
-            if (string.IsNullOrWhiteSpace(fullName))
-            {
-                item.SetValue(Guest.Title, item.Id.ToString());
-            }
-
-            var delegationID = contextValue.ContainsKey(Guest.GuestJSON.SetFirstLetterLowercase()) ? Guid.Parse(contextValue[Guest.GuestJSON.SetFirstLetterLowercase()].ToString()) : Guid.Empty;
-
-            if (delegationID != Guid.Empty)
-            {
-                var originalGuestJson = item.GetValue(Guest.GuestJSON);
-
-                //GuestJSOn is empty
-                if (originalGuestJson == null || string.IsNullOrWhiteSpace(originalGuestJson.ToString()))
-                {
-                    GuestJson guest = new GuestJson();
-                    guest.DelegationID = delegationID;
-
-                    FlatGuest flatGuest = new FlatGuest();
-                    flatGuest.Guest = new List<GuestJson>() { guest };
-
-                    contextValue[Guest.GuestJSON.SetFirstLetterLowercase()] = JsonSerializer.Serialize(flatGuest);
-                }
-                else if (!string.IsNullOrWhiteSpace(originalGuestJson.ToString()))
-                {
-                    var flatGuest = JsonSerializer.Deserialize<FlatGuest>(originalGuestJson.ToString());
-                    if (flatGuest != null && flatGuest.Guest?.Count > 0)
-                    {
-                        //TODO: Fix this logic - this logic consider only one guest - future: can support multi guests
-                        foreach (var guestJson in flatGuest.Guest)
-                        {
-                            if (guestJson.DelegationID == delegationID)
-                            {
-                                contextValue[Guest.GuestJSON.SetFirstLetterLowercase()] = JsonSerializer.Serialize(flatGuest);
-                                return;
-                            }
-                            else
-                            {
-                                flatGuest.Guest.Add(new GuestJson() { DelegationID = delegationID });
-                                contextValue[Guest.GuestJSON.SetFirstLetterLowercase()] = JsonSerializer.Serialize(flatGuest);
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         // Define the dynamicManager with transaction as there may be a lot of operations

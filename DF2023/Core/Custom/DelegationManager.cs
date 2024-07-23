@@ -250,5 +250,10 @@ namespace DF2023.Core.Custom
         public override void DuringProcessData(DynamicContent item, Dictionary<string, object> contextValue)
         {
         }
+
+        public override void PostProcessRelateItem(DynamicContent item, string normalizedFieldName, IDataItem toRelate)
+        {
+            // No PostProcessRelateItem for unsupported types
+        }
     }
 }

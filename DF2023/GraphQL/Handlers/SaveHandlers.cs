@@ -1,5 +1,4 @@
-﻿using DF2023.Core.Constants;
-using DF2023.Core.Custom;
+﻿using DF2023.Core.Custom;
 using DF2023.Core.Extensions;
 using DF2023.Core.Helpers;
 using DF2023.GraphQL.Classes;
@@ -141,8 +140,6 @@ namespace DF2023.GraphQL.Handlers
                 else
                     item = dynamicManager.GetDataItems(type).FirstOrDefault(i => i.Id == id);
 
-                handler.DuringProcessData(item, contextValue);
-
                 List<DynamicContent> oldrelatedItems = null;
                 foreach (var field in contextValue.Where(f => !f.Key.ToLower().StartsWith("child")))
                 {
@@ -151,13 +148,15 @@ namespace DF2023.GraphQL.Handlers
                     if (f != null && f.ClrType == typeof(RelatedItems).FullName)
                     {
                         item.DeleteRelations(normalizedFieldName);
-                        RelateItem(item, f, field, normalizedFieldName);
+                        RelateItem(item, f, field, normalizedFieldName, handler);
                     }
                     else
                     {
                         item.SetValue(normalizedFieldName, field.Value);
                     }
                 }
+
+                handler.DuringProcessData(item, contextValue);
 
                 // Deal with child items.
                 foreach (var childField in contextValue.Where(f => f.Key.ToLower().StartsWith("child")))
@@ -199,7 +198,7 @@ namespace DF2023.GraphQL.Handlers
             }
         }
 
-        private static void RelateItem(DynamicContent item, MetaFieldModel f, KeyValuePair<string, object> field, string normalizedFieldName)
+        private static void RelateItem(DynamicContent item, MetaFieldModel f, KeyValuePair<string, object> field, string normalizedFieldName, ContentHandler handler)
         {
             var newDicrionaryList = field.Value as object[];
             foreach (var newObject in newDicrionaryList)
@@ -210,14 +209,6 @@ namespace DF2023.GraphQL.Handlers
                 if (innerManager is DynamicModuleManager)
                 {
                     var newObjectAsDictionary = newObject.ToObjectDictionary();
-
-                    if (item.GetType().ToString() == Delegation.DelegationDynamicTypeName
-                        && normalizedFieldName == Delegation.Guests
-                        && relatedFieldType == Guest.GuestDynamicTypeName)
-                    {
-                        //set up json
-                        newObjectAsDictionary[Guest.GuestJSON] = item.Id;
-                    }
 
                     if (ContentPermissionValidator.SkipCreatingContent(relatedFieldType))
                     {
@@ -240,6 +231,7 @@ namespace DF2023.GraphQL.Handlers
                 if (toRelate != null)
                 {
                     item.CreateRelation(toRelate, normalizedFieldName);
+                    handler.PostProcessRelateItem(item, normalizedFieldName, toRelate);
                 }
             }
         }
