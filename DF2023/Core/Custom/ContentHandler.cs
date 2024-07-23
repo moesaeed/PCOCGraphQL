@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Telerik.Sitefinity.DynamicModules.Model;
+using Telerik.Sitefinity.Model;
 
 namespace DF2023.Core.Custom
 {
@@ -15,6 +16,7 @@ namespace DF2023.Core.Custom
         public abstract void PostProcessData(DynamicContent item, Dictionary<string, Object> contextValue = null);
 
         public abstract void DuringProcessData(DynamicContent item, Dictionary<string, Object> contextValue);
+        public abstract void PostProcessRelateItem(DynamicContent item, string normalizedFieldName, IDataItem toRelate);
     }
 
     public class DefaultContentHandler : ContentHandler
@@ -38,6 +40,11 @@ namespace DF2023.Core.Custom
         public override void DuringProcessData(DynamicContent item, Dictionary<string, object> contextValue)
         {
             // No During-Processing for unsupported types
+        }
+
+        public override void PostProcessRelateItem(DynamicContent item, string normalizedFieldName, IDataItem toRelate)
+        {
+            // No PostProcessRelateItem for unsupported types
         }
     }
 }
