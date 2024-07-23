@@ -139,6 +139,8 @@
         public const string ServicesLevel = "ServicesLevel";
 
         public const string InvitationDate = "InvitationDate";
+        public const string SourceOfInvitation = "SourceOfInvitation";
+        
 
         public const string Country = "Country";
 

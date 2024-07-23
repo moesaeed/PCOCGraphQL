@@ -104,6 +104,8 @@ namespace DF2023.Core.Custom
                 {
                     item.SetValue(Guest.InvitationDate, invitationDate);
                 }
+
+                item.SetValue(Guest.SourceOfInvitation, _delegation.GetValue<string>(Delegation.SourceOfInvitation).ToString());
             }
         }
 

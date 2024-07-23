@@ -32,6 +32,12 @@ namespace DF2023.Core.Custom
                     string subject = null;
                     string emailMessage = null;
 
+                    // Convention without custom invitation has no conformation email
+                    if (customInvitation == false && isConformationEmail)
+                    {
+                        return true;
+                    }
+
                     if (customInvitation)
                     {
                         var service = delegation.GetRelatedItems(Delegation.ServicesLevel)?.FirstOrDefault();
