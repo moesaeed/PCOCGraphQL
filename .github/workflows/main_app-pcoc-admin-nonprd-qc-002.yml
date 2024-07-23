@@ -23,9 +23,9 @@ jobs:
         uses: NuGet/setup-nuget@v1.0.5
       
       - name: Add NuGet package source
-	      uses: deitry/add-nuget-source-action@v2
+	uses: deitry/add-nuget-source-action@v2
         with:
-    	    url: https://nuget.sitefinity.com/nuget
+	  url: https://nuget.sitefinity.com/nuget
 
 
       - name: Restore NuGet packages
