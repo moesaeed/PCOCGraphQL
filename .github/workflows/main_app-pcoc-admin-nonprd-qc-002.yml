@@ -21,12 +21,11 @@ jobs:
 
       - name: Setup NuGet
         uses: NuGet/setup-nuget@v1.0.5
-      
-      - name: Add NuGet package source
-	uses: deitry/add-nuget-source-action@v2
-        with:
-	  url: https://nuget.sitefinity.com/nuget
 
+      - name: Add NuGet package source
+        uses: deitry/add-nuget-source-action@v2
+        with:
+          url: https://nuget.sitefinity.com/nuget
 
       - name: Restore NuGet packages
         run: nuget restore
@@ -38,26 +37,26 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ASP-app
-          path: '/published/**'
+          path: "/published/**"
 
   deploy:
     runs-on: windows-latest
     needs: build
     environment:
-      name: 'Production'
+      name: "Production"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: ASP-app
-      
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'app-pcoc-admin-nonprd-qc-002'
-          slot-name: 'Production'
+          app-name: "app-pcoc-admin-nonprd-qc-002"
+          slot-name: "Production"
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0768BEB1DBF242FD91541A27ACDD55D1 }}
