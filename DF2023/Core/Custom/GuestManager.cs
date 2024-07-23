@@ -129,6 +129,8 @@ namespace DF2023.Core.Custom
                     PermissionExtensions.SetPermission(item, new List<Guid>() { item.Owner }, new List<string>() { UserRoles.PCOC });
                     manager.SaveChanges();
                 }
+
+                DelegationEmailManager.SendInvitationEmail(DelegationId, item.SystemParentId, out string errMsg, true);
             }
         }
 
