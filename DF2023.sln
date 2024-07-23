@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DF2023", "DF2023\DF2023.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OTP.Net", "OTP.Net\OTP.Net.csproj", "{DCE0D096-5C59-40AD-A6FC-21184C894C55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{7A973428-FCF6-461F-9794-0A6AC90C0810}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{990A0294-2DA1-4BD9-943A-0C3DFC7B10DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{DCE0D096-5C59-40AD-A6FC-21184C894C55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCE0D096-5C59-40AD-A6FC-21184C894C55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCE0D096-5C59-40AD-A6FC-21184C894C55}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7A973428-FCF6-461F-9794-0A6AC90C0810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7A973428-FCF6-461F-9794-0A6AC90C0810}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7A973428-FCF6-461F-9794-0A6AC90C0810}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7A973428-FCF6-461F-9794-0A6AC90C0810}.Release|Any CPU.Build.0 = Release|Any CPU
+		{990A0294-2DA1-4BD9-943A-0C3DFC7B10DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{990A0294-2DA1-4BD9-943A-0C3DFC7B10DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{990A0294-2DA1-4BD9-943A-0C3DFC7B10DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{990A0294-2DA1-4BD9-943A-0C3DFC7B10DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
