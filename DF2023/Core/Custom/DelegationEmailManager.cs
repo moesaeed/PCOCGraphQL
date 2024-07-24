@@ -1,8 +1,10 @@
 ﻿using DF2023.Core.Constants;
+using DF2023.Core.Extensions;
 using DF2023.Core.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Data;
 using Telerik.Sitefinity.DynamicModules;
@@ -15,7 +17,8 @@ namespace DF2023.Core.Custom
 {
     public class DelegationEmailManager
     {
-        public static bool SendInvitationEmail(Guid delegationID, Guid conventionID, out string errorMsg, bool isConformationEmail = false)
+        public static bool SendInvitationEmail(Guid delegationID, Guid conventionID, out string errorMsg, bool isConformationEmail = false
+            , List<string> extraRecipients = null)
         {
             errorMsg = null;
             try
@@ -64,12 +67,15 @@ namespace DF2023.Core.Custom
                         subject = convention.GetValue<string>(Convention.InvitationEmailSubject);
                         emailMessage = convention.GetValue<string>(Convention.InvitationEmail);
                     }
+
+                    var userEmail = delegation.GetValue<string>(Delegation.ContactEmail);
                     List<string> recipients = new List<string>()
                     {
-                        delegation.GetValue<string>(Delegation.ContactEmail),
+                        userEmail,
                         delegation.GetValue<string>(Delegation.SecondaryEmail)
                     };
 
+                    recipients.AddRange(extraRecipients);
                     var filteredRecipients = recipients
                         .Where(email => !string.IsNullOrWhiteSpace(email))
                         .Distinct()
@@ -79,8 +85,19 @@ namespace DF2023.Core.Custom
                         && !string.IsNullOrEmpty(emailMessage)
                         && filteredRecipients.Count > 0)
                     {
+                        var guestPortalUrl = "https://reg.sitefinityapps.com/";
+                        if (isConformationEmail == false)
+                        {
+                            string verificationCode = UserExtensions.GetVerificationCode(userEmail);
+                            if (!string.IsNullOrWhiteSpace(verificationCode))
+                            {
+                                guestPortalUrl += $"#/GenerateOtp?email={userEmail}&verification-code={verificationCode}";
+                            }
+                        }
+
                         emailMessage = emailMessage.Replace("[Email]", delegation.GetValue<string>(Delegation.ContactEmail));
                         emailMessage = emailMessage.Replace("[Name]", delegation.GetValue<string>(Delegation.ContactName));
+                        emailMessage = emailMessage.Replace("[REGISTRATIONLINK]", $"<a href=\"{guestPortalUrl}\" >REGISTRATION LINK</a>");
                         result = EmailSender.Send(filteredRecipients, subject, emailMessage);
                     }
                     else

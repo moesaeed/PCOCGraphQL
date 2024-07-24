@@ -558,5 +558,32 @@ namespace DF2023.Core.Extensions
                 }
             }
         }
+
+        public static string GetVerificationCode(string userEmail)
+        {
+            User user = GetUserByEmail(userEmail);
+            if (user != null)
+            {
+                UserProfileManager profileManager = UserProfileManager.GetManager();
+
+                var profile = profileManager.GetUserProfile<SitefinityProfile>(user);
+
+                if (profile == null
+                    || profile.DoesFieldExist(Others.VerificationCode) == false
+                    || profile.DoesFieldExist(Others.Registered) == false)
+                {
+                    return null;
+                }
+
+                string VerificationCode = profile.GetValue<string>(Others.VerificationCode);
+                bool registered = profile.GetValue<bool>(Others.Registered);
+
+                if (!string.IsNullOrWhiteSpace(VerificationCode) || registered == false)
+                {
+                    return VerificationCode;
+                }
+            }
+            return null;
+        }
     }
 }
