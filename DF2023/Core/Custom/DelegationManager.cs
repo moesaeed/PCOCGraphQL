@@ -99,6 +99,7 @@ namespace DF2023.Core.Custom
         {
             if (IsNewDelegation)
             {
+                item.SetValue(Delegation.AllowToAddGuest, true);
                 var email = item.GetValue<string>(Delegation.ContactEmail).ToString();
                 Guid delegationID = item.Id;
                 Guid conventionID = item.SystemParentId;

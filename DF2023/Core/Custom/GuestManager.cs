@@ -46,9 +46,10 @@ namespace DF2023.Core.Custom
 
                 IsNewGuest = true;
 
-                errorMsg = AllowToAddGuest(contextValue);
-                if (!string.IsNullOrEmpty(errorMsg))
+                var addMoreGuests = AllowToAddGuest();
+                if (addMoreGuests == false)
                 {
+                    errorMsg = "You are not allowed to add more guests.";
                     return false;
                 }
 
@@ -64,6 +65,11 @@ namespace DF2023.Core.Custom
         }
 
         public override void PreProcessData(Dictionary<string, object> contextValue)
+        {
+            SetGuestTitle(contextValue);
+        }
+
+        private void SetGuestTitle(Dictionary<string, object> contextValue)
         {
             var firstName = contextValue.ContainsKey("firstName") ? contextValue["firstName"].ToString() : string.Empty;
             var lastName = contextValue.ContainsKey("lastName") ? contextValue["lastName"].ToString() : string.Empty;
@@ -105,7 +111,23 @@ namespace DF2023.Core.Custom
                     item.SetValue(Guest.InvitationDate, invitationDate);
                 }
 
-                item.SetValue(Guest.SourceOfInvitation, _delegation.GetValue<string>(Delegation.SourceOfInvitation).ToString());
+                var sourceOfInvitation = _delegation.GetValue<string>(Delegation.SourceOfInvitation);
+                if (!string.IsNullOrWhiteSpace(sourceOfInvitation))
+                {
+                    item.SetValue(Guest.SourceOfInvitation, sourceOfInvitation.ToString());
+                }
+
+                var specialLogisticsRequirements = _delegation.GetValue<string>(Delegation.SpecialLogisticsRequirements);
+                if (!string.IsNullOrWhiteSpace(specialLogisticsRequirements))
+                {
+                    item.SetValue(Guest.SpecialLogisticsRequirements, specialLogisticsRequirements.ToString());
+                }
+
+                IDataItem subAttendeeTypeItem = _delegation.GetRelatedItems(Delegation.SubAttendeeType).FirstOrDefault();
+                if (subAttendeeTypeItem != null)
+                {
+                    item.CreateRelation(subAttendeeTypeItem, Guest.SubAttendeeType);
+                }
             }
         }
 
@@ -124,15 +146,16 @@ namespace DF2023.Core.Custom
                 {
                     //Set permissions for the delegation
                     var manager = ManagerBase.GetMappedManager(item.GetType().FullName);
+
                     Telerik.Sitefinity.Security.Model.ISecuredObject secureObject = item;
                     manager.BreakPermiossionsInheritance(secureObject);
                     PermissionExtensions.ClearPermission(item);
                     // TODO: What if PCOC user was creating/adding the guest to exisiting delegation
                     PermissionExtensions.SetPermission(item, new List<Guid>() { item.Owner }, new List<string>() { UserRoles.PCOC });
                     manager.SaveChanges();
-                }
 
-                DelegationEmailManager.SendInvitationEmail(DelegationId, item.SystemParentId, out string errMsg, true);
+                    DelegationEmailManager.SendInvitationEmail(DelegationId, item.SystemParentId, out string errMsg, true);
+                }
             }
         }
 
@@ -181,7 +204,7 @@ namespace DF2023.Core.Custom
             return "Not valid delegation";
         }
 
-        private string AllowToAddGuest(Dictionary<string, object> contextValue)
+        private bool AllowToAddGuest()
         {
             var numberOfOfficialDelegates = _delegation.GetValue<decimal?>(Delegation.NumberOfOfficialDelegates);
             int counter = (int)numberOfOfficialDelegates.GetValueOrDefault(0);
@@ -189,23 +212,27 @@ namespace DF2023.Core.Custom
             var isSingleDelegation = _delegation.GetValue<bool?>(Delegation.IsSingle) ?? false;
             if ((isSingleDelegation && guests > 0) || (counter <= guests))
             {
-                return "You are not allowed to add more guests";
+                return false;
             }
 
-            return null;
+            return true;
         }
 
         private bool RelatedGuestToDelegation(DynamicContent item, Dictionary<string, Object> contextValue)
         {
-            var errorMsg = AllowToAddGuest(contextValue);
+            var addMoreGuests = AllowToAddGuest();
 
-            if (!string.IsNullOrWhiteSpace(errorMsg))
+            if (addMoreGuests == false)
             {
                 DeleteGuest(item);
                 return false;
             }
 
             _delegation.CreateRelation(item, Delegation.Guests);
+
+            addMoreGuests = AllowToAddGuest();
+            _delegation.SetValue(Delegation.AllowToAddGuest, addMoreGuests);
+            DynamicModuleManager.SaveChanges();
 
             return true;
         }

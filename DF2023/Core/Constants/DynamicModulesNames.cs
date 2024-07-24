@@ -127,6 +127,10 @@
         public const string NumberOfOfficialDelegates = "NumberOfOfficialDelegates";
 
         public const string Entity = "Entity";
+        public const string SubAttendeeType = "SubAttendeeType";
+        public const string SpecialLogisticsRequirements = "SpecialLogisticsRequirements";
+        public const string AllowToAddGuest = "AllowToAddGuest";
+        
 
         public const string Guests = "Guests";
 
